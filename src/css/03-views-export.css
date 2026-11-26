@@ -38,3 +38,16 @@
 .psvg img{max-width:80%;max-height:140px}
 @media (max-width:680px){.pbody{grid-template-columns:minmax(0,1fr);grid-template-rows:150px minmax(0,1fr)}.xfoot{flex-wrap:wrap}.xfoot p{flex-basis:100%}}
 
+/* Open from GitHub */
+.xcard.gh{width:min(480px,92vw);height:auto;grid-template-rows:auto auto auto}
+.ghbody{display:grid;gap:12px;padding:6px 18px 0}
+.ghbody label{display:grid;gap:5px;font-size:12.5px;font-weight:500;color:#1d232b}
+.ghbody label small{font-weight:400;color:#8a929c}
+.ghbody input{height:34px;padding:0 10px;border:1px solid #d5d9df;border-radius:7px;font:12.5px "Geist Mono",ui-monospace,monospace;color:#1d232b;background:#fff}
+.ghbody input:focus{outline:2px solid #1d232b;outline-offset:-1px;border-color:transparent}
+.ghnote{margin:0;font-size:12px;line-height:1.45;color:#6b7480}
+.ghmsg{margin:0;min-height:1em;font-size:12px;line-height:1.45;color:#9a5b00}
+.ghmsg:empty{display:none}
+.lnk{border:0;background:none;padding:6px 0;font:inherit;font-size:12.5px;color:#4b5460;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lnk:hover{color:#1d232b}
+.lnk[hidden]{display:none}

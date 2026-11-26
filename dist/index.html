@@ -395,6 +395,19 @@ main.dk .bgpick [aria-pressed="true"]{box-shadow:inset 0 0 0 1px rgba(255,255,25
 .psvg img{max-width:80%;max-height:140px}
 @media (max-width:680px){.pbody{grid-template-columns:minmax(0,1fr);grid-template-rows:150px minmax(0,1fr)}.xfoot{flex-wrap:wrap}.xfoot p{flex-basis:100%}}
 
+/* Open from GitHub */
+.xcard.gh{width:min(480px,92vw);height:auto;grid-template-rows:auto auto auto}
+.ghbody{display:grid;gap:12px;padding:6px 18px 0}
+.ghbody label{display:grid;gap:5px;font-size:12.5px;font-weight:500;color:#1d232b}
+.ghbody label small{font-weight:400;color:#8a929c}
+.ghbody input{height:34px;padding:0 10px;border:1px solid #d5d9df;border-radius:7px;font:12.5px "Geist Mono",ui-monospace,monospace;color:#1d232b;background:#fff}
+.ghbody input:focus{outline:2px solid #1d232b;outline-offset:-1px;border-color:transparent}
+.ghnote{margin:0;font-size:12px;line-height:1.45;color:#6b7480}
+.ghmsg{margin:0;min-height:1em;font-size:12px;line-height:1.45;color:#9a5b00}
+.ghmsg:empty{display:none}
+.lnk{border:0;background:none;padding:6px 0;font:inherit;font-size:12.5px;color:#4b5460;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lnk:hover{color:#1d232b}
+.lnk[hidden]{display:none}
 /* ---------- component gallery (themed by the same variables) ---------- */
 .pv.gal{padding:8px 8px 28px;display:grid;gap:34px;background:transparent;box-shadow:none;border-radius:0;overflow:visible}
 .gal .k-sec{display:grid;gap:12px}
@@ -863,6 +876,7 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
         <hr>
         <button role="menuitem" id="mPkg"><svg viewBox="0 0 16 16"><path d="M2.5 5L8 2.5 13.5 5v6L8 13.5 2.5 11z"/><path d="M2.5 5L8 7.5 13.5 5M8 7.5v6"/></svg>Export package…</button>
         <button role="menuitem" id="mOpen"><svg viewBox="0 0 16 16"><path d="M2 4.5a1 1 0 0 1 1-1h3l1.5 1.5H13a1 1 0 0 1 1 1V12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>Open app style…</button>
+        <button role="menuitem" id="mGh"><svg viewBox="0 0 16 16" style="fill:currentColor;stroke:none"><path d="M8 1.8a6.2 6.2 0 0 0-2 12.1c.3 0 .4-.1.4-.3v-1.1c-1.7.4-2.1-.8-2.1-.8-.3-.7-.7-.9-.7-.9-.6-.4 0-.4 0-.4.6 0 1 .6 1 .6.5 1 1.5.7 1.8.5.1-.4.2-.7.4-.8-1.4-.2-2.8-.7-2.8-3 0-.7.2-1.2.6-1.6 0-.2-.3-.8.1-1.6 0 0 .5-.2 1.7.6a5.8 5.8 0 0 1 3.1 0c1.2-.8 1.7-.6 1.7-.6.3.8.1 1.4.1 1.6.4.4.6 1 .6 1.6 0 2.4-1.4 2.9-2.8 3 .2.2.4.6.4 1.1v1.7c0 .2.1.3.4.3A6.2 6.2 0 0 0 8 1.8z"/></svg>Open from GitHub…</button>
         <hr>
         <button role="menuitem" id="reset"><svg viewBox="0 0 16 16"><path d="M3.5 8.5A4.5 4.5 0 1 0 8 4H5"/><path d="M6.5 2L4.5 4l2 2"/></svg>Reset to defaults</button>
       </div>
@@ -1180,6 +1194,18 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
     <div class="pbody"><nav class="pkfiles" id="pfiles" aria-label="Files in the package"></nav>
       <div class="pview"><div class="pvh"><b id="pname"></b><p id="pnote"></p></div><pre class="xcode" id="pcode"></pre><div class="psvg" id="psvg" hidden></div></div></div>
     <div class="xfoot"><p id="pcount"></p><button class="btn" id="pCopy">Copy file</button><button class="btn pri" id="pAll">Download package (.zip)</button></div>
+  </div>
+</div>
+<div class="xmod" id="ghmod" hidden role="dialog" aria-modal="true" aria-labelledby="ghTitle">
+  <div class="xcard gh">
+    <div class="xhead"><h2 id="ghTitle">Open from GitHub</h2><button id="ghClose" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+    <form class="ghbody" id="ghForm">
+      <label>Repository<input id="ghRepo" placeholder="owner/repo, or a github.com link" autocomplete="off" spellcheck="false" required></label>
+      <label>Folder <small>optional: where the Stylist files are, if not at the top of the repo</small><input id="ghPath" placeholder="top of the repo" autocomplete="off" spellcheck="false"></label>
+      <p class="ghnote">Public repos. Stylist reads the app’s stylist.json, theme, app tokens, components and brand files, as they are on GitHub now.</p>
+      <p class="ghmsg" id="ghMsg" role="status"></p>
+    </form>
+    <div class="xfoot"><button class="lnk" id="ghLink" type="button" title="A link that opens Stylist with this app’s style already loaded">Copy link</button><p></p><button class="btn" id="ghCancel" type="button">Cancel</button><button class="btn pri" id="ghGo" type="submit" form="ghForm">Open</button></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -1952,7 +1978,7 @@ function renderCustom(){
   const el=$('cusBody');if(!el||$('vCus').hidden)return;
   const t=tokens(),T=APP.tokens,tg=APP.target,R=APP.review||[],sw=v=>isColor(v)?`<span class="c-sw" style="background:${escH(v)}"></span>`:'';
   let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||'').replace(/^Built-in .+ setup$/,'Built-in setup'))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
-    <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn" data-act="open">Open app style…</button><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
+    <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn" data-act="open">Open app style…</button><button class="k-btn" data-act="gh">Open from GitHub…</button><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
     <div class="k-row" style="gap:20px;align-items:flex-end"><label class="k-field">App name<input class="k-input" data-f="name" value="${escH(APP.name)}"></label>
     <div class="k-field" style="width:auto">Exports to<div class="k-seg" data-f="target">${Object.entries(TGT).map(([k,v])=>`<button data-v="${k}" aria-pressed="${k===tg}">${v}</button>`).join('')}</div></div>
     <button class="k-btn ghost sm" data-act="reset" style="margin-left:auto">Back to built-in setup</button></div>
@@ -2012,6 +2038,7 @@ const cus=$('vCus');
 cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   const a=b.dataset.act;
   if(a==='open')$('appFiles').click();
+  if(a==='gh')openGh();
   else if(a==='pkg')openPkg();
   else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Back to the built-in setup')}
   else if(a==='addtok'){const n=$('newTok').value.trim().replace(/^--/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
@@ -2370,6 +2397,50 @@ function showTip(d){rtip.textContent=d.dataset.tip;rtip.hidden=false;const b=d.g
   let x=b.left+b.width/2-w/2,y=b.top-h-8;x=Math.max(8,Math.min(innerWidth-w-8,x));if(y<8)y=b.bottom+8;rtip.style.left=x+'px';rtip.style.top=y+'px'}
 for(const [ev,on] of [['mouseover',1],['focusin',1],['mouseout',0],['focusout',0]])document.addEventListener(ev,e=>{const d=e.target.closest&&e.target.closest('.rdot');if(!d)return;on?showTip(d):hideTip()});
 apply();
+// ---- Open from GitHub: load an app's Stylist files from a public repo, no download needed ----
+// Reads raw.githubusercontent.com (the repo's default branch, as it is now) and hands the files to openFiles(),
+// exactly as "Open app style…" does. The last repo is remembered, so syncing again is one click.
+// Also opens from a link: ?app=owner/repo (optionally ?app=owner/repo/folder).
+const GH_FILES=['stylist.json','stylist-theme.css','app-tokens.css','components.json','stylist-icons.css',
+  'brand/logo.svg','brand/logo-dark.svg','brand/mark.svg','brand/mark-dark.svg','brand/favicon.svg','brand/favicon-dark.svg'];
+let ghLast=null;try{ghLast=JSON.parse(localStorage.getItem('stylist.gh.v1')||'null')}catch(e){}
+// "owner/repo", "github.com/owner/repo", ".../tree/branch/folder" → {owner,repo,ref,path}
+function ghParse(s,folder){s=String(s||'').trim().replace(/^https?:\/\//,'').replace(/^(www\.)?github\.com\//,'').replace(/\.git$/,'').replace(/\/+$/,'');
+  const p=s.split('/').filter(Boolean);if(p.length<2||!/^[\w.-]+$/.test(p[0])||!/^[\w.-]+$/.test(p[1]))return null;
+  let ref='HEAD',path=p.slice(2);if(path[0]==='tree'&&path[1]){ref=path[1];path=path.slice(2)}
+  const extra=String(folder||'').trim().replace(/^\/+|\/+$/g,'');if(extra)path=extra.split('/');
+  if(path.some(x=>x==='..'))return null;
+  return {owner:p[0],repo:p[1],ref,path:path.join('/')}}
+const ghLabel=g=>`${g.owner}/${g.repo}${g.path?'/'+g.path:''}`;
+async function ghFetch(g){const base=`https://raw.githubusercontent.com/${g.owner}/${g.repo}/${encodeURIComponent(g.ref)}/${g.path?g.path+'/':''}`;
+  const got=await Promise.all(GH_FILES.map(async n=>{try{const r=await fetch(base+n,{cache:'no-store'});return r.ok?new File([await r.text()],n):null}catch(e){return {err:e}}}));
+  if(got.length&&got.every(x=>x&&x.err))throw new Error('offline');
+  return got.filter(x=>x&&!x.err)}
+async function ghOpen(g){const files=await ghFetch(g);
+  if(!files.some(f=>f.name==='stylist.json'||f.name==='stylist-theme.css'))return false;
+  await openFiles(files);
+  APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);saveApp();apply();
+  ghLast={repo:`${g.owner}/${g.repo}`,path:g.path};try{localStorage.setItem('stylist.gh.v1',JSON.stringify(ghLast))}catch(e){}
+  return true}
+function openGh(){$('ghRepo').value=ghLast?ghLast.repo:'';$('ghPath').value=ghLast?ghLast.path||'':'';$('ghMsg').textContent='';
+  $('ghLink').hidden=!ghLast;$('ghGo').disabled=false;$('ghmod').hidden=false;setTimeout(()=>$('ghRepo').focus(),0)}
+const closeGh=()=>{$('ghmod').hidden=true};
+$('mGh').onclick=openGh;$('ghClose').onclick=closeGh;$('ghCancel').onclick=closeGh;
+$('ghmod').onclick=e=>{if(e.target===$('ghmod'))closeGh()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ghmod').hidden)closeGh()});
+$('ghRepo').oninput=$('ghPath').oninput=()=>{$('ghLink').hidden=!ghParse($('ghRepo').value,$('ghPath').value)};
+$('ghForm').onsubmit=async e=>{e.preventDefault();const g=ghParse($('ghRepo').value,$('ghPath').value);
+  if(!g){$('ghMsg').textContent='Use owner/repo, for example g-ab/cast, or paste the repo’s github.com link.';return}
+  $('ghGo').disabled=true;$('ghMsg').textContent=`Reading ${ghLabel(g)}…`;
+  try{if(await ghOpen(g))closeGh();else $('ghMsg').textContent=`No Stylist files found in ${ghLabel(g)}. Check the folder, and that the repo is public.`}
+  catch(err){$('ghMsg').textContent='GitHub can’t be reached from here. This works on the Stylist website (g-ab.github.io/stylist), with an internet connection.'}
+  $('ghGo').disabled=false};
+$('ghLink').onclick=async()=>{const g=ghParse($('ghRepo').value,$('ghPath').value);if(!g)return;
+  const url=`${location.origin}${location.pathname}?app=${ghLabel(g)}`;
+  try{await navigator.clipboard.writeText(url);toast('Link copied: it opens Stylist with this app loaded')}catch(e){$('ghMsg').textContent=url}};
+// a link with ?app=owner/repo opens that app straight away
+{const q=new URLSearchParams(location.search).get('app'),g=q&&ghParse(q);
+  if(g)ghOpen(g).then(ok=>{if(!ok)toast(`No Stylist files found in ${ghLabel(g)}`)}).catch(()=>toast('GitHub can’t be reached from here'))}
 </script>
 </body>
 </html>

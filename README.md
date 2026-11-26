@@ -10,7 +10,7 @@ Stylist sits above any design system. It defines what can be styled (colour, typ
 Your app keeps its Stylist files in its own repo: `stylist.json` (your settings), `stylist-theme.css`, `app-tokens.css`, `stylist-icons.css`, `components.json` and `brand/`. An AI assistant with access to that repo, or you in a terminal, keeps them up to date.
 
 **Restyle the app**
-1. Change the style at https://g-ab.github.io/stylist/.
+1. Open your app's current style: Share → **Open from GitHub…** and type the repo (e.g. `g-ab/cast`). Stylist remembers it, so next time it's one click. Then change the style.
 2. Share → **Copy setup for Claude**.
 3. Paste it in your app's AI chat and say **"restyle the app"**.
 

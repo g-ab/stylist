@@ -1,6 +1,7 @@
 # Changelog
 
 ## 26 Nov 2026
+- **Open from GitHub:** load an app's style straight from its repo (Share menu or Custom view). Remembers the last repo; "Copy link" makes a link that opens Stylist with that app loaded.
 - Browser settings are now saved under new names: settings kept in the browser before this update reset once. Re-open the app's files to get a style back.
 - **Stylist runs on the web:** https://g-ab.github.io/stylist/, published by GitHub on every push once the checks pass. Downloads work as plain browser downloads there.
 - **Restyle an app from a setup.** "Copy setup for Claude" now copies the full recipe (settings and pins), and `export.py` turns it into the app's style files, stopping if the theme was edited by hand.

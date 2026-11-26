@@ -106,6 +106,37 @@ async def main():
         check("no page errors (main page)", not errors, errors[:3])
         await pg.close()
 
+        # 6c. Open from GitHub: reads the repo's files (served here from a fixture), from the dialog and from ?app= links
+        fxd = Path(__file__).resolve().parent / "fixtures" / "v5-css"
+        async def raw(route):
+            m = re.match(r"https://raw\.githubusercontent\.com/g-ab/cast/HEAD/(.+)$", route.request.url)
+            f = fxd / m.group(1) if m else None
+            if f and f.is_file():
+                await route.fulfill(status=200, body=f.read_text(encoding="utf-8"), headers={"Access-Control-Allow-Origin": "*"})
+            else:
+                await route.fulfill(status=404, body="", headers={"Access-Control-Allow-Origin": "*"})
+        gh, gerr = await open_page(browser)
+        await gh.route(re.compile(r"https://raw\.githubusercontent\.com/.*"), raw)
+        await gh.click("#shareBtn") if await gh.query_selector("#shareBtn") else None
+        await gh.evaluate("openGh()")
+        await gh.fill("#ghRepo", "https://github.com/g-ab/cast")
+        await gh.click("#ghGo")
+        await gh.wait_for_timeout(500)
+        g1 = await gh.evaluate("({hidden:$('ghmod').hidden,src:APP.source,review:APP.review.length,radius:S.radius,track:trackOf().base,last:localStorage.getItem('stylist.gh.v1')})")
+        check("open from GitHub", g1["hidden"] and "g-ab/cast" in g1["src"] and g1["review"] == 0 and g1["radius"] == 12 and g1["track"] == 0.01 and "g-ab/cast" in (g1["last"] or ""), g1)
+        await gh.evaluate("openGh()")
+        await gh.fill("#ghRepo", "g-ab/nothing-here")
+        await gh.click("#ghGo")
+        await gh.wait_for_timeout(400)
+        g2 = await gh.evaluate("({hidden:$('ghmod').hidden,msg:$('ghMsg').textContent})")
+        check("open from GitHub: repo without Stylist files", not g2["hidden"] and "No Stylist files" in g2["msg"], g2)
+        await gh.goto(PAGE + "?app=g-ab/cast")
+        await gh.wait_for_timeout(700)
+        g3 = await gh.evaluate("({src:APP.source,radius:S.radius})")
+        check("?app= link opens the app", "g-ab/cast" in (g3["src"] or "") and g3["radius"] == 12, g3)
+        check("no page errors (GitHub)", not gerr, gerr[:3])
+        await gh.close()
+
         # 7. The export dialog keeps its download button in view, even in small windows
         for w, h in [(1440, 900), (820, 650), (560, 800)]:
             pg, errors = await open_page(browser, w, h)

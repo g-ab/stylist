@@ -9,7 +9,7 @@ function renderCustom(){
   const el=$('cusBody');if(!el||$('vCus').hidden)return;
   const t=tokens(),T=APP.tokens,tg=APP.target,R=APP.review||[],sw=v=>isColor(v)?`<span class="c-sw" style="background:${escH(v)}"></span>`:'';
   let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||'').replace(/^Built-in .+ setup$/,'Built-in setup'))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
-    <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn" data-act="open">Open app style…</button><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
+    <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn" data-act="open">Open app style…</button><button class="k-btn" data-act="gh">Open from GitHub…</button><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
     <div class="k-row" style="gap:20px;align-items:flex-end"><label class="k-field">App name<input class="k-input" data-f="name" value="${escH(APP.name)}"></label>
     <div class="k-field" style="width:auto">Exports to<div class="k-seg" data-f="target">${Object.entries(TGT).map(([k,v])=>`<button data-v="${k}" aria-pressed="${k===tg}">${v}</button>`).join('')}</div></div>
     <button class="k-btn ghost sm" data-act="reset" style="margin-left:auto">Back to built-in setup</button></div>
@@ -69,6 +69,7 @@ const cus=$('vCus');
 cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   const a=b.dataset.act;
   if(a==='open')$('appFiles').click();
+  if(a==='gh')openGh();
   else if(a==='pkg')openPkg();
   else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Back to the built-in setup')}
   else if(a==='addtok'){const n=$('newTok').value.trim().replace(/^--/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');

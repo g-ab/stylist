@@ -109,6 +109,11 @@ Stylist never edits component code. It owns the core tokens and edits only where
 - **`export.py APP_DIR [SETUP]`** (Stylist repo) runs Stylist's own code headless: opens the app's current files like "Open app style…", **stops (exit 2) if the theme file was edited by hand** since the last export, applies the setup's settings and pins, writes the package files the app already has (plus theme, app tokens, stylist.json), and prints every token value that changed. Without SETUP it just regenerates the files.
 - So restyling an app is: style in Stylist → Copy setup for Claude → paste in the app's chat → it runs export.py, shows the diff, commits.
 
+## Open from GitHub (26 Nov 2026)
+- Share menu and Custom view: **Open from GitHub…** asks for `owner/repo` (or a github.com link, incl. `/tree/<branch>/<folder>`) and an optional folder. It fetches `stylist.json`, `stylist-theme.css`, `app-tokens.css`, `components.json`, `stylist-icons.css` and `brand/{logo,mark,favicon}[-dark].svg` from raw.githubusercontent.com (default branch, no cache) and hands them to `openFiles()`, like Open app style…. Public repos only.
+- The last repo is remembered (`stylist.gh.v1`), so syncing again is one click. "Copy link" gives `?app=owner/repo[/folder]`, which opens Stylist with that app loaded.
+- Doesn't work in the Claude artifact copy (it can't reach other sites); it says so.
+
 ## Round trip (Open app style… or drop the files on Custom)
 - Stylist compares the core file with `snapshot`. Without stylist.json, it compares with what Stylist would export now. `stylist-icons.*` files are ignored on import; brand SVGs are restored to their slots.
 - For each change: **Match with controls** (accent, support, fonts, any radius step or Radix factor, spacing unit, control heights, text size, icon stroke; closest match), **Pin** (an exception kept on every export; library-only names are pinned as `@shadcn:<name>` or `@radix:<name>`), or **Revert**. An added var can be **moved to app tokens**; a removed one is **restored**. Shadows can be pinned but not matched.
