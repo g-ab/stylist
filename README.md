@@ -1,2 +1,2 @@
 # stylist
-Kickstart your UI styling and motion with stylist. Target css, shadcn and radix as destination and handle global tokens with the editor
+Handle global tokens and motion with the editor. Target css, shadcn or radix as destination and kickstart your UI styling in minutes
