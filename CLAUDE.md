@@ -8,6 +8,7 @@ Stylist is gab's styling tool.
 - `src/js/NN-*.js`: one script, split by feature and joined in file-name order. **All files share one scope**: order matters, and a `const` used at load time must be declared in an earlier file.
 - `src/data/icons.json`: the embedded icon paths (Lucide, Tabler, Phosphor). Don't hand-edit; regenerate from npm if the sets change.
 - `build.py` → `dist/index.html`, byte-exact concatenation. `dist/` is committed because it's what gets published.
+- `export.py`: restyles an app's folder from a pasted setup, using `dist/index.html` headless (so build first).
 - `tests/run.py`: the checks; `tests/fixtures/clay-*`: real packages exported by Clay, which must keep opening.
 - `docs/interface.md`: what Stylist does, its tokens, the package format and the Cast hand-off. The claude.ai project doc `claude/stylist-cast-interface.md` is a copy of it.
 

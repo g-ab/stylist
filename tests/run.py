@@ -92,6 +92,26 @@ async def main():
             return {n:document.querySelectorAll('#tokBody [data-copy]').length,bad:bad.length}}""")
         check("swatches copy as hex", hx["n"] > 50 and hx["bad"] == 0, hx)
 
+        # 6b. "Copy setup for Claude" carries the full recipe, and export.py turns it into the files
+        setup = await pg.evaluate("()=>{S={...PRESETS[0],radius:16,fam:'teal'};APP.name='Fixture';APP.target='css';apply();return setupText()}")
+        block = json.loads(setup[setup.index("{"):setup.rindex("}") + 1])
+        keys = await pg.evaluate("RECIPE_KEYS")
+        check("copy setup is a full recipe", set(keys) <= set(block["settings"]) and "pins" in block and block["settings"]["radius"] == 16, list(block)[:6])
+        import shutil, subprocess, tempfile
+        root = Path(__file__).resolve().parent.parent
+        with tempfile.TemporaryDirectory() as tmp:
+            app = Path(tmp) / "app"
+            shutil.copytree(root / "tests" / "fixtures" / "clay-css", app)
+            (Path(tmp) / "setup.txt").write_text(setup)
+            r1 = subprocess.run([sys.executable, str(root / "export.py"), str(app), str(Path(tmp) / "setup.txt")], capture_output=True, text=True)
+            theme = (app / "stylist-theme.css").read_text() if (app / "stylist-theme.css").exists() else ""
+            check("export.py applies a setup", r1.returncode == 0 and "--radius-lg: 16px" in theme and not (app / "clay-theme.css").exists() and "--radius-lg: 12px → 16px" in r1.stdout, r1.stdout[-300:] + r1.stderr[-300:])
+            r2 = subprocess.run([sys.executable, str(root / "export.py"), str(app)], capture_output=True, text=True)
+            check("export.py again: nothing changes", r2.returncode == 0 and "No token values changed" in r2.stdout, r2.stdout[-200:])
+            (app / "stylist-theme.css").write_text(theme.replace("--radius-lg: 16px", "--radius-lg: 10px"))
+            r3 = subprocess.run([sys.executable, str(root / "export.py"), str(app), str(Path(tmp) / "setup.txt")], capture_output=True, text=True)
+            check("export.py stops on hand edits", r3.returncode == 2 and "radius-lg" in r3.stdout, r3.stdout[-200:])
+
         check("no page errors (main page)", not errors, errors[:3])
         await pg.close()
 

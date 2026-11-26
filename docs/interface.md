@@ -106,6 +106,11 @@ Stylist never edits component code. It owns the core tokens and edits only where
 - `components.json`: `{app, components:[{name, tokens, html, css}]}`. Stylist renders each one in a shadow root, themed with exactly the variables the exported files define (for Radix, also its runtime `--radius-1…6`). Each component is marked "Follows heights" (uses height tokens or `h-N`) or "Fixed Npx" (a hard-coded height in the control range, 16–64px).
 - "Export tokens…" (quick copy) offers CSS variables, shadcn, Radix and JSON.
 
+## Restyling an app from a setup (26 Nov 2026)
+- **Share → Copy setup for Claude** copies the full recipe: a short line, then a JSON block with `stylist`, `framework`, `app`, `target`, `settings` (every recipe key, `RECIPE_KEYS`) and `pins`. It no longer copies a readable summary. Own font files and brand SVGs aren't in it (the app keeps its brand files; a new brand needs Export package).
+- **`export.py APP_DIR [SETUP]`** (Stylist repo) runs Stylist's own code headless: opens the app's current files like "Open app style…", **stops (exit 2) if the theme file was edited by hand** since the last export, applies the setup's settings and pins, writes the package files the app already has (plus theme, app tokens, stylist.json; old `clay-*` files are renamed), and prints every token value that changed. Without SETUP it just regenerates the files.
+- So restyling an app is: style in Stylist → Copy setup for Claude → paste in the app's chat → it runs export.py, shows the diff, commits.
+
 ## Round trip (Open app style… or drop the files on Custom)
 - Stylist compares the core file with `snapshot`. Without stylist.json, it compares with what Stylist would export now. `stylist-icons.*` files are ignored on import; brand SVGs are restored to their slots.
 - For each change: **Match with controls** (accent, support, fonts, any radius step or Radix factor, spacing unit, control heights, text size, icon stroke; closest match), **Pin** (an exception kept on every export; library-only names are pinned as `@shadcn:<name>` or `@radix:<name>`), or **Revert**. An added var can be **moved to app tokens**; a removed one is **restored**. Shadows can be pinned but not matched.
@@ -139,7 +144,7 @@ Stylist's export also has the scales (gray/accent/support 1–12), support roles
 - Stylist's own chrome uses fixed colours (Instrument Sans / Geist Mono) and isn't themed.
 - Panel: top bar with the Library dropdown and the Share menu, then icon tabs, one category at a time: Colour (theme dropdown with full-size cards, accent, support, neutrals, containers) · Typeface (families, letter spacing) · Corners (8 visual tiles) · Shadows (shadows + focus with a demo) · Icons (set, stroke or weight, preview strip) · Brand (logo, mark, favicon slots; opening it shows the Brand view) · Density (presets, read-only scope list with hover preview, control heights, follow list) · Spacing (unit field with a ×1–×8 scale). Each relevant group ends with a library caption.
 - Views: Components (gallery, then a Heights section at the bottom: one row of controls per size with dashed guides, plus a mixed form row at md showing focus), App preview (mimics Cast's Home, Drawing and Patterns), Tokens (with Shadows, Corners and Spacing cards), Brand (assets, fits your components, in context), Custom (app name, target, changes and pins, custom tokens, custom components with height status, usage, changelog). All preview icons use the chosen icon set.
-- "Copy setup for Claude" still exists, but the package is the full hand-off.
+- "Copy setup for Claude" copies the full recipe for export.py (see Restyling an app from a setup); Export package is still the full hand-off, and the one to use for new brand files.
 
 ## Not covered here yet
 - **Motion** (added 25 Nov in another chat): tokens `--motion-fast|moderate|slow`, `--ease-*`, `--motion-*-exit`, `--ease-exit`, `--motion-move`; `stylist-motion.ts` for Framer Motion. Needs its own section.

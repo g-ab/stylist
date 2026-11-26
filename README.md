@@ -11,6 +11,7 @@ Stylist sits above any design system. It defines what can be styled (colour, typ
 pip install -r requirements-dev.txt && python3 -m playwright install chromium
 python3 build.py          # src/ → dist/index.html
 python3 tests/run.py      # the checks; all must pass before publishing
+python3 export.py APP_DIR [SETUP]   # restyle an app's files from a pasted "Copy setup for Claude"
 ```
 `dist/index.html` is a single self-contained page; open it in a browser to try it locally.
 

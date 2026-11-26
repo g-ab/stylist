@@ -109,15 +109,16 @@ function apply(){
   $('unitOut').textContent=pxs(U);
   $('uscale').innerHTML=[1,2,4,6,8].map(n=>`<div><span>×${n}</span><i style="width:${n*U}px"></i><span>${rem(n*U)} (${pxs(n*U)})</span></div>`).join('');
   const p=preset(),edited=p&&KEYS.some(k=>S[k]!==p[k]);
-  $('setup').textContent=setupText();
   if(typeof renderTokens==='function')renderTokens();
   if(typeof renderCustom==='function')renderCustom();
   try{localStorage.setItem('blueprint.style.v1',JSON.stringify(S))}catch(e){}
 }
-function setupText(){
-  const p=preset(),edited=p&&KEYS.some(k=>S[k]!==p[k]);
-  const np=['light','dark'].reduce((a,m)=>a+Object.keys(APP.pins[m]||{}).length,0);
-  return `Stylist setup for ${APP.name}${np?` (${np} pinned value${np>1?'s':''}: use the exported package)`:''}: colours ${p.name}${edited?' (edited)':''} · fonts ${S.ui}${custom[S.ui]?' (my file)':''} / ${S.mono}${custom[S.mono]?' (my file)':''} · accent Tailwind ${S.fam}, ${S.sat}% · support Tailwind ${supFam()} (${S.sup==='custom'?'custom':SUP[S.sup].name.toLowerCase()}) · neutrals ${S.warm}/100 warm · containers ${S.tint===0?'white':S.tint+'/100 tint'} · shadows ${(s=>s.op?`seed ${s.x}px ${s.y}px ${s.blur}px ${s.spread}px, ${s.color||'auto colour'} at ${s.op}%`:'none')(shOf())} · radius ${cornerName()} · icons ${ICON_SETS[iconOf().set].name} (${iconOf().set==='phosphor'?iconOf().weight:iconOf().stroke+'px stroke'}) · heights ${HK.map(k=>k+' '+hPx()[k]).join('/')}px · focus ${focusOf().shape} ${focusOf().w}px, offset ${focusOf().off}px, ${focusOf().str}% · density ${densCustom()?'Custom ('+DENS[S.dens].name+' heights)':DENS[S.dens].name} · spacing unit ${rem(unitOf())} (${pxs(unitOf())})`;
+function setupText(){ // the full recipe: an app's chat turns it into the style files with Stylist's export.py
+  const cj={stylist:SCHEMA,framework:FRAMEWORK,app:APP.name,target:APP.target,settings:recipeSettings(),pins:APP.pins};
+  const own=[S.ui,S.mono].filter(n=>custom[n]);
+  return `Stylist setup for ${APP.name}. Paste it in the ${APP.name} chat to restyle the app: Stylist's export.py turns it into the style files.`+
+    (own.length?` Your own font file (${own.join(', ')}) isn't included: add it to the app, or use Export package.`:'')+
+    `\n\n\`\`\`json\n${JSON.stringify(cj,null,1)}\n\`\`\`\n`;
 }
 function swatch(p){const c=p.exact?p.exact.light:(()=>{const s=S;S={...p};const d=derive('light');S=s;return d})();return `<span class="sw"><i style="background:${c.paper}"></i><i style="background:${c.sheet}"></i><i style="background:${c.ink}"></i><i style="background:${c.accent}"></i></span>`}
 $('presets').innerHTML=PRESETS.map(p=>`<button class="pre" role="option" data-id="${p.id}">${swatch(p)}<span><b>${p.name}</b><small>${p.desc}</small></span></button>`).join('');

@@ -1,8 +1,11 @@
 // ---- the package ----
 let pTgt='css',pFile=0,pBuilt=null;
+// the settings a recipe carries (stylist.json, and "Copy setup for Claude")
+const RECIPE_KEYS=['id','fam','sat','warm','tint','shStr','shSoft','sh','motion','sup','supFam','ui','mono','radius','pill','dens','unit','h','focus','icons','track'];
+function recipeSettings(){return Object.fromEntries(RECIPE_KEYS.map(k=>[k,k==='track'?{base:trackOf().base}:S[k]]))}
 function buildPackage(tg){const core=coreCSS(tg),snap=parseCSS(core);
   const cj={stylist:SCHEMA,framework:FRAMEWORK,app:APP.name,target:tg,exported:new Date().toISOString(),
-    settings:Object.fromEntries(['id','fam','sat','warm','tint','shStr','shSoft','sh','motion','sup','supFam','ui','mono','radius','pill','dens','unit','h','focus','icons','track'].map(k=>[k,k==='track'?{base:trackOf().base}:S[k]])),
+    settings:recipeSettings(),
     fontFiles:[S.ui,S.mono].filter(n=>custom[n]),brand:brandFiles().map(f=>f.name),pins:APP.pins,snapshot:snap,changelog:APP.changelog};
   return {snap,files:[
    {name:'stylist.json',type:'application/json',text:JSON.stringify(cj,null,2),note:'Stylist’s recipe: settings, pins, the changelog and a snapshot of the core file. Keep it in the app’s repo, and open it in Stylist to restyle.'},
