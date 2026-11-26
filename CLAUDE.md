@@ -1,8 +1,6 @@
 # Stylist: rules for working on this repo
 
-Stylist is gab's styling tool (formerly Clay). It's published as a single-page artifact:
-https://claude.ai/artifact/7YiBzeCAkQVbi4KZxfUkbq (slug `350445d5-a388-4d2c-84f8-735ffc283ee8`).
-**This repo is the source of truth.** The artifact is only the published copy.
+Stylist is gab's styling tool.
 
 ## Layout
 - `src/index.html`: the page shell, with three placeholders (`/*@stylist:css*/`, `/*@stylist:icons*/`, `/*@stylist:js*/`).
