@@ -1,0 +1,22 @@
+/* Clay app tokens · Fixture. Owned by the app: add tokens here, built from core tokens. Clay edits only where they point and pinned values. Load after the core file. */
+:root {
+  --grid: var(--gray-3);
+  --grid-major: var(--gray-5);
+  --axis: var(--gray-8);
+  --pencil: var(--gray-10);
+  --fill: color-mix(in oklab, var(--ink) 5%, transparent);
+  --cut: #d9480f;
+  --clay: #d6b19a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --cut: #ff8a4c;
+    --clay: #a9806a;
+  }
+}
+
+:root[data-theme="dark"] {
+  --cut: #ff8a4c;
+  --clay: #a9806a;
+}

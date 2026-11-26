@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stylist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>/*@stylist:css*/</style>
+</head>
+<body>
+<aside>
+  <div class="ah">
+    <div class="amenu libdd"><button class="ttl" id="libBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Stylist: choose the destination" title="Destination: None"><h1>Stylist</h1><svg viewBox="0 0 10 10"><path d="M2.5 4l2.5 2.5L7.5 4"/></svg></button>
+      <div class="amlist liblist" id="libSeg" role="listbox" aria-label="Destination" hidden>
+        <div class="lh">Destination</div>
+        <button role="option" data-t="css"><b>None</b><small>Plain CSS variables, no component library</small></button>
+        <button role="option" data-t="shadcn"><b>shadcn</b><small>shadcn/ui on Tailwind v4</small></button>
+        <button role="option" data-t="radix"><b>Radix</b><small>Radix Themes</small></button>
+      </div>
+    </div>
+    <div class="ahr">
+    <div class="amenu"><button class="aico" id="amBtn" aria-label="Share and export" aria-haspopup="true" aria-expanded="false" title="Share and export"><svg viewBox="0 0 16 16"><path d="M8 10V2.5M5 5.5l3-3 3 3"/><path d="M4.5 7.5h-1a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-1"/></svg></button>
+      <div class="amlist" id="amList" hidden role="menu">
+        <button role="menuitem" id="copy"><svg viewBox="0 0 16 16"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V3.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>Copy setup for Claude</button>
+        <button role="menuitem" id="export"><svg viewBox="0 0 16 16"><path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5"/></svg>Export tokens…</button>
+        <hr>
+        <button role="menuitem" id="mPkg"><svg viewBox="0 0 16 16"><path d="M2.5 5L8 2.5 13.5 5v6L8 13.5 2.5 11z"/><path d="M2.5 5L8 7.5 13.5 5M8 7.5v6"/></svg>Export package…</button>
+        <button role="menuitem" id="mOpen"><svg viewBox="0 0 16 16"><path d="M2 4.5a1 1 0 0 1 1-1h3l1.5 1.5H13a1 1 0 0 1 1 1V12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>Open app style…</button>
+        <hr>
+        <button role="menuitem" id="reset"><svg viewBox="0 0 16 16"><path d="M3.5 8.5A4.5 4.5 0 1 0 8 4H5"/><path d="M6.5 2L4.5 4l2 2"/></svg>Reset to defaults</button>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div class="setup" id="setup" hidden></div>
+  <div class="ptabs" id="ptabs" role="tablist" aria-label="Style controls"><button role="tab" data-tab="style" aria-label="Style" title="Style"><svg viewBox="0 0 18 18"><rect x="2.5" y="2.5" width="13" height="13" rx="3.5"/><rect x="5.5" y="5.5" width="7" height="3" rx="1.5"/><path d="M5.5 11.5h7"/></svg></button><button role="tab" data-tab="col" aria-label="Colour" title="Colour"><svg viewBox="0 0 18 18"><path d="M9 2.2C9 2.2 4 7.6 4 11a5 5 0 0 0 10 0c0-3.4-5-8.8-5-8.8z"/></svg></button><button role="tab" data-tab="type" aria-label="Typeface" title="Typeface"><svg viewBox="0 0 18 18"><path d="M3 15L8.2 3h1.6L15 15M5.2 10.5h7.6"/></svg></button><button role="tab" data-tab="rad" aria-label="Radius" title="Radius"><svg viewBox="0 0 18 18"><path d="M4 15V9a5 5 0 0 1 5-5h5"/></svg></button><button role="tab" data-tab="sh" aria-label="Shadows" title="Shadows"><svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="6"/><path d="M9 3v12M9 6.5h5.2M9 9h6M9 11.5h5.2"/></svg></button><button role="tab" data-tab="ico" aria-label="Icons" title="Icons"><svg viewBox="0 0 18 18"><rect x="2.5" y="2.5" width="5" height="5" rx="1"/><circle cx="12.5" cy="5" r="2.6"/><path d="M5 10.5l2.7 4.5H2.3z"/><rect x="10" y="10.5" width="5" height="5" rx="2.5"/></svg></button><button role="tab" data-tab="brand" aria-label="Brand" title="Brand"><svg viewBox="0 0 18 18"><path d="M9 2.3l2 4.1 4.5.6-3.3 3.1.8 4.5L9 12.5l-4 2.1.8-4.5L2.5 7l4.5-.6z"/></svg></button><button role="tab" data-tab="dens" aria-label="Density" title="Density"><svg viewBox="0 0 18 18"><rect x="3" y="3" width="12" height="3" rx="1"/><rect x="3" y="8" width="12" height="2.5" rx="1"/><rect x="3" y="12.5" width="12" height="2" rx="1"/></svg></button><button role="tab" data-tab="motion" aria-label="Motion" title="Motion"><svg viewBox="0 0 18 18"><path d="M2.5 13.5c3 0 3.5-9 7-9 2.2 0 3 2.4 6 2.4"/><path d="M2.5 15.5h13" opacity=".45"/></svg></button><button role="tab" data-tab="space" aria-label="Spacing" title="Spacing"><svg viewBox="0 0 18 18"><path d="M3.5 4H6v10H3.5M14.5 4H12v10h2.5"/><path d="M9 5.5v7" stroke-dasharray="1.4 1.6"/></svg></button></div>
+  <div class="ctl">
+    <div class="grp" data-tab="col"><h2>Colour theme</h2><div class="pdd"><button class="pre ptrig" id="preBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Colour theme"></button><div class="presets plist" id="presets" role="listbox" aria-label="Colour themes" hidden></div></div></div>
+    <div class="grp" data-tab="type"><h2>Typeface <output>or drop a file</output></h2>
+      <div class="fpick">
+        <div class="frow" data-k="ui"><span>Interface</span><button class="fbtn" data-k="ui"></button></div>
+        <div class="frow" data-k="mono"><span>Numbers &amp; labels</span><button class="fbtn" data-k="mono"></button></div>
+      </div>
+      
+    </div>
+    <div class="grp" data-tab="type"><h2>Letter spacing <output id="trOut"></output></h2>
+      <label class="tf"><span>Tracking</span><span class="unitf"><input type="number" data-tr="base" step="0.005" min="-0.2" max="0.5" inputmode="decimal" aria-label="Tracking in em"><span>em</span></span></label>
+      <p class="hint">Applies to all text, and the tight-to-widest steps used by headings and labels move with it. The arrow keys move 0.005em.</p>
+      </div>
+    <div class="grp" data-tab="col">
+      <h2>Accent <output id="hueOut"></output></h2>
+            <div class="swatches" id="swatches" style="margin:0 0 4px"></div>
+      <div class="sub"><span>Muted</span><span>Vivid</span></div>
+      <input type="range" id="sat" min="10" max="100" aria-label="Accent strength">
+    </div>
+    <div class="grp" data-tab="col">
+      <h2>Support <output id="supOut"></output></h2>
+      <div class="chips" id="supMode" role="group" aria-label="How support relates to the accent"></div>
+      <div class="swatches" id="supSw" style="margin-top:10px"></div>
+    </div>
+    <div class="grp" data-tab="col">
+      <h2>Neutrals <output id="warmOut"></output></h2>
+      <div class="warm"></div><input type="range" id="warm" min="0" max="100" aria-label="Cool to warm greys">
+      <div class="sub" style="margin-top:4px"><span>Cool</span><span>Grey</span><span>Warm</span></div>
+    </div>
+    <div class="grp" data-tab="col">
+      <h2>Containers <output id="tintOut"></output></h2>
+      <input type="range" id="tint" min="0" max="100" aria-label="Container tint, white to tinted">
+      <div class="sub" style="margin-top:4px"><span>White</span><span>Tinted</span></div>
+      <p class="hint">Cards, panels and menus. The tint takes the Neutrals direction; the page background keeps following Neutrals.</p>
+    </div>
+    <div class="grp" data-tab="sh">
+      <h2>Shadows <output id="shOut"></output></h2>
+      <div class="shr" data-k="color"><span>Color</span><div class="shcol"><label class="shsw" title="Pick a shadow colour"><input type="color" id="shColor" aria-label="Shadow colour"><i></i></label><span id="shColTxt">Auto</span><label class="unitf"><input type="number" id="shOp" min="0" max="60" step="0.5" aria-label="Shadow opacity in percent"><span>%</span></label></div></div>
+      <div class="shr" data-k="blur"><span>Blur</span><input type="range" data-sh="blur" min="0" max="40" step="0.5" aria-label="Shadow blur"><label class="unitf"><input type="number" data-sh="blur" min="0" max="40" step="0.5" aria-label="Shadow blur in px"><span>px</span></label></div>
+      <div class="shr" data-k="spread"><span>Spread</span><input type="range" data-sh="spread" min="-10" max="10" step="1" aria-label="Shadow spread"><label class="unitf"><input type="number" data-sh="spread" min="-10" max="10" step="1" aria-label="Shadow spread in px"><span>px</span></label></div>
+      <div class="shr" data-k="x"><span>Offset X</span><input type="range" data-sh="x" min="-20" max="20" step="0.5" aria-label="Shadow offset X"><label class="unitf"><input type="number" data-sh="x" min="-20" max="20" step="0.5" aria-label="Shadow offset X in px"><span>px</span></label></div>
+      <div class="shr" data-k="y"><span>Offset Y</span><input type="range" data-sh="y" min="-20" max="20" step="0.5" aria-label="Shadow offset Y"><label class="unitf"><input type="number" data-sh="y" min="-20" max="20" step="0.5" aria-label="Shadow offset Y in px"><span>px</span></label></div>
+      <p class="hint">Cards use this shadow. Menus and dialogs scale it up.</p>
+      
+    </div>
+    <div class="grp" data-tab="sh"><h2>Focus <output id="fOut"></output></h2>
+      <div class="frow2" data-lens-ctl="fshape"><span>Shape</span><div class="segs" id="fShape"><button data-v="ring">Ring</button><button data-v="outline">Outline</button></div><small class="why"></small></div>
+      <div class="frow2" data-lens-ctl="fw"><span>Width</span><label class="unitf"><input type="number" id="fW" min="1" max="6" step="1" aria-label="Focus width"><span>px</span></label><small class="why"></small></div>
+      <div class="frow2" data-lens-ctl="foff"><span>Offset</span><label class="unitf"><input type="number" id="fOff" min="0" max="6" step="1" aria-label="Focus offset"><span>px</span></label><small class="why"></small></div>
+      <div class="frow2" data-lens-ctl="fstr"><span>Strength</span><label class="unitf"><input type="number" id="fStr" min="10" max="100" step="10" aria-label="Focus strength"><span>%</span></label><small class="why"></small></div>
+      <div class="fdemo" id="fdemo"></div>
+      
+    </div>
+    <div class="grp" data-tab="rad"><h2>Radius <output id="rOut"></output></h2><div class="ctiles" id="round" role="group" aria-label="Radius"></div></div>
+    <div class="grp" data-tab="ico"><h2>Icon set <output id="icOut"></output></h2>
+      <div class="segs" id="icSet"><button data-v="lucide">Lucide</button><button data-v="tabler">Tabler</button><button data-v="phosphor">Phosphor</button></div></div>
+    <div class="grp" data-tab="ico" data-ic="stroke"><h2>Stroke <output id="icStrokeOut"></output></h2>
+      <input type="range" id="icStroke" min="1" max="3" step="0.25" aria-label="Icon stroke width">
+      <div class="sub" style="margin-top:4px"><span>Thin</span><span>Heavy</span></div></div>
+    <div class="grp" data-tab="ico" data-ic="weight"><h2>Weight</h2><div class="wtiles" id="icWeight"></div></div>
+    <div class="grp" data-tab="ico"><h2>Preview</h2><div class="icstrip" id="icStrip"></div></div>
+    <div class="grp" data-tab="brand"><h2>Brand <output id="brOut"></output></h2>
+      <div id="brSlots"></div>
+      <p class="hint">The symbol fills every spot. Drop a Logo or Favicon only when that spot needs its own file. An empty dark slot uses the light one.</p>
+      <input type="file" id="brFile" accept=".svg,image/svg+xml" hidden></div>
+    <div class="grp" data-tab="style"><h2>Style <output id="densOut"></output></h2><div class="segs" id="dens"></div><p class="hint">Controls global elements such as text size, spacing, card padding, borders and typeface.</p><div class="dspec" id="dspec" aria-live="polite"></div></div>
+    <div class="grp" data-tab="dens"><h2>Control heights <output id="hOut"></output></h2>
+      <div class="hfields" id="hfields" data-lens-ctl="h"></div><small class="why hwhy"></small>
+      <p class="hint">Every control at a size uses the same height, so a button and a field next to each other line up. The arrow keys move one spacing unit.</p></div>
+    <div class="grp" data-tab="dens"><h2>Follow these heights</h2><div class="follow" id="follow"></div></div>
+    <div class="grp" data-tab="motion"><h2>Speeds <output id="mOut"></output></h2>
+      <div class="mhd"><span></span><span>Duration</span><span>Bounce</span></div>
+      <div class="mrow" data-k="fast"><span><b>Fast</b><small>Hover, focus, tooltips</small></span><label class="unitf"><input type="number" data-m="fast" data-f="d" min="0" max="1000" step="10" aria-label="Fast duration in ms"><span>ms</span></label><label class="unitf"><input type="number" data-m="fast" data-f="b" min="0" max="60" step="1" aria-label="Fast bounce in percent"><span>%</span></label></div>
+      <div class="mrow" data-k="moderate"><span><b>Moderate</b><small>Tabs, switches, dropdowns</small></span><label class="unitf"><input type="number" data-m="moderate" data-f="d" min="0" max="1000" step="10" aria-label="Moderate duration in ms"><span>ms</span></label><label class="unitf"><input type="number" data-m="moderate" data-f="b" min="0" max="60" step="1" aria-label="Moderate bounce in percent"><span>%</span></label></div>
+      <div class="mrow" data-k="slow"><span><b>Slow</b><small>Dialogs, side panels</small></span><label class="unitf"><input type="number" data-m="slow" data-f="d" min="0" max="1000" step="10" aria-label="Slow duration in ms"><span>ms</span></label><label class="unitf"><input type="number" data-m="slow" data-f="b" min="0" max="60" step="1" aria-label="Slow bounce in percent"><span>%</span></label></div>
+      <p class="hint">Bigger things move slower. Components use these three, never their own timing.</p></div>
+    <div class="grp" data-tab="motion"><h2>Exit <output id="mExOut"></output></h2>
+      <input type="range" id="mExit" min="40" max="100" step="5" aria-label="Exit speed, as a share of the enter time">
+      <div class="sub" style="margin-top:4px"><span>Quicker</span><span>Same as enter</span></div>
+      <p class="hint">Closing is a plain ease-in without bounce, a bit quicker than opening.</p></div>
+    <div class="grp" data-tab="motion"><h2>Reduced motion</h2>
+      <div class="segs" id="mRed"><button data-v="fade">Fades only</button><button data-v="none">No animation</button></div>
+      <p class="hint">When someone asks their device for less motion.</p></div>
+    <div class="grp" data-tab="space"><h2>Spacing unit <output id="unitOut"></output></h2>
+      <label class="unitf"><input type="number" id="unit" min="0.125" max="0.75" step="0.125" inputmode="decimal" aria-label="Spacing unit in rem"><span>rem</span></label>
+      <div class="uscale" id="uscale"></div></div>
+  </div>
+</aside>
+<main>
+  <div class="mh"><div class="segs views" id="views"><button data-v="comp" aria-pressed="true">Components</button><button data-v="app" aria-pressed="false">App preview</button><button data-v="tok" aria-pressed="false">Tokens</button><button data-v="brand" aria-pressed="false">Brand</button><button data-v="mot" aria-pressed="false">Motion</button><button data-v="cus" aria-pressed="false">Custom</button></div><span class="sp"></span>
+    <div class="bgpick" id="bgpick" role="group" aria-label="Preview background"><span>Background</span>
+      <button data-b="white" title="White (dark surface in Dark)" aria-label="White"></button>
+      <button data-b="paper" title="Theme background" aria-label="Theme background"></button>
+      <label data-b="custom" title="Pick a colour" aria-label="Custom colour"><input type="color" id="bgColor" value="#f3efe8"></label>
+    </div>
+    <div class="segs" id="mode"><button data-v="light" aria-pressed="true">Light</button><button data-v="dark">Dark</button></div>
+  </div>
+  <div class="view-pane" id="vComp">
+  <div class="frames"><div class="frame wide">
+  <div class="pv gal">
+    <div class="k-mason">
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Sign in</h4><p>Pick up where you left off.</p></div></div>
+        <label class="k-field w">Email<input class="k-input" placeholder="you@studio.com" value="gab@studio.com"></label>
+        <label class="k-field w">Password<input class="k-input err" type="password" value="clay"><span class="hint err">At least 8 characters.</span></label>
+        <div class="k-row sb"><label class="k-opt"><input type="checkbox" class="k-check" checked><span>Remember me</span></label><button class="k-link">Forgot?</button></div>
+        <button class="k-btn pri w">Sign in</button>
+        <div class="k-or"><span>or</span></div>
+        <button class="k-btn w"><svg class="ic" data-i="globe"></svg>Continue with Google</button>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Recent drawings</h4><p>Saved on this device.</p></div><button class="k-btn ghost sm">View all</button></div>
+        <div class="k-list">
+          <div class="k-li on"><span class="k-th"><svg viewBox="0 0 40 30"><path d="M14 26V6h12v20z"/><path d="M26 11c6 0 6 10 0 10"/></svg></span><span class="k-lt"><b>Pitcher vase</b><small>Edited 2 h ago · 3 pieces</small></span><span class="k-badge acc"><i></i>Open</span></div>
+          <div class="k-li"><span class="k-th"><svg viewBox="0 0 40 30"><path d="M8 25L20 6l12 19z"/></svg></span><span class="k-lt"><b>Planter</b><small>Yesterday · 4 pieces</small></span><button class="k-btn ghost icon sm" aria-label="More"><svg class="ic" data-i="more"></svg></button></div>
+          <div class="k-li"><span class="k-th"><svg viewBox="0 0 40 30"><rect x="9" y="11" width="22" height="14"/><path d="M12 9c2-5 14-5 16 0"/></svg></span><span class="k-lt"><b>Lidded box</b><small>12 Nov · 6 pieces</small></span><span class="k-badge dng"><i></i>Too thin</span></div>
+          <div class="k-li"><span class="k-th"><svg viewBox="0 0 40 30"><path d="M10 8h20l-3 18H13z"/></svg></span><span class="k-lt"><b>Tumbler</b><small>3 Nov · 2 pieces</small></span><span class="k-badge">Draft</span></div>
+        </div>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Pattern summary</h4><p>Pitcher vase · A4</p></div><span class="k-badge solid">Ready</span></div>
+        <div class="k-stats"><div><small>Pieces</small><b>7</b></div><div><small>Pages</small><b>3</b></div><div><small>Clay</small><b>1.4<em>kg</em></b></div></div>
+        <div class="k-bars" aria-label="Area per piece"><i style="height:92%"></i><i style="height:64%"></i><i style="height:64%"></i><i class="sup" style="height:38%"></i><i class="sup" style="height:22%"></i><i class="sup" style="height:18%"></i><i class="warn" style="height:9%"></i></div>
+        <div class="k-bars-l"><span>A1</span><span>A2</span><span>A3</span><span>B</span><span>C1</span><span>C2</span><span>D</span></div>
+        <div class="k-leg"><span><i></i>Walls</span><span class="s"><i></i>Handle &amp; spout</span><span class="w"><i></i>Too thin</span></div>
+        <div class="k-row" style="gap:6px"><span class="k-tag">Stoneware</span><span class="k-tag">5 mm slab</span><span class="k-tag">Cone 6</span></div>
+        <div class="k-panel tint sm"><h4>Piece D is very thin</h4><p>At 3 mm it may crack when drying. Try 5 mm or more.</p></div>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Print settings</h4></div></div>
+        <div class="k-tabs" role="tablist"><button role="tab" aria-selected="true">Paper</button><button role="tab" aria-selected="false">Lines</button><button role="tab" aria-selected="false">Pages</button></div>
+        <div class="k-set"><span>Size</span><div class="k-seg"><button aria-pressed="true">A4</button><button aria-pressed="false">Letter</button><button aria-pressed="false">A3</button></div></div>
+        <div class="k-set col"><div class="k-row sb"><span>Shape grow</span><b class="k-val">12%</b></div><input type="range" class="k-range w" value="24" aria-label="Shape grow"></div>
+        <div class="k-set"><span>Number the pieces<small>Prints A1, A2… inside each shape</small></span><input type="checkbox" class="k-switch" checked aria-label="Number the pieces"></div>
+        <div class="k-set"><span>Crop marks<small>Corners for trimming the sheet</small></span><input type="checkbox" class="k-switch" aria-label="Crop marks"></div>
+        <div class="k-row end"><button class="k-btn ghost">Cancel</button><button class="k-btn pri"><svg class="ic" data-i="download"></svg>Download</button></div>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Share</h4><p>People with access can view and comment.</p></div></div>
+        <div class="k-row nowrap"><input class="k-input" placeholder="Email"><span class="k-sel narrow"><select class="k-input"><option>Can view</option><option>Can edit</option></select><svg class="ic" data-i="chevron"></svg></span><button class="k-btn pri">Invite</button></div>
+        <div class="k-list plain">
+          <div class="k-li"><span class="k-av">GA</span><span class="k-lt"><b>Gab <span class="k-badge" style="height:18px;font-size:11px">You</span></b><small>gab@studio.com</small></span><span class="k-mut">Owner</span></div>
+          <div class="k-li"><span class="k-av b">ML</span><span class="k-lt"><b>Marie Laurent</b><small>marie@atelier.fr</small></span><span class="k-mut">Can edit</span></div>
+          <div class="k-li"><span class="k-av c">JS</span><span class="k-lt"><b>Jonas Sjöberg</b><small>jonas@keramik.se</small></span><span class="k-mut">Can view</span></div>
+        </div>
+        <div class="k-row sb"><button class="k-link"><svg class="ic" data-i="link"></svg>Copy link</button><span class="k-tip">Anyone with the link can view</span></div>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Pieces</h4><p>Front view</p></div><button class="k-btn sm">Actions<svg class="ic" data-i="chevron" style="width:10px;height:10px"></svg></button></div>
+        <table class="k-table">
+          <thead><tr><th style="width:24px"><input type="checkbox" class="k-check" aria-label="Select all"></th><th>Piece</th><th class="num">W × H</th></tr></thead>
+          <tbody>
+            <tr class="sel"><td><input type="checkbox" class="k-check" checked aria-label="Select"></td><td>A · Body</td><td class="num">100 × 105</td></tr>
+            <tr><td><input type="checkbox" class="k-check" aria-label="Select"></td><td>B · Handle</td><td class="num">18 × 50</td></tr>
+            <tr><td><input type="checkbox" class="k-check" aria-label="Select"></td><td>C · Spout</td><td class="num">40 × 30</td></tr>
+          </tbody></table>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Activity</h4></div><div class="k-seg sm"><button aria-pressed="true">All</button><button aria-pressed="false">Mine</button></div></div>
+        <ol class="k-tl">
+          <li><span class="k-av sm b">ML</span><p><b>Marie</b> commented on <b>Piece C</b><span>“Spout needs a 2 mm overlap for joining.”</span><small>10 min ago</small></p></li>
+          <li><span class="tl-dot"></span><p>Pattern downloaded · 3 pages<small>1 h ago</small></p></li>
+          <li><span class="k-av sm">GA</span><p><b>You</b> renamed the drawing to <b>Pitcher vase</b><small>Yesterday</small></p></li>
+        </ol>
+        <div class="k-row nowrap"><input class="k-input" placeholder="Write a comment…"><button class="k-btn icon pri" aria-label="Send"><svg class="ic" data-i="send"></svg></button></div>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Front</h4><p>Right-click a piece</p></div><span class="k-badge acc"><i></i>A · Body</span></div>
+        <div class="k-canvas">
+          <svg viewBox="0 0 300 170"><path class="cv-ax" d="M0 150H300M90 0V170"/><rect class="cv-sel" x="40" y="40" width="100" height="110"/><circle class="cv-j" cx="40" cy="40" r="3.5"/><circle class="cv-j" cx="140" cy="40" r="3.5"/><circle class="cv-j" cx="140" cy="150" r="3.5"/><circle class="cv-j" cx="40" cy="150" r="3.5"/></svg>
+          <div class="k-menu ctx" role="menu">
+            <button><svg class="ic" data-i="measure"></svg>Measure<kbd>M</kbd></button>
+            <button><svg class="ic" data-i="split"></svg>Split<kbd>S</kbd></button>
+            <button><svg class="ic" data-i="rotate"></svg>Rotate<kbd>R</kbd></button>
+            <hr><button class="dng"><svg class="ic" data-i="eraser"></svg>Delete<kbd>⌫</kbd></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Glazes</h4><p>Pick one for the inside</p></div><span class="k-badge sup">3 saved</span></div>
+        <div class="k-list plain">
+          <div class="k-li"><span class="k-glz" style="background:var(--support)"></span><span class="k-lt"><b>Celadon</b><small>Gloss · cone 6</small></span><input type="radio" name="gz" class="k-radio" checked aria-label="Celadon"></div>
+          <div class="k-li"><span class="k-glz" style="background:var(--support-soft);box-shadow:inset 0 0 0 1px var(--support)"></span><span class="k-lt"><b>Shino</b><small>Satin · cone 10</small></span><input type="radio" name="gz" class="k-radio" aria-label="Shino"></div>
+          <div class="k-li"><span class="k-glz" style="background:var(--accent)"></span><span class="k-lt"><b>Cobalt wash</b><small>Matte · cone 6</small></span><input type="radio" name="gz" class="k-radio" aria-label="Cobalt wash"></div>
+        </div>
+        <button class="k-link" style="justify-self:start"><svg class="ic" data-i="plus"></svg>Add a glaze</button>
+      </div>
+
+      <div class="k-card blk center">
+        <span class="k-empty"><svg class="ic" data-i="box"></svg></span>
+        <h4>No pieces yet</h4><p>Sketch with the pencil, or start from a 10 cm box.</p>
+        <div class="k-row" style="justify-content:center"><button class="k-btn pri">Add a box</button><button class="k-btn">Open a file…</button></div>
+      </div>
+
+      <div class="k-panel inverse blk">
+        <div class="k-row sb nowrap"><div><h4>Pattern downloaded</h4><p style="margin:0">Pitcher vase pattern.pdf · 3 pages</p></div><button class="k-btn sm">Open</button></div>
+      </div>
+
+      <div class="k-card blk">
+        <div class="blk-h"><div><h4>Save changes?</h4><p>Latest changes are not saved. Saving will download your file.</p></div><button class="k-btn ghost icon sm" aria-label="Close"><svg class="ic" data-i="close"></svg></button></div>
+        <div class="k-row end"><button class="k-btn dng">Discard</button><button class="k-btn pri">Save</button></div>
+      </div>
+
+    </div>
+    <div class="k-heights" id="kHeights"></div>
+  </div>
+  </div></div>
+  </div>
+  <div class="view-pane" id="vCus" hidden><div class="frames"><div class="frame wide"><div class="pv cus" id="cusBody"></div></div></div><input type="file" id="appFiles" multiple accept=".json,.css,.svg" hidden></div>
+  <div class="view-pane" id="vMot" hidden><div class="frames"><div class="frame wide"><div class="pv mot" id="motBody"></div></div></div></div>
+  <div class="view-pane" id="vBrand" hidden><div class="frames"><div class="frame wide"><div class="pv brv" id="brBody"></div></div></div></div>
+  <div class="view-pane" id="vTok" hidden><div class="frames"><div class="frame wide"><div class="pv toks" id="tokBody"></div></div></div></div>
+  <div class="view-pane" id="vApp" hidden>
+  <div class="frames">
+    <div class="frame wide">
+      <div class="pv">
+        <div class="bar">
+          <div class="fl brand"><span class="bp-logo">Your app</span> <span class="sep">/</span><span class="nm">Pitcher vase</span><span class="dot"></span><span class="unit">MM</span></div>
+          <div class="fl tabs"><span class="b on"><svg class="ic" data-i="pencil"></svg>Drawing</span><span class="b"><svg class="ic" data-i="file"></svg>Patterns</span></div>
+          <span class="sp"></span>
+          <div class="fl">
+            <span class="b"><svg class="ic" data-i="pencil"></svg><kbd>P</kbd></span>
+            <span class="b"><svg class="ic" data-i="wand"></svg><kbd>C</kbd></span>
+            <span class="b on"><svg class="ic" data-i="cursor"></svg><kbd>V</kbd></span>
+            <span class="b"><svg class="ic" data-i="measure"></svg><kbd>M</kbd></span>
+            <span class="b"><svg class="ic" data-i="split"></svg><kbd>S</kbd></span>
+            <span class="b"><svg class="ic" data-i="box"></svg>Box</span>
+            <span class="b"><svg class="ic" data-i="eraser"></svg><kbd>E</kbd></span>
+          </div>
+          <div class="fl"><span class="b"><svg class="ic" data-i="fit"></svg><kbd>F</kbd></span></div>
+        </div>
+        <div class="canvas">
+          <div class="view"><span class="vl">TOP</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="ax" d="M0 85H400M200 0V170"/><rect class="sh" x="150" y="45" width="100" height="80"/><circle class="hole" cx="200" cy="85" r="26"/></svg></div>
+          <div class="view"><span class="vl">3D</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="clay2" d="M170 50l40 -18 40 18v80l-40 18-40-18z"/><path class="clay" d="M170 50l40 18v80l-40-18z"/><path class="clay3" d="M210 68l40-18v80l-40 18z"/><path class="clay2" d="M250 70c22 0 22 40 0 40v-8c12 0 12-24 0-24z"/></svg></div>
+          <div class="view"><span class="vl">FRONT</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="ax" d="M0 150H400M200 0V170"/><path class="sel" d="M150 150V45H250V150z"/><path class="sh" d="M250 70c26 0 26 50 0 50v-10c14 0 14-30 0-30z"/><path class="ax" d="M150 135H250" stroke-dasharray="4 3" style="stroke:var(--accent-line)"/><circle class="jt" cx="150" cy="45" r="3.5"/><circle class="jt" cx="250" cy="45" r="3.5"/><circle class="jt" cx="250" cy="150" r="3.5"/><circle class="jt" cx="150" cy="150" r="3.5"/><text class="dim" x="200" y="37" text-anchor="middle">100</text><text class="dim" x="140" y="100" text-anchor="end">105</text></svg></div>
+          <div class="view"><span class="vl">SIDE</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="ax" d="M0 150H400M200 0V170"/><rect class="sh" x="160" y="45" width="80" height="105"/><path class="pen" d="M270 60c18 6 30 30 22 60"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="frame">
+      <div class="pv pad">
+        <div class="menu">
+          <div class="msec"><h3>File</h3><span class="mb">Open…</span><span class="mb">Save</span><span class="mb">Download pattern</span></div>
+          <div class="msec"><h3>Canvas</h3>
+            <div class="fld">Units<div class="mseg"><span class="on">mm</span><span>cm</span></div></div>
+            <div class="fld">Snap grid<div class="inp">5 mm<svg viewBox="0 0 10 10" width="10" height="10"><path d="M2.5 4l2.5 2.5L7.5 4"/></svg></div></div>
+            <div class="chk"><i><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2 4-4.4"/></svg></i>Snap to grid and to other edges</div>
+          </div>
+          <div class="msec"><h3>Print</h3><div class="fld">Line weight (pt)<div class="inp">0.5</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="frame">
+      <div class="pv"><div class="scrim"></div>
+        <div class="dlgwrap"><div class="dlg"><span class="x"><svg class="ic" data-i="close"></svg></span><h4>Save changes?</h4><p>Latest changes are not saved. Saving will download your file.</p><div class="acts"><span class="btn2 dng">Discard</span><span class="btn2 pri">Save</span></div></div></div>
+      </div>
+    </div>
+    <div class="frame wide">
+      <div class="pv"><div class="home">
+        <div class="bar"><div class="fl brand"><span class="bp-logo">Your app</span></div></div>
+        <h3>Recent</h3>
+        <div class="cards">
+          <div class="card"><div class="th"><svg class="new" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg></div><div class="meta"><b>New drawing</b><span>Start empty</span></div></div>
+          <div class="card on"><div class="th"><svg viewBox="0 0 100 70"><path d="M35 62V12h30v50z" style="fill:var(--fill-sel);stroke:var(--ink);stroke-width:1.5"/><path d="M65 25c14 0 14 25 0 25" style="stroke:var(--ink);stroke-width:1.5"/></svg></div><div class="meta"><b>Pitcher vase</b><span>2 hours ago</span></div></div>
+          <div class="card"><div class="th"><svg viewBox="0 0 100 70"><path d="M20 55L50 15l30 40z" style="fill:var(--fill-sel);stroke:var(--ink);stroke-width:1.5"/></svg></div><div class="meta"><b>Planter</b><span>Yesterday</span></div></div>
+          <div class="card"><div class="th"><svg viewBox="0 0 100 70"><rect x="22" y="22" width="56" height="34" style="fill:var(--fill-sel);stroke:var(--ink);stroke-width:1.5"/><path d="M30 20c4-14 36-14 40 0" style="stroke:var(--pencil);stroke-width:1.5"/></svg></div><div class="meta"><b>Lidded box</b><span>12 Nov</span></div></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="frame wide">
+      <div class="pv"><div class="pat">
+        <div class="bar">
+          <div class="fl brand"><span class="bp-logo">Your app</span> <span class="sep">/</span><span class="nm">Pitcher vase</span><span class="unit">MM</span></div>
+          <div class="fl tabs"><span class="b"><svg class="ic" data-i="pencil"></svg>Drawing</span><span class="b on"><svg class="ic" data-i="file"></svg>Patterns</span></div>
+          <span class="sp"></span>
+          <div class="fl"><span class="b"><svg class="ic" data-i="rotate"></svg>Rotate</span><span class="b"><svg class="ic" data-i="page"></svg>Page</span><span class="b"><svg class="ic" data-i="arrange"></svg>Arrange</span></div>
+        </div>
+        <div class="page"><svg viewBox="0 0 210 297"><rect class="pc on" x="20" y="20" width="110" height="120"/><text class="pl" x="75" y="84" text-anchor="middle">A1</text><rect class="pc" x="20" y="160" width="110" height="120"/><text class="pl" x="75" y="224" text-anchor="middle">A2</text><rect class="pc" x="145" y="20" width="50" height="50"/><text class="pl" x="170" y="49" text-anchor="middle">B</text></svg></div>
+        <div class="page"><svg viewBox="0 0 210 297"><rect class="pc" x="20" y="20" width="90" height="120"/><text class="pl" x="65" y="84" text-anchor="middle">A3</text><path class="pc" d="M125 20h40c30 0 30 70 0 70h-40v-18h38c10 0 10-34 0-34h-38z"/><text class="pl" x="150" y="110" text-anchor="middle">C</text></svg></div>
+      </div></div>
+    </div>
+  </div>
+  </div>
+</main>
+<div class="fpop" id="fpop" hidden role="dialog" aria-label="Choose a font"><input id="fq" placeholder="Search Google Fonts" autocomplete="off" spellcheck="false"><div class="flist" id="flist" role="listbox"></div><label class="fup"><svg viewBox="0 0 16 16"><path d="M8 11V2.5M4.5 6L8 2.5 11.5 6M2.5 11v2.5h11V11"/></svg>Upload a font file (.woff2, .ttf, .otf)<input type="file" id="ffile" accept=".woff2,.woff,.ttf,.otf" hidden></label></div>
+<div class="xmod" id="xmod" hidden role="dialog" aria-modal="true" aria-labelledby="xTitle">
+  <div class="xcard">
+    <div class="xhead"><h2 id="xTitle">Export tokens</h2><button id="xClose" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+    <div class="xfmt" id="xfmt"><button data-f="css" aria-pressed="true">CSS variables</button><button data-f="shadcn">shadcn</button><button data-f="radix">Radix</button><button data-f="json">JSON</button></div>
+    <pre class="xcode" id="xcode"></pre>
+    <div class="xfoot"><p id="xnote"></p><button class="btn pri" id="xCopy">Copy</button></div>
+  </div>
+</div>
+<div class="xmod" id="pmod" hidden role="dialog" aria-modal="true" aria-labelledby="pTitle">
+  <div class="xcard pkg">
+    <div class="xhead"><h2 id="pTitle">Export package</h2><button id="pClose" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+    <div class="xfmt" id="ptgt"><button data-t="css">Plain CSS</button><button data-t="shadcn">shadcn</button><button data-t="radix">Radix Themes</button></div>
+    <div class="pbody"><nav class="pkfiles" id="pfiles" aria-label="Files in the package"></nav>
+      <div class="pview"><div class="pvh"><b id="pname"></b><p id="pnote"></p></div><pre class="xcode" id="pcode"></pre><div class="psvg" id="psvg" hidden></div></div></div>
+    <div class="xfoot"><p id="pcount"></p><button class="btn" id="pCopy">Copy file</button><button class="btn pri" id="pAll">Download package (.zip)</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script id="iconData" type="application/json">/*@stylist:icons*/</script>
+<script>/*@stylist:js*/</script>
+</body>
+</html>

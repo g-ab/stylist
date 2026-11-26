@@ -1,0 +1,15 @@
+/* Clay app tokens · Fixture. Owned by the app: add tokens here, built from core tokens. Clay edits only where they point and pinned values. Load after the core file. */
+.radix-themes {
+  --grid: var(--gray-3);
+  --grid-major: var(--gray-5);
+  --axis: var(--gray-8);
+  --pencil: var(--gray-10);
+  --fill: color-mix(in oklab, var(--clay-ink) 5%, transparent);
+  --cut: #d9480f;
+  --clay: #d6b19a;
+}
+
+.dark .radix-themes, .dark-theme .radix-themes, .radix-themes.dark, .radix-themes.dark-theme {
+  --cut: #ff8a4c;
+  --clay: #a9806a;
+}
