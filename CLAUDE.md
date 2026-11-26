@@ -19,6 +19,8 @@ Stylist is gab's styling tool.
 4. Commit; one feature or fix per commit.
 
 ## Publishing
+- **GitHub Pages publishes automatically:** every push to `main` runs `.github/workflows/pages.yml`, which checks that `dist/` was rebuilt, runs the tests and deploys `dist/` to https://g-ab.github.io/stylist/. A failing check means nothing gets published.
+- The Claude artifact is an optional second copy. If it is still used, the rules below apply to it.
 - Publish only `dist/index.html`, built from a committed state with passing tests.
 - Before publishing, get the artifact's live version. If it isn't the version this repo last published (see the latest "Published" line in `CHANGELOG.md`), someone changed the artifact outside the repo: download it, compare it with `python3 build.py --check <file>`, and bring those changes into `src/` first. Never overwrite them.
 - After publishing, note the new version id in `CHANGELOG.md` and copy `docs/interface.md` to the project doc if it changed.

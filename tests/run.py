@@ -120,7 +120,12 @@ async def main():
             pg, errors = await open_page(browser, w, h)
             d = await pg.evaluate("""()=>{openPkg();const c=document.querySelector('.xcard.pkg').getBoundingClientRect(),a=$('pAll').getBoundingClientRect();
                 return {fits:c.right<=innerWidth&&c.bottom<=innerHeight,button:a.right<=c.right&&a.bottom<=c.bottom,files:document.querySelectorAll('#pfiles button').length}}""")
-            check(f"export dialog at {w}x{h}", d["fits"] and d["button"] and d["files"] > 3 and not errors, {**d, "errors": errors[:2]})
+            if w == 1440:
+                # Outside Claude (e.g. GitHub Pages) the package downloads as a plain browser download
+                async with pg.expect_download() as dl:
+                    await pg.click("#pAll")
+                d["download"] = (await dl.value).suggested_filename
+            check(f"export dialog at {w}x{h}", d["fits"] and d["button"] and d["files"] > 3 and not errors and ("download" not in d or d["download"].endswith("-stylist.zip")), {**d, "errors": errors[:2]})
             await pg.close()
 
         await browser.close()

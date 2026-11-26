@@ -1,0 +1,48 @@
+# Publishes Stylist on GitHub Pages on every push to main, once the checks pass.
+# (Repo Settings → Pages → Source must be "GitHub Actions".)
+name: Publish Stylist
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build the page
+        run: python3 build.py --check dist/index.html   # fails if dist/ wasn't rebuilt before committing
+      - name: Install the test browser
+        run: |
+          pip install -r requirements-dev.txt
+          python3 -m playwright install --with-deps chromium
+      - name: Run the checks
+        run: python3 tests/run.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
