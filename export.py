@@ -4,7 +4,7 @@
     python3 export.py APP_DIR [SETUP]
 
 APP_DIR  the app's folder holding its Stylist files (stylist.json, stylist-theme.css,
-         app-tokens.css, components.json, brand/…). Older clay.* files work too.
+         app-tokens.css, components.json, brand/…).
 SETUP    optional: what Stylist's "Copy setup for Claude" copied, saved to a file
          (the JSON block, with or without the text around it). Without it, the app's
          own stylist.json is used, so the files are simply regenerated.
@@ -16,7 +16,7 @@ the Export package dialog would give:
      be matched, pinned or reverted in Stylist first, never overwritten silently;
   3. apply the setup's settings and pins;
   4. write the package files back into APP_DIR: those the app already has (plus the
-     theme, app tokens and stylist.json), renaming old clay-* files to stylist-*;
+     theme, app tokens and stylist.json);
   5. print which token values changed, for the commit message and the review.
 
 Exit codes: 0 done · 1 bad input · 2 hand edits to resolve first.
@@ -33,7 +33,7 @@ from pathlib import Path
 from playwright.async_api import async_playwright
 
 PAGE = (Path(__file__).resolve().parent / "dist" / "index.html").as_uri()
-STYLE_FILES = re.compile(r"^(stylist|clay)(\.json|-theme\.css|-icons\.(css|tsx)|-motion\.ts)$|^(app-tokens\.css|components\.json|icon-setup\.md)$")
+STYLE_FILES = re.compile(r"^stylist(\.json|-theme\.css|-icons\.(css|tsx)|-motion\.ts)$|^(app-tokens\.css|components\.json|icon-setup\.md)$")
 ALWAYS = {"stylist.json", "stylist-theme.css", "app-tokens.css"}
 
 
@@ -64,8 +64,8 @@ def app_files(app_dir):
 
 async def run(app_dir, setup):
     files = app_files(app_dir)
-    if not any(n in ("stylist.json", "clay.json") for n, _ in files):
-        sys.exit(f"export: no stylist.json (or clay.json) in {app_dir}")
+    if not any(n == "stylist.json" for n, _ in files):
+        sys.exit(f"export: no stylist.json in {app_dir}")
     async with async_playwright() as p:
         kw = {"executable_path": os.environ["STYLIST_CHROME"]} if os.environ.get("STYLIST_CHROME") else {}
         browser = await p.chromium.launch(args=["--no-sandbox"], **kw)
@@ -98,7 +98,7 @@ async def run(app_dir, setup):
         print("Open these files in Stylist (Custom view → Open app style…) to match, pin or revert each one, then export again.")
         sys.exit(2)
 
-    have = {n.replace("clay", "stylist", 1) if n.startswith("clay") else n for n, _ in files} | ALWAYS
+    have = {n for n, _ in files} | ALWAYS
     written, skipped = [], []
     for name, text in out["files"]:
         if name.startswith("brand/") or name in have:
@@ -109,10 +109,6 @@ async def run(app_dir, setup):
                 written.append(name)
         else:
             skipped.append(name)
-    for old in ("clay.json", "clay-theme.css", "clay-icons.css", "clay-icons.tsx", "clay-motion.ts"):
-        if (app_dir / old).exists():
-            (app_dir / old).unlink()
-            written.append(f"{old} (removed, replaced by its stylist-* file)")
 
     print(f"Target: {out['target']}")
     print("Changed tokens:" if out["changed"] else "No token values changed.")

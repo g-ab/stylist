@@ -111,7 +111,7 @@ function apply(){
   const p=preset(),edited=p&&KEYS.some(k=>S[k]!==p[k]);
   if(typeof renderTokens==='function')renderTokens();
   if(typeof renderCustom==='function')renderCustom();
-  try{localStorage.setItem('blueprint.style.v1',JSON.stringify(S))}catch(e){}
+  try{localStorage.setItem('stylist.style.v1',JSON.stringify(S))}catch(e){}
 }
 function setupText(){ // the full recipe: an app's chat turns it into the style files with Stylist's export.py
   const cj={stylist:SCHEMA,framework:FRAMEWORK,app:APP.name,target:APP.target,settings:recipeSettings(),pins:APP.pins};

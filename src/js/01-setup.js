@@ -15,7 +15,7 @@ const GF={
  Mono:['IBM Plex Mono','JetBrains Mono','Geist Mono','DM Mono','Space Mono','Roboto Mono','Source Code Pro','Fira Code','Fira Mono','Inconsolata','Red Hat Mono','Martian Mono','Azeret Mono','Spline Sans Mono','Sometype Mono','Chivo Mono','Kode Mono','Victor Mono','Overpass Mono','Noto Sans Mono','Reddit Mono','Atkinson Hyperlegible Mono','Ubuntu Mono','Cousine','Anonymous Pro','Courier Prime','Share Tech Mono','Xanh Mono']
 };
 // Fonts load on demand: previews fetch only the letters of their own name.
-const loaded=new Set(),CUST='blueprint.style.fonts.v1';
+const loaded=new Set(),CUST='stylist.fonts.v1';
 let custom={};try{custom=JSON.parse(localStorage.getItem(CUST)||'{}')}catch(e){}
 function addCSS(href,fail){const l=document.createElement('link');l.rel='stylesheet';l.href=href;if(fail)l.onerror=()=>{l.remove();fail()};document.head.appendChild(l)}
 function loadFont(name,previewOnly){

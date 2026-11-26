@@ -1,9 +1,9 @@
 {
-  "clay": 1,
+  "stylist": 1,
   "framework": 5,
   "app": "Fixture",
   "target": "radix",
-  "exported": "2026-11-26T13:25:27.398Z",
+  "exported": "2026-11-26T15:41:02.611Z",
   "settings": {
     "id": "current",
     "fam": "blue",
@@ -193,7 +193,7 @@
       "shadow-4": "0 0 0 1px var(--gray-a3), 0 1.9px 3.8px oklch(0.220 0.037 253 / 0.08), 0 9.2px 24.9px oklch(0.220 0.037 253 / 0.132)",
       "shadow-5": "0 0 0 1px var(--gray-a3), 0 2.2px 4.4px oklch(0.220 0.037 253 / 0.08), 0 11.6px 31.2px oklch(0.220 0.037 253 / 0.156)",
       "shadow-6": "0 0 0 1px var(--gray-a3), 0 3px 6px oklch(0.220 0.037 253 / 0.08), 0 18px 48px oklch(0.220 0.037 253 / 0.22)",
-      "clay-ink": "#1a2b3c",
+      "stylist-ink": "#1a2b3c",
       "motion-fast": "80ms",
       "ease-fast": "ease-out",
       "motion-fast-exit": "60ms",
@@ -301,7 +301,7 @@
       "shadow-4": "0 0 0 1px var(--gray-a6), 0 1.9px 3.8px oklch(0.080 0.037 253 / 0.208), 0 9.2px 24.9px oklch(0.080 0.037 253 / 0.343)",
       "shadow-5": "0 0 0 1px var(--gray-a6), 0 2.2px 4.4px oklch(0.080 0.037 253 / 0.208), 0 11.6px 31.2px oklch(0.080 0.037 253 / 0.406)",
       "shadow-6": "0 0 0 1px var(--gray-a6), 0 3px 6px oklch(0.080 0.037 253 / 0.208), 0 18px 48px oklch(0.080 0.037 253 / 0.572)",
-      "clay-ink": "#dce6f1"
+      "stylist-ink": "#dce6f1"
     }
   },
   "changelog": []

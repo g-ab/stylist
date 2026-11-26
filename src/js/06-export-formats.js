@@ -13,7 +13,7 @@ function shadcnShadows(c,M){const D=M==='dark',g=grayScale(D),at=e=>shadowAt(e,D
 // PT = the target being written; pins are applied to every block of it
 let PT=null;
 function pinMap(o,role){if(!PT)return o;const r={...o},p=(APP.pins&&APP.pins[role])||{};
-  for(const k in r){const v=(PT==='shadcn'||PT==='radix')&&!/^(stylist|clay)-/.test(k)?p['@'+PT+':'+k]:p[inName(PT,k)];if(v!=null)r[k]=v}return r}
+  for(const k in r){const v=(PT==='shadcn'||PT==='radix')&&!k.startsWith('stylist-')?p['@'+PT+':'+k]:p[inName(PT,k)];if(v!=null)r[k]=v}return r}
 const block=(sel,o,role='light')=>`${sel} {\n${Object.entries(pinMap(o,role)).map(([k,v])=>`  --${k}: ${v};`).join('\n')}\n}`;
 const appRefs=()=>[...new Set(Object.values(APP.tokens).map(d=>d.ref).filter(Boolean))];
 function base(t){return {...Object.fromEntries(Object.entries(t.light)),'font-ui':t.font.ui,'font-mono':t.font.mono,

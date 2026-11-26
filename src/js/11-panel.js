@@ -1,7 +1,7 @@
 // ---- sidebar tabs: one category of controls at a time ----
-let PTAB='col';try{PTAB=localStorage.getItem('clay.tab.v1')||'col'}catch(e){}
+let PTAB='col';try{PTAB=localStorage.getItem('stylist.tab.v1')||'col'}catch(e){}
 function showTab(t){PTAB=t;document.querySelectorAll('#ptabs button').forEach(b=>{const on=b.dataset.tab===t;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1});
-  document.querySelectorAll('.ctl .grp').forEach(g=>g.hidden=g.dataset.tab!==t);try{renderIcons()}catch(e){}document.querySelector('.ctl').scrollTop=0;try{localStorage.setItem('clay.tab.v1',t)}catch(e){}}
+  document.querySelectorAll('.ctl .grp').forEach(g=>g.hidden=g.dataset.tab!==t);try{renderIcons()}catch(e){}document.querySelector('.ctl').scrollTop=0;try{localStorage.setItem('stylist.tab.v1',t)}catch(e){}}
 $('ptabs').onclick=e=>{const b=e.target.closest('button');if(b){showTab(b.dataset.tab);if(b.dataset.tab==='brand')showView('brand');if(b.dataset.tab==='motion')showView('mot')}};
 $('ptabs').onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const bs=[...$('ptabs').children],i=bs.findIndex(b=>b.dataset.tab===PTAB);
   const n=e.key==='Home'?0:e.key==='End'?bs.length-1:(i+(e.key==='ArrowRight'?1:-1)+bs.length)%bs.length;showTab(bs[n].dataset.tab);bs[n].focus()};

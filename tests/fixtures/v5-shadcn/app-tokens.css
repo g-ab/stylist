@@ -1,0 +1,15 @@
+/* Stylist app tokens · Fixture. Owned by the app: add tokens here, built from core tokens. Stylist edits only where they point and pinned values. Load after the core file. */
+:root {
+  --grid: var(--stylist-gray-3);
+  --grid-major: var(--stylist-gray-5);
+  --axis: var(--stylist-gray-8);
+  --pencil: var(--stylist-gray-10);
+  --fill: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --cut: #d9480f;
+  --clay: #d6b19a;
+}
+
+.dark {
+  --cut: #ff8a4c;
+  --clay: #a9806a;
+}

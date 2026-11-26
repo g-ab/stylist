@@ -17,9 +17,9 @@ const BP_COMPS=[
 const appDefault=()=>({brand:{},name:'Your app',target:'css',tokens:JSON.parse(JSON.stringify(BP_TOKENS)),components:JSON.parse(JSON.stringify(BP_COMPS)),
   pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'Built-in setup'});
 let APP=appDefault();
-try{const a=JSON.parse(localStorage.getItem('clay.app.v1')||'null');if(a)APP={...APP,...a,pins:{light:{},dark:{},...(a.pins||{})}};if(APP.name==='Blueprint')APP.name='Your app';if(APP.brand&&APP.brand.mark){mergeMark(APP.brand);mergeMark(APP.brandBase)}}catch(e){}
+try{const a=JSON.parse(localStorage.getItem('stylist.app.v1')||'null');if(a)APP={...APP,...a,pins:{light:{},dark:{},...(a.pins||{})}};if(APP.name==='Blueprint')APP.name='Your app';if(APP.brand&&APP.brand.mark){mergeMark(APP.brand);mergeMark(APP.brandBase)}}catch(e){}
 if(APP.target==='tw')APP.target='css'; // Tailwind as a target was retired; files made for it open as Plain CSS
-const saveApp=()=>{try{localStorage.setItem('clay.app.v1',JSON.stringify(APP))}catch(e){toast('Too big to remember after a reload')}};
+const saveApp=()=>{try{localStorage.setItem('stylist.app.v1',JSON.stringify(APP))}catch(e){toast('Too big to remember after a reload')}};
 // names in each target: shadcn renames some core tokens; Stylist-only tokens get a stylist- prefix there
 const SHAD={paper:'background',ink:'foreground',sheet:'card',muted:'muted-foreground',rule:'border',danger:'destructive',accent:'primary','on-accent':'primary-foreground',hover:'accent'};
 const SHAD_BACK={...Object.fromEntries(Object.entries(SHAD).map(([k,v])=>[v,k])),radius:'radius-lg','font-sans':'font-ui','font-mono':'font-mono',tracking:'tracking',...Object.fromEntries(['tighter','tight','normal','wide','wider','widest'].map(k=>['tracking-'+k,'tracking-'+k]))};
@@ -31,12 +31,12 @@ const RX_LIGHT=':root, .light, .light-theme',RX_DARK='.dark, .dark-theme',RT='.r
 const RX_BACK={'color-background':'paper','color-panel-solid':'sheet','accent-contrast':'on-accent','default-font-family':'font-ui','code-font-family':'font-mono','radius-factor':'radius-factor','radius-full':'radius-round','default-letter-spacing':'tracking'};
 function rxOut(n){if(/^(gray|accent)-\d+$/.test(n))return n;const m=n.match(/^support-(\d+)$/);if(m)return radixNames().s+'-'+m[1];
   return {paper:'color-background',sheet:'color-panel-solid','on-accent':'accent-contrast'}[n]||'stylist-'+n}
-const inName=(tg,v)=>tg==='shadcn'||tg==='radix'?(v.startsWith('stylist-')?v.slice(8):v.startsWith('clay-')?v.slice(5):(tg==='shadcn'?SHAD_BACK:RX_BACK)[v]||null):v;
-const pinKey=(tg,v)=>{const n=inName(tg,v);return (tg==='shadcn'||tg==='radix')&&!/^(stylist|clay)-/.test(v)?'@'+tg+':'+v:n};
-let BG={mode:'white',color:'#f3efe8'};try{const b=JSON.parse(localStorage.getItem('clay.bg.v1')||'null');if(b)BG={...BG,...b}}catch(e){}
-const saveBG=()=>{try{localStorage.setItem('clay.bg.v1',JSON.stringify(BG))}catch(e){}};
+const inName=(tg,v)=>tg==='shadcn'||tg==='radix'?(v.startsWith('stylist-')?v.slice(8):(tg==='shadcn'?SHAD_BACK:RX_BACK)[v]||null):v;
+const pinKey=(tg,v)=>{const n=inName(tg,v);return (tg==='shadcn'||tg==='radix')&&!v.startsWith('stylist-')?'@'+tg+':'+v:n};
+let BG={mode:'white',color:'#f3efe8'};try{const b=JSON.parse(localStorage.getItem('stylist.bg.v1')||'null');if(b)BG={...BG,...b}}catch(e){}
+const saveBG=()=>{try{localStorage.setItem('stylist.bg.v1',JSON.stringify(BG))}catch(e){}};
 function isDarkHex(h){const n=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4};return .2126*f(n>>16&255)+.7152*f(n>>8&255)+.0722*f(n&255)<.18}
-try{const s=JSON.parse(localStorage.getItem('blueprint.style.v1')||'null');if(s)S={...S,...s};}catch(e){}
+try{const s=JSON.parse(localStorage.getItem('stylist.style.v1')||'null');if(s)S={...S,...s};}catch(e){}
 if(S.round){S.radius=OLD_ROUND[S.round]??8;S.pill=false}delete S.round;if(S.unit==null)S.unit=(DENS[S.dens]||DENS.default).unit;if(!S.h)S.h={...(DENS[S.dens]||DENS.default).h};if(!S.focus)S.focus={...FOCUS_DEFAULT};if(!S.icons)S.icons={...ICON_DEFAULT};if(S.tint==null)S.tint=0;if(S.shStr==null)S.shStr=50;if(S.shSoft==null)S.shSoft=50;if(!S.motion)S.motion=JSON.parse(JSON.stringify(MOTION_DEFAULT));if(!S.sh)S.sh={...SH_DEFAULT,op:+(S.shStr*8/50).toFixed(1),blur:+(3*(.5+S.shSoft/100)).toFixed(1)}; // framework 2 defaults: white containers
 if(!PRESETS.some(p=>p.id===S.id)||!S.ui)S={...PRESETS[0]};if(!S.sup)S.sup='analogous';if(!S.fam||!TW[S.fam])S.fam=nearestFam(S.hue??258);delete S.hue;delete S.supHue;delete S.font;
 const $=id=>document.getElementById(id);
