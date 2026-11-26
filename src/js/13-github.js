@@ -5,7 +5,7 @@
 const GH_FILES=['stylist.json','stylist-theme.css','app-tokens.css','components.json','stylist-icons.css',
   'brand/logo.svg','brand/logo-dark.svg','brand/mark.svg','brand/mark-dark.svg','brand/favicon.svg','brand/favicon-dark.svg'];
 let ghLast=null;try{ghLast=JSON.parse(localStorage.getItem('stylist.gh.v1')||'null')}catch(e){}
-// "owner/repo", "github.com/owner/repo", ".../tree/branch/folder" → {owner,repo,ref,path}
+// "owner/repo", "owner/repo/folder", "github.com/owner/repo", ".../tree/branch/folder" → {owner,repo,ref,path}
 function ghParse(s,folder){s=String(s||'').trim().replace(/^https?:\/\//,'').replace(/^(www\.)?github\.com\//,'').replace(/\.git$/,'').replace(/\/+$/,'');
   const p=s.split('/').filter(Boolean);if(p.length<2||!/^[\w.-]+$/.test(p[0])||!/^[\w.-]+$/.test(p[1]))return null;
   let ref='HEAD',path=p.slice(2);if(path[0]==='tree'&&path[1]){ref=path[1];path=path.slice(2)}
@@ -23,20 +23,20 @@ async function ghOpen(g){const files=await ghFetch(g);
   APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);saveApp();apply();
   ghLast={repo:`${g.owner}/${g.repo}`,path:g.path};try{localStorage.setItem('stylist.gh.v1',JSON.stringify(ghLast))}catch(e){}
   return true}
-function openGh(){$('ghRepo').value=ghLast?ghLast.repo:'';$('ghPath').value=ghLast?ghLast.path||'':'';$('ghMsg').textContent='';
+function openGh(){$('ghRepo').value=ghLast?ghLast.repo+(ghLast.path?'/'+ghLast.path:''):'';$('ghMsg').textContent='';
   $('ghLink').hidden=!ghLast;$('ghGo').disabled=false;$('ghmod').hidden=false;setTimeout(()=>$('ghRepo').focus(),0)}
 const closeGh=()=>{$('ghmod').hidden=true};
 $('mGh').onclick=openGh;$('ghClose').onclick=closeGh;$('ghCancel').onclick=closeGh;
 $('ghmod').onclick=e=>{if(e.target===$('ghmod'))closeGh()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ghmod').hidden)closeGh()});
-$('ghRepo').oninput=$('ghPath').oninput=()=>{$('ghLink').hidden=!ghParse($('ghRepo').value,$('ghPath').value)};
-$('ghForm').onsubmit=async e=>{e.preventDefault();const g=ghParse($('ghRepo').value,$('ghPath').value);
+$('ghRepo').oninput=()=>{$('ghLink').hidden=!ghParse($('ghRepo').value)};
+$('ghForm').onsubmit=async e=>{e.preventDefault();const g=ghParse($('ghRepo').value);
   if(!g){$('ghMsg').textContent='Use owner/repo, for example g-ab/cast, or paste the repo’s github.com link.';return}
   $('ghGo').disabled=true;$('ghMsg').textContent=`Reading ${ghLabel(g)}…`;
   try{if(await ghOpen(g))closeGh();else $('ghMsg').textContent=`No Stylist files found in ${ghLabel(g)}. Check the folder, and that the repo is public.`}
   catch(err){$('ghMsg').textContent='GitHub can’t be reached from here. This works on the Stylist website (g-ab.github.io/stylist), with an internet connection.'}
   $('ghGo').disabled=false};
-$('ghLink').onclick=async()=>{const g=ghParse($('ghRepo').value,$('ghPath').value);if(!g)return;
+$('ghLink').onclick=async()=>{const g=ghParse($('ghRepo').value);if(!g)return;
   const url=`${location.origin}${location.pathname}?app=${ghLabel(g)}`;
   try{await navigator.clipboard.writeText(url);toast('Link copied: it opens Stylist with this app loaded')}catch(e){$('ghMsg').textContent=url}};
 // a link with ?app=owner/repo opens that app straight away

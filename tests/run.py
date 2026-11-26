@@ -134,6 +134,8 @@ async def main():
         await gh.wait_for_timeout(700)
         g3 = await gh.evaluate("({src:APP.source,radius:S.radius})")
         check("?app= link opens the app", "g-ab/cast" in (g3["src"] or "") and g3["radius"] == 12, g3)
+        g4 = await gh.evaluate("[ghParse('https://github.com/g-ab/x/tree/main/styles'),ghParse('g-ab/x/ui/theme'),ghParse('g-ab/x')]")
+        check("GitHub links with a folder", g4[0] == {"owner": "g-ab", "repo": "x", "ref": "main", "path": "styles"} and g4[1]["path"] == "ui/theme" and g4[2]["path"] == "", g4)
         check("no page errors (GitHub)", not gerr, gerr[:3])
         await gh.close()
 

@@ -353,8 +353,7 @@
     <div class="xhead"><h2 id="ghTitle">Open from GitHub</h2><button id="ghClose" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
     <form class="ghbody" id="ghForm">
       <label>Repository<input id="ghRepo" placeholder="owner/repo, or a github.com link" autocomplete="off" spellcheck="false" required></label>
-      <label>Folder <small>optional: where the Stylist files are, if not at the top of the repo</small><input id="ghPath" placeholder="top of the repo" autocomplete="off" spellcheck="false"></label>
-      <p class="ghnote">Public repos. Stylist reads the app’s stylist.json, theme, app tokens, components and brand files, as they are on GitHub now.</p>
+      <p class="ghnote">Public repos. Stylist reads the app’s style files as they are on GitHub now. Files in a subfolder? Paste that folder’s GitHub link.</p>
       <p class="ghmsg" id="ghMsg" role="status"></p>
     </form>
     <div class="xfoot"><button class="lnk" id="ghLink" type="button" title="A link that opens Stylist with this app’s style already loaded">Copy link</button><p></p><button class="btn" id="ghCancel" type="button">Cancel</button><button class="btn pri" id="ghGo" type="submit" form="ghForm">Open</button></div>

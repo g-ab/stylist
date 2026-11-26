@@ -110,7 +110,7 @@ Stylist never edits component code. It owns the core tokens and edits only where
 - So restyling an app is: style in Stylist → Copy setup for Claude → paste in the app's chat → it runs export.py, shows the diff, commits.
 
 ## Open from GitHub (26 Nov 2026)
-- Share menu and Custom view: **Open from GitHub…** asks for `owner/repo` (or a github.com link, incl. `/tree/<branch>/<folder>`) and an optional folder. It fetches `stylist.json`, `stylist-theme.css`, `app-tokens.css`, `components.json`, `stylist-icons.css` and `brand/{logo,mark,favicon}[-dark].svg` from raw.githubusercontent.com (default branch, no cache) and hands them to `openFiles()`, like Open app style…. Public repos only.
+- Share menu and Custom view: **Open from GitHub…** asks for `owner/repo` (or `owner/repo/folder`, or a github.com link incl. `/tree/<branch>/<folder>`). It fetches `stylist.json`, `stylist-theme.css`, `app-tokens.css`, `components.json`, `stylist-icons.css` and `brand/{logo,mark,favicon}[-dark].svg` from raw.githubusercontent.com (default branch, no cache) and hands them to `openFiles()`, like Open app style…. Public repos only.
 - The last repo is remembered (`stylist.gh.v1`), so syncing again is one click. "Copy link" gives `?app=owner/repo[/folder]`, which opens Stylist with that app loaded.
 - Doesn't work in the Claude artifact copy (it can't reach other sites); it says so.
 

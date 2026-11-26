@@ -11,7 +11,7 @@ Your app keeps its Stylist files in its own repo: `stylist.json` (your settings)
 
 **Load your app's current style into Stylist**
 1. Share menu (or the Custom view) → **Open from GitHub…**
-2. Type the repo, e.g. `g-ab/cast` (or paste its github.com link). Add a folder if the Stylist files aren't at the top of the repo.
+2. Type the repo, e.g. `g-ab/cast`, or paste its github.com link. If the Stylist files are in a subfolder, paste that folder's link.
 3. Click **Open**. Stylist loads the app's settings, tokens, components and logos as they are on GitHub now.
 
 Stylist remembers the repo, so syncing again is one click. **Copy link** in the same dialog gives an address that opens Stylist with that app already loaded, handy as a bookmark. Public repos only, and only on the Stylist website, not in a Claude artifact copy. No repo? Use Share → **Open app style…** and pick the files yourself.
