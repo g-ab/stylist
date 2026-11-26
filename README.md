@@ -9,8 +9,15 @@ Stylist sits above any design system. It defines what can be styled (colour, typ
 ## Using it with your app
 Your app keeps its Stylist files in its own repo: `stylist.json` (your settings), `stylist-theme.css`, `app-tokens.css`, `stylist-icons.css`, `components.json` and `brand/`. An AI assistant with access to that repo, or you in a terminal, keeps them up to date.
 
+**Load your app's current style into Stylist**
+1. Share menu (or the Custom view) → **Open from GitHub…**
+2. Type the repo, e.g. `g-ab/cast` (or paste its github.com link). Add a folder if the Stylist files aren't at the top of the repo.
+3. Click **Open**. Stylist loads the app's settings, tokens, components and logos as they are on GitHub now.
+
+Stylist remembers the repo, so syncing again is one click. **Copy link** in the same dialog gives an address that opens Stylist with that app already loaded, handy as a bookmark. Public repos only, and only on the Stylist website, not in a Claude artifact copy. No repo? Use Share → **Open app style…** and pick the files yourself.
+
 **Restyle the app**
-1. Open your app's current style: Share → **Open from GitHub…** and type the repo (e.g. `g-ab/cast`). Stylist remembers it, so next time it's one click. Then change the style.
+1. Load the app's style (above), then change it.
 2. Share → **Copy setup for Claude**.
 3. Paste it in your app's AI chat and say **"restyle the app"**.
 
