@@ -113,6 +113,18 @@ async def main():
             check("export.py styles a new app", r4.returncode == 0 and {"stylist.json", "stylist-theme.css", "app-tokens.css"} <= set(added) and "First time" in r4.stdout and "--radius-lg: 16px" in (new / "stylist-theme.css").read_text(), added)
             r5 = subprocess.run([sys.executable, str(root / "export.py"), str(new)], capture_output=True, text=True)
             check("export.py on the new app again: nothing changes", r5.returncode == 0 and "No token values changed" in r5.stdout, r5.stdout[-200:] + r5.stderr[-200:])
+            agents = (new / "AGENTS.md").read_text() if (new / "AGENTS.md").exists() else ""
+            check("new app gets the AI instructions", agents.count("<!-- stylist:start -->") == 1 and "upgrade Stylist" in agents and (new / "CLAUDE.md").read_text().strip() == "@AGENTS.md", agents[:120])
+            # stale instructions between the markers are refreshed; files explaining Stylist their own way are left alone
+            (new / "AGENTS.md").write_text("# Mine\n\nKeep this.\n\n<!-- stylist:start -->\nold text\n<!-- stylist:end -->\n")
+            subprocess.run([sys.executable, str(root / "export.py"), str(new)], capture_output=True, text=True)
+            refreshed = (new / "AGENTS.md").read_text()
+            own = Path(tmp) / "own"
+            shutil.copytree(root / "tests" / "fixtures" / "v5-css", own)
+            (own / "CLAUDE.md").write_text("# Notes\n\n## Restyling with Stylist\nOur own steps.\n")
+            subprocess.run([sys.executable, str(root / "export.py"), str(own)], capture_output=True, text=True)
+            check("AI instructions stay current, own notes untouched", "Keep this." in refreshed and "old text" not in refreshed and refreshed.count("<!-- stylist:start -->") == 1 and "upgrade Stylist" in refreshed
+                  and (own / "CLAUDE.md").read_text() == "# Notes\n\n## Restyling with Stylist\nOur own steps.\n" and not (own / "AGENTS.md").exists(), refreshed[:160])
             empty = Path(tmp) / "empty"
             empty.mkdir()
             r6 = subprocess.run([sys.executable, str(root / "export.py"), str(empty)], capture_output=True, text=True)

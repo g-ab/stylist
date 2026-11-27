@@ -122,7 +122,7 @@ function setupText(){ // the full recipe, with the steps spelled out so any AI a
     '1. Clone https://github.com/g-ab/stylist and run `python3 build.py` in it. Needs Python 3, `pip install playwright` and `python3 -m playwright install chromium`.',
     '2. Save this whole message to a file and run `python3 <stylist>/export.py <app folder> <that file>`.',
     '   - The app already has a stylist.json: its Stylist files are updated, and every token value that changed is listed. Exit code 2 means the theme file was edited by hand: show that list and stop, never overwrite it.',
-    '   - The app has no stylist.json yet (first time): the Stylist files are added. Then load them before the app\'s own styles (stylist-theme.css, app-tokens.css, stylist-icons.css) and switch the app\'s styles to the tokens one area at a time, without changing its layout. Guide: https://github.com/g-ab/stylist#style-a-new-app',
+    '   - The app has no stylist.json yet (first time): the Stylist files are added, plus a Stylist section in the app\'s AGENTS.md so later requests work. Then load them before the app\'s own styles (stylist-theme.css, app-tokens.css, stylist-icons.css) and switch the app\'s styles to the tokens one area at a time, without changing its layout. Guide: https://github.com/g-ab/stylist#style-a-new-app',
     '3. Show what changed, then commit.','',
     'Not included: logos and favicon (Stylist\'s Brand tab → Download brand files)'+(own.length?`, and your own font file (${own.join(', ')}): add it to the app`:'')+'.','',
     '```json',JSON.stringify(cj,null,1),'```',''].join('\n');

@@ -2,6 +2,7 @@
 
 ## 27 Nov 2026
 - **"Copy setup for AI"** (was "for Claude"): the copied text now explains itself to any AI assistant or agent, with the steps to apply it.
+- **The app's AI instructions write themselves:** the first export adds a Stylist section to the app's `AGENTS.md` (and a `CLAUDE.md` pointing to it), and every later run keeps it current. No more pasting the block by hand.
 - **Download brand files:** a button in the Brand tab gives just the logos, favicon and light/dark switch as a .zip, without the whole package.
 - **Style a new app from a setup:** `export.py` adds all the Stylist files to an app that has none yet.
 - Open from GitHub: one field, clearer copy.

@@ -11,9 +11,8 @@ Your app keeps its Stylist files in its own repo: `stylist.json` (your settings)
 1. Design the style at https://g-ab.github.io/stylist/. Pick the app's library at the top of the panel: CSS, shadcn or Radix.
 2. Share → **Copy setup for AI**.
 3. Paste it in your app's AI chat and say **"style this app with Stylist"**.
-4. Add the block from [Teach your app's AI](#teach-your-apps-ai) to the app's `AGENTS.md` or `CLAUDE.md`, so restyling and upgrading work later.
 
-The setup explains itself, so any AI can follow it: it gets Stylist and runs `export.py`, which adds the Stylist files. Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos aren't in the setup: in Stylist's Brand tab, **Download brand files** and give the .zip to the AI as well.
+The setup explains itself, so any AI can follow it: it gets Stylist and runs `export.py`, which adds the Stylist files and a Stylist section to the app's `AGENTS.md` (so "restyle the app" and "upgrade Stylist" work later, with any AI). Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos aren't in the setup: in Stylist's Brand tab, **Download brand files** and give the .zip to the AI as well.
 
 ### Restyle an app
 1. Load its current style: Share menu (or the Custom view) → **Open from GitHub…**, type the repo (e.g. `g-ab/cast`) or paste its link, then **Open**.
@@ -40,20 +39,8 @@ python3 export.py path/to/your-app            # upgrade
 ```
 For a new app, you then connect its styles to the tokens yourself.
 
-### Teach your app's AI
-The words only work if the app's instructions file says what to do. Paste this into its `AGENTS.md` (most AI tools) or `CLAUDE.md` (Claude):
-```
-## Stylist
-This app's look comes from Stylist (https://github.com/g-ab/stylist). Its files: stylist.json,
-stylist-theme.css (generated: never edit by hand), app-tokens.css, stylist-icons.css, components.json, brand/.
-To run Stylist: clone it, run `python3 build.py`, and have playwright + Chromium installed.
-- "restyle the app" + a pasted Stylist setup: save the setup to a file, run
-  `python3 <stylist>/export.py <this repo> <that file>`.
-- "upgrade Stylist": run `python3 <stylist>/export.py <this repo>` (no setup). The look must not change.
-- New brand files (a .zip from Stylist's "Download brand files"): replace the files in brand/ with it.
-If it stops (exit code 2), the theme was edited by hand: show the list and stop. Otherwise show the
-"Changed tokens" list, check the app in light and dark mode, and commit (one restyle or upgrade per commit).
-```
+### How your app's AI knows what to do
+Requests like "restyle the app" only work because the app's instructions file explains them. `export.py` takes care of it: the first time, it adds a Stylist section to the app's `AGENTS.md` (read by most AI tools) and, if the app has no `CLAUDE.md`, creates one that points to it (Claude reads that name). Every later run refreshes that section, so it follows Stylist's updates. Your own notes in those files are never touched: only the part between the `stylist:start` and `stylist:end` markers. The text it adds: [templates/agents-block.md](templates/agents-block.md).
 
 ## Working on it
 ```

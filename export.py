@@ -39,9 +39,41 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
-PAGE = (Path(__file__).resolve().parent / "dist" / "index.html").as_uri()
+ROOT = Path(__file__).resolve().parent
+PAGE = (ROOT / "dist" / "index.html").as_uri()
+BLOCK_START, BLOCK_END = "<!-- stylist:start -->", "<!-- stylist:end -->"
 STYLE_FILES = re.compile(r"^stylist(\.json|-theme\.css|-icons\.(css|tsx)|-motion\.ts)$|^(app-tokens\.css|components\.json|icon-setup\.md)$")
 ALWAYS = {"stylist.json", "stylist-theme.css", "app-tokens.css"}
+
+
+def teach(app_dir, first):
+    """Keep the app's AI instructions current: the Stylist section of AGENTS.md / CLAUDE.md.
+
+    Between the stylist markers the section is replaced on every run, so it follows Stylist's
+    updates. The first time, it's added to AGENTS.md (created if needed); a CLAUDE.md that
+    doesn't exist yet is created as a pointer to it, since Claude reads that name.
+    An instructions file that already explains Stylist without the markers is left alone."""
+    block = f"{BLOCK_START}\n{(ROOT / 'templates' / 'agents-block.md').read_text(encoding='utf-8').strip()}\n{BLOCK_END}\n"
+    files = [app_dir / n for n in ("AGENTS.md", "CLAUDE.md") if (app_dir / n).exists()]
+    for f in files:
+        text = f.read_text(encoding="utf-8")
+        if BLOCK_START in text and BLOCK_END in text:
+            a, b = text.index(BLOCK_START), text.index(BLOCK_END) + len(BLOCK_END)
+            new = text[:a] + block.rstrip("\n") + text[b:]
+            if new != text:
+                f.write_text(new, encoding="utf-8")
+                return f"{f.name} (Stylist section updated)"
+            return None
+    if not first or any("stylist" in f.read_text(encoding="utf-8").lower() for f in files):
+        return None
+    agents = app_dir / "AGENTS.md"
+    old = agents.read_text(encoding="utf-8").rstrip("\n") + "\n\n" if agents.exists() else "# Notes for AI assistants\n\n"
+    agents.write_text(old + block, encoding="utf-8")
+    done = ["AGENTS.md (Stylist section added)"]
+    if not (app_dir / "CLAUDE.md").exists():
+        (app_dir / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
+        done.append("CLAUDE.md (points to AGENTS.md)")
+    return ", ".join(done)
 
 
 def read_setup(path):
@@ -118,6 +150,9 @@ async def run(app_dir, setup):
         else:
             skipped.append(name)
 
+    taught = teach(app_dir, first)
+    if taught:
+        written.append(taught)
     if first:
         print(f"First time: added the Stylist files for {out['target']} ({', '.join(written)}).")
         print("Next: load stylist-theme.css, then app-tokens.css, then stylist-icons.css before the app's own styles,")
