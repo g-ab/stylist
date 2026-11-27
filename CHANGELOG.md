@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **The old Claude artifact copy is retired:** its link now shows a short page pointing to https://g-ab.github.io/stylist/ (artifact version `1795823422-db07`).
 - **Library dropdown:** "None" is now **CSS**, and **Reset to defaults** moved there from the Share menu.
 - **Send to your agent, simpler:** one line saying what to do, then [Download file] [Copy] when it fits a chat box (under 8,000 characters), or Download file alone when it doesn't.
 

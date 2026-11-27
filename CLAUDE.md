@@ -21,10 +21,8 @@ Stylist is gab's styling tool.
 
 ## Publishing
 - **GitHub Pages publishes automatically:** every push to `main` runs `.github/workflows/pages.yml`, which checks that `dist/` was rebuilt, runs the tests and deploys `dist/` to https://g-ab.github.io/stylist/. A failing check means nothing gets published.
-- The Claude artifact is an optional second copy. If it is still used, the rules below apply to it.
-- Publish only `dist/index.html`, built from a committed state with passing tests.
-- Before publishing, get the artifact's live version. If it isn't the version this repo last published (see the latest "Published" line in `CHANGELOG.md`), someone changed the artifact outside the repo: download it, compare it with `python3 build.py --check <file>`, and bring those changes into `src/` first. Never overwrite them.
-- After publishing, note the new version id in `CHANGELOG.md` and copy `docs/interface.md` to the project doc if it changed.
+- **The old Claude artifact** (the first home of Stylist) was retired on 28 Nov 2026: it now only shows a short
+  "Stylist has moved" page linking to the website. Don't publish `dist/index.html` there.
 
 ## Rules that keep upgrades safe
 An app upgrades with `export.py <app>` (no setup). It reads which version made the app's files, translates them to
