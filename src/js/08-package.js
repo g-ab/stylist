@@ -58,9 +58,10 @@ function zip(files){const enc=new TextEncoder(),T=(()=>{const t=new Uint32Array(
   const cs=cen.reduce((a,b)=>a+b.length,0),z=new DataView(new ArrayBuffer(22));z.setUint32(0,0x06054b50,true);z.setUint16(8,files.length,true);z.setUint16(10,files.length,true);z.setUint32(12,cs,true);z.setUint32(16,off,true);
   return new Blob([...parts,...cen,new Uint8Array(z.buffer)],{type:'application/zip'})}
 let DLS=null;(async()=>{try{DLS=await window.claude?.use('downloads')}catch(e){DLS=null}})();
-async function saveZip(){const name=(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist.zip',blob=zip(pBuilt.files);
-  if(DLS){try{await DLS.save({filename:name,data:blob});commitExport();toast('Package saved')}catch(e){if(e&&e.code==='declined')return;toast('Download isn’t available here. Copy each file instead')}return}
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);commitExport()}
+async function downloadZip(files,name,done){const blob=zip(files); // true when the download went through
+  if(DLS){try{await DLS.save({filename:name,data:blob});toast(done);return true}catch(e){if(e&&e.code==='declined')return false;toast('Download isn’t available here. Copy each file instead');return false}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);return true}
+async function saveZip(){if(await downloadZip(pBuilt.files,(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist.zip','Package saved'))commitExport()}
 function openPkg(){pTgt=APP.target;pFile=Math.max(0,buildPackage(pTgt).files.findIndex(f=>f.name==='stylist-theme.css'));renderPkg();$('pmod').hidden=false}
 $('mPkg').onclick=openPkg;$('mOpen').onclick=()=>$('appFiles').click();
 $('appFiles').onchange=e=>{if(e.target.files.length)openFiles(e.target.files);e.target.value=''};

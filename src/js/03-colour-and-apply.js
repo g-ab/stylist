@@ -124,7 +124,7 @@ function setupText(){ // the full recipe, with the steps spelled out so any AI a
     '   - The app already has a stylist.json: its Stylist files are updated, and every token value that changed is listed. Exit code 2 means the theme file was edited by hand: show that list and stop, never overwrite it.',
     '   - The app has no stylist.json yet (first time): the Stylist files are added. Then load them before the app\'s own styles (stylist-theme.css, app-tokens.css, stylist-icons.css) and switch the app\'s styles to the tokens one area at a time, without changing its layout. Guide: https://github.com/g-ab/stylist#style-a-new-app',
     '3. Show what changed, then commit.','',
-    'Not included: logos and favicon (use Stylist\'s Export package for those)'+(own.length?`, and your own font file (${own.join(', ')}): add it to the app`:'')+'.','',
+    'Not included: logos and favicon (Stylist\'s Brand tab → Download brand files)'+(own.length?`, and your own font file (${own.join(', ')}): add it to the app`:'')+'.','',
     '```json',JSON.stringify(cj,null,1),'```',''].join('\n');
 }
 function swatch(p){const c=p.exact?p.exact.light:(()=>{const s=S;S={...p};const d=derive('light');S=s;return d})();return `<span class="sw"><i style="background:${c.paper}"></i><i style="background:${c.sheet}"></i><i style="background:${c.ink}"></i><i style="background:${c.accent}"></i></span>`}

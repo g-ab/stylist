@@ -13,7 +13,7 @@ Your app keeps its Stylist files in its own repo: `stylist.json` (your settings)
 3. Paste it in your app's AI chat and say **"style this app with Stylist"**.
 4. Add the block from [Teach your app's AI](#teach-your-apps-ai) to the app's `AGENTS.md` or `CLAUDE.md`, so restyling and upgrading work later.
 
-The setup explains itself, so any AI can follow it: it gets Stylist and runs `export.py`, which adds the Stylist files. Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos aren't in the setup: for those, Share → **Export package** and give the AI its `brand/` folder.
+The setup explains itself, so any AI can follow it: it gets Stylist and runs `export.py`, which adds the Stylist files. Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos aren't in the setup: in Stylist's Brand tab, **Download brand files** and give the .zip to the AI as well.
 
 ### Restyle an app
 1. Load its current style: Share menu (or the Custom view) → **Open from GitHub…**, type the repo (e.g. `g-ab/cast`) or paste its link, then **Open**.
@@ -21,6 +21,8 @@ The setup explains itself, so any AI can follow it: it gets Stylist and runs `ex
 3. Share → **Copy setup for AI**, paste it in the app's AI chat and say **"restyle the app"**.
 
 The AI runs `export.py` with your setup, shows which values changed, and commits. It stops if someone edited the theme file by hand, so nothing is overwritten.
+
+New logos? Drop them in the Brand tab, **Download brand files**, and give the .zip to the app's AI to replace its `brand/` folder.
 
 Stylist remembers the repo, so loading it again is one click. **Copy link** in that dialog gives an address that opens Stylist with the app already loaded. Public repos only, and only on the Stylist website. No repo? Share → **Open app style…** and pick the files yourself.
 
@@ -48,6 +50,7 @@ To run Stylist: clone it, run `python3 build.py`, and have playwright + Chromium
 - "restyle the app" + a pasted Stylist setup: save the setup to a file, run
   `python3 <stylist>/export.py <this repo> <that file>`.
 - "upgrade Stylist": run `python3 <stylist>/export.py <this repo>` (no setup). The look must not change.
+- New brand files (a .zip from Stylist's "Download brand files"): replace the files in brand/ with it.
 If it stops (exit code 2), the theme was edited by hand: show the list and stop. Otherwise show the
 "Changed tokens" list, check the app in light and dark mode, and commit (one restyle or upgrade per commit).
 ```

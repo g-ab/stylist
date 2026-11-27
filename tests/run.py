@@ -154,6 +154,19 @@ async def main():
         check("no page errors (GitHub)", not gerr, gerr[:3])
         await gh.close()
 
+        # 6d. "Download brand files" gives just the brand folder, and is off until there is a logo or symbol
+        bp, berr = await open_page(browser)
+        b0 = await bp.evaluate("(()=>{APP.brand={};apply();return $('brDl').disabled})()")
+        await bp.evaluate("""(()=>{APP.brand={main:{light:{name:'symbol.svg',svg:'<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"><circle cx=\"5\" cy=\"5\" r=\"4\"/></svg>'}}};saveApp();apply()})()""")
+        await bp.evaluate("document.querySelector('#ptabs [data-tab=brand]').click()")
+        async with bp.expect_download() as dl:
+            await bp.click("#brDl")
+        d = await dl.value
+        import zipfile
+        names = zipfile.ZipFile(await d.path()).namelist()
+        check("download brand files", b0 and d.suggested_filename.endswith("-brand.zip") and names and all(n.startswith("brand/") for n in names) and "brand/mark.svg" in names and not berr, {"off_when_empty": b0, "files": names, "errors": berr[:2]})
+        await bp.close()
+
         # 7. The export dialog keeps its download button in view, even in small windows
         for w, h in [(1440, 900), (820, 650), (560, 800)]:
             pg, errors = await open_page(browser, w, h)

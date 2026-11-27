@@ -72,7 +72,10 @@ function renderBrandSlots(){const B=APP.brand||{};let n=0;refitBrand();
   const md=v=>v==='light'?'Light mode':'Dark mode';
   $('brSlots').innerHTML=`<div class="bgrp bmain"><b>Symbol</b><small>Avatars, icon buttons and sign-in. Also fills Logo and Favicon when they’re empty</small>${['light','dark'].map(v=>slot('main',v,md(v))).join('')}${mainWarns().map(x=>`<small class="bwarn">${escH(x)}</small>`).join('')}</div>`+
   BR_SLOTS.map(([k,l,w,vs])=>{const ws=brandWarns(k);return `<div class="bgrp"><b>${l}</b><small>${w}</small>${vs.map(v=>slot(k,v,md(v))).join('')}${ws.map(x=>`<small class="bwarn">${escH(x)}</small>`).join('')}</div>`}).join('');
-  $('brOut').textContent=n?`${n} file${n>1?'s':''}`:'none yet'}
+  $('brOut').textContent=n?`${n} file${n>1?'s':''}`:'none yet';$('brDl').disabled=!n}
+// just the brand files (logos, favicon, the light/dark switch, a README), without the whole package
+$('brDl').onclick=()=>{const fs=brandFiles();if(!fs.length){toast('Drop a symbol or logo first');return}
+  downloadZip(fs,(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-brand.zip','Brand files saved')};
 let brTarget=null;
 $('brSlots').addEventListener('click',e=>{const b=e.target.closest('.bbtn');if(!b)return;const k=b.dataset.k,v=b.dataset.v;
   if(e.target.closest('[data-rs]')){brReset(k,v);saveApp();apply();return}

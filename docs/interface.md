@@ -51,6 +51,8 @@ Stylist never edits component code. It owns the core tokens and edits only where
 - **Package (`brandFiles()`):** `brand/logo.svg`, `logo-dark.svg`, `mark.svg`, `mark-dark.svg` (only those set, all fitted); `brand/favicon.svg`, which **switches with the OS theme by itself** when a dark version exists (both versions inside, `prefers-color-scheme`; marked `<!-- stylist:favicon from=favicon|mark -->`); `brand/brand.css` when a logo or mark has both modes (`.brand-light` / `.brand-dark` swapped by the target's dark selector: `:root[data-theme="dark"]` plus the media query for Plain CSS, `.dark` for shadcn, `.dark, .dark-theme` for Radix; header "Stylist brand", skipped on import); `brand/README.md` (favicon link, light/dark markup, shadcn `AvatarImage` / Radix `Avatar` hints). `stylist.json` lists them under `brand`.
 - **Re-import:** exact names restore their slots; a favicon made from the mark is skipped (it's regenerated); an adaptive favicon is split back into light and dark.
 
+- **Download brand files** (Brand tab, 27 Nov 2026): a `<app>-brand.zip` with just `brandFiles()` (fitted SVGs, `brand.css`, `README.md`), off while no brand file is set. For new logos without exporting the whole package; "Copy setup for AI" points to it.
+
 ## Letter spacing (framework 5, Typeface tab)
 - **One control** (gab's call, 23 Nov 2026): `track` = {base} in em, default 0. Field steps 0.005em; values round to 0.001em, range −0.2 to 0.5. Applies to all text.
 - The named scale isn't editable: each step = Tailwind's default + Tracking (tighter −0.05, tight −0.025, normal 0, wide 0.025, wider 0.05, widest 0.1). Tokens view shows each step on a heading and a label.
