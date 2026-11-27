@@ -115,7 +115,7 @@ function apply(){
 }
 function setupText(d){ // short: a request line, the settings (compact) and any changed logos; the steps live in APPLY.md
   d=d||brandDelta();
-  const cj={stylist:SCHEMA,framework:FRAMEWORK,app:APP.name,target:APP.target,settings:recipeSettings(),pins:APP.pins};
+  const cj={stylist:SCHEMA,version:VERSION,framework:FRAMEWORK,app:APP.name,target:APP.target,settings:recipeSettings(),pins:APP.pins};
   if(d.files.length||d.removed.length)cj.brand={files:d.files.map(f=>({name:f.name,hash:f.hash,base:f.base})),removed:d.removed};
   const own=[S.ui,S.mono].filter(n=>custom[n]),notes=[];
   if(d.files.length)notes.push('Logos changed in Stylist are at the end; export.py writes them.');

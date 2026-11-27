@@ -39,3 +39,5 @@ $('sendCopy').onclick=async()=>{if(await copyStr(sendText)){toast(`Copied. Paste
 $('sendDl').onclick=async()=>{const name=(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist-setup.md',blob=new Blob([sendText],{type:'text/markdown'});
   if(DLS){try{await DLS.save({filename:name,data:blob});toast('Setup saved');closeSend()}catch(e){if(!(e&&e.code==='declined'))toast('Download isn’t available here. Use Copy instead')}return}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);toast('Setup saved');closeSend()};
+
+$('ver').textContent='v'+VERSION;

@@ -1,6 +1,15 @@
 // ---- the app layer: tokens and components the app owns; Stylist reads them, edits aliases and pins, never component code ----
 const SCHEMA=1;     // stylist.json format version
 const FRAMEWORK=5;  // what Stylist can style. 1: colour, typeface, corners, density. 2: + container tint, shadows. 3: + control heights, focus. 4: + icon set. 5: + letter spacing. Bump when a property is added (e.g. shadows) and fill its default in migrate().
+// Stylist's version: <format>.<framework>. Bump the second number with FRAMEWORK, and also when a token is renamed.
+// Shown in the header and written into every app's files (stylist.json, the theme's header), so an upgrade knows where it starts.
+const VERSION='1.5';
+// what each framework added: an upgrade lists what's new since the app's version
+const FRAMEWORK_NOTES={2:'container tint and shadows',3:'control heights and focus',4:'icon sets',5:'letter spacing and motion'};
+// Tokens renamed over time, e.g. {since:'1.6',from:'sheet',to:'surface'} (Stylist's own names, no --).
+// Exports keep each old name pointing to the new one, so app code written for an older version keeps working;
+// export.py lists where the app's code still uses an old name. Remove an entry only in a new major version.
+const TOKEN_RENAMES=[];
 const RESERVED=['grid','grid-major','axis','pencil','fill','cut','clay']; // were Blueprint tokens inside the core; now they live in Blueprint's app layer
 const BP_TOKENS={grid:{ref:'gray-3'},'grid-major':{ref:'gray-5'},axis:{ref:'gray-8'},pencil:{ref:'gray-10'},fill:{ref:'ink',pct:5},
   cut:{light:'#d9480f',dark:'#ff8a4c'},clay:{light:'#d6b19a',dark:'#a9806a'}};

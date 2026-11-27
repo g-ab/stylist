@@ -33,6 +33,12 @@ changed in Stylist after it. Applying it means writing the app's Stylist files f
 4. With shadcn or Radix, the theme file uses the library's own variable names: import it after the library's styles.
 
 ## Other requests
-- **"upgrade Stylist":** run `python3 <stylist>/export.py <app folder>` with no setup. The look must not change:
-  if it lists changed tokens, show them before committing.
+- **"upgrade Stylist":** run `python3 <stylist>/export.py <app folder>` with no setup. It reads which Stylist made
+  the app's files and rewrites them for the current one. It prints:
+  - "Upgrade: … made with Stylist X, now Y. New since then: …": what the upgrade brings.
+  - "No token values changed": expected; the look stays the same. If it lists **changed** tokens instead, show
+    them to the user before committing. **New** tokens are fine: they're additions the app doesn't use yet.
+  - "Older token names in the app's code": names Stylist renamed. They keep working (the theme keeps the old
+    name pointing to the new one); offer to switch them, in a separate commit.
+  Commit as "Upgrade Stylist to Y" with what's new.
 - **A brand .zip** (Stylist's "Download brand files"): replace the files in the app's `brand/` with it.

@@ -28,7 +28,7 @@ Stylist remembers the repo, so loading it again is one click. **Copy link** in t
 ### Upgrade an app
 1. In the app's AI chat, say **"upgrade Stylist"**.
 
-The AI runs `export.py` with no new settings: the files are rewritten in Stylist's latest format and the app looks exactly the same. It tells you what's new, then commits.
+The AI runs `export.py` with no new settings. It reads which Stylist version made the app's files (shown as **v1.5** next to Stylist's name), rewrites them for the latest one, and tells you what's new. Nothing the app already has changes: new settings start at values that keep the look, and renamed tokens keep their old names working, with a list of where the app's code still uses them.
 
 ### Without an AI
 Run the same thing yourself from a copy of this repo:

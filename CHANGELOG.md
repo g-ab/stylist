@@ -1,6 +1,7 @@
 # Changelog
 
 ## 27 Nov 2026
+- **Safe upgrades:** Stylist shows its version (v1.5) and writes it into every app's files. An upgrade reads the app's version, translates its files, and reports what's new, which tokens changed (none expected) and where the app's code uses renamed tokens, which keep working through aliases. Tests make sure an upgrade never changes an existing value.
 - **Shorter setup:** its first line asks the AI to apply it and links to `APPLY.md` (the steps, kept in this repo); the settings are compact JSON. About 750 characters instead of 4,000, and nothing else to type when pasting.
 - **Send to your agent** (was "Copy setup for AI"): a panel shows what's included, with Copy or Download file. Logos you changed in Stylist travel with the setup, only those; the export stops instead of overwriting if one arrived damaged or the app's logo changed since loading. Too-big logos fall back to Download brand files.
 - **"Copy setup for AI"** (was "for Claude"): the copied text now explains itself to any AI assistant or agent, with the steps to apply it.

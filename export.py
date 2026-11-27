@@ -42,8 +42,51 @@ from playwright.async_api import async_playwright
 ROOT = Path(__file__).resolve().parent
 PAGE = (ROOT / "dist" / "index.html").as_uri()
 BLOCK_START, BLOCK_END = "<!-- stylist:start -->", "<!-- stylist:end -->"
+CODE_FILES = {".css", ".scss", ".sass", ".less", ".html", ".htm", ".js", ".mjs", ".jsx", ".ts", ".tsx", ".vue", ".svelte", ".astro"}
+SKIP_DIRS = {".git", "node_modules", "dist", "build", ".next", ".svelte-kit", "vendor", "brand"}
 STYLE_FILES = re.compile(r"^stylist(\.json|-theme\.css|-icons\.(css|tsx)|-motion\.ts)$|^(app-tokens\.css|components\.json|icon-setup\.md)$")
 ALWAYS = {"stylist.json", "stylist-theme.css", "app-tokens.css"}
+
+
+def vtuple(v):
+    try:
+        return tuple(int(x) for x in str(v).split("."))
+    except ValueError:
+        return (0,)
+
+
+def app_version(app_dir):
+    """Which Stylist made the app's files: stylist.json's "version", or <format>.<framework> for older files."""
+    p = app_dir / "stylist.json"
+    if not p.exists():
+        return None, None
+    try:
+        j = json.loads(p.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None, None
+    fw = int(j.get("framework") or 1)
+    return str(j.get("version") or f"{int(j.get('stylist') or 1)}.{fw}"), fw
+
+
+def old_names_in_code(app_dir, renames):
+    """Where the app's own code still uses a token name Stylist has since renamed (they keep working via aliases)."""
+    hits = []
+    if not renames:
+        return hits
+    pats = [(r, re.compile(r"--" + re.escape(r["old"]) + r"(?![\w-])")) for r in renames]
+    for p in sorted(app_dir.rglob("*")):
+        rel = p.relative_to(app_dir)
+        if not p.is_file() or p.suffix.lower() not in CODE_FILES or any(part in SKIP_DIRS for part in rel.parts) or STYLE_FILES.match(p.name):
+            continue
+        try:
+            lines = p.read_text(encoding="utf-8").splitlines()
+        except (UnicodeDecodeError, OSError):
+            continue
+        for i, line in enumerate(lines, 1):
+            for r, pat in pats:
+                if pat.search(line):
+                    hits.append(f"--{r['old']} → --{r['new']} (renamed in Stylist {r['since']}): {rel}:{i}")
+    return hits
 
 
 def teach(app_dir, first):
@@ -141,6 +184,8 @@ def app_files(app_dir):
 async def run(app_dir, setup, brand_files=(), removed=()):
     files = app_files(app_dir)
     first = not any(n == "stylist.json" for n, _ in files)
+    was_version, was_fw = app_version(app_dir)
+    extra = json.loads(os.environ.get("STYLIST_EXTRA_RENAMES", "[]"))  # tests only: renames to try before a real one exists
     if first and not setup:
         sys.exit(f"export: {app_dir} has no stylist.json yet. To style it for the first time, pass the setup copied from Stylist.")
     async with async_playwright() as p:
@@ -153,7 +198,7 @@ async def run(app_dir, setup, brand_files=(), removed=()):
         await page.goto(PAGE)
         await page.wait_for_timeout(300)
         out = await page.evaluate(
-            """async([files,setup,first])=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();
+            """async([files,setup,first,extra])=>{TOKEN_RENAMES.push(...extra);localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();
             if(!first)await openFiles(files.map(([n,t])=>new File([t],n)));
             if(APP.review.length)return {review:APP.review.map(r=>`${r.kind} --${r.v}: ${r.from??'(none)'} → ${r.to??'(none)'}`)};
             const before=first?{light:{},dark:{}}:(APP.snapshot||parseCSS(coreCSS(APP.target)));
@@ -162,8 +207,9 @@ async def run(app_dir, setup, brand_files=(), removed=()):
             const pk=buildPackage(APP.target),after=pk.snap,changed=[];
             for(const m of ['light','dark'])for(const k of new Set([...Object.keys(before[m]||{}),...Object.keys(after[m]||{})])){
               const a=(before[m]||{})[k],b=(after[m]||{})[k];if(a!==b)changed.push(`${m} --${k}: ${a??'(none)'} → ${b??'(none)'}`)}
-            return {target:APP.target,files:pk.files.map(f=>[f.name,f.text]),changed}}""",
-            [files, {k: v for k, v in setup.items() if k != "_files"} if setup else None, first],
+            return {target:APP.target,files:pk.files.map(f=>[f.name,f.text]),changed,version:VERSION,framework:FRAMEWORK,notes:FRAMEWORK_NOTES,
+              renames:TOKEN_RENAMES.map(r=>({since:r.since,old:outName(APP.target,r.from),new:outName(APP.target,r.to)}))}}""",
+            [files, {k: v for k, v in setup.items() if k != "_files"} if setup else None, first, extra],
         )
         await browser.close()
     if errors:
@@ -207,9 +253,27 @@ async def run(app_dir, setup, brand_files=(), removed=()):
         print("and switch the app's styles to the tokens one area at a time (README: Style a new app).")
         return
     print(f"Target: {out['target']}")
-    print("Changed tokens:" if out["changed"] else "No token values changed.")
-    for line in out["changed"]:
+    if was_version and vtuple(was_version) < vtuple(out["version"]):
+        new = [out["notes"][str(f)] for f in range(was_fw + 1, out["framework"] + 1) if str(f) in out["notes"]]
+        print(f"Upgrade: the app's files were made with Stylist {was_version}, now {out['version']}." + (f" New since then: {'; '.join(new)}." if new else ""))
+    changed = [c for c in out["changed"] if "(none)" not in c]
+    added = [c for c in out["changed"] if c.split(": ", 1)[1].startswith("(none)")]
+    removed = [c for c in out["changed"] if c.endswith("→ (none)")]
+    print("Changed tokens:" if changed else "No token values changed.")
+    for line in changed:
         print("  " + line)
+    if added:
+        print(f"New tokens ({len(added)}), added without changing anything the app uses: " + ", ".join(c.split(" ", 1)[1].split(":")[0] for c in added[:12]) + (" …" if len(added) > 12 else ""))
+    if removed:
+        print("Removed tokens (check the app doesn't use them):")
+        for line in removed:
+            print("  " + line)
+    olds = [r for r in out["renames"] if not was_version or vtuple(r["since"]) > vtuple(was_version)] if was_version else out["renames"]
+    hits = old_names_in_code(app_dir, olds)
+    if hits:
+        print("Older token names in the app's code (they still work, through aliases; switch them when convenient):")
+        for h in hits:
+            print("  " + h)
     print("Files updated: " + (", ".join(written) if written else "none"))
     if skipped:
         print("Not written (the app doesn't use them yet): " + ", ".join(skipped))

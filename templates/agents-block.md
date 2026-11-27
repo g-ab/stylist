@@ -10,8 +10,8 @@ To run Stylist: clone https://github.com/g-ab/stylist, run `python3 build.py` in
 - **A Stylist setup** (a message or .md file starting "Apply this Stylist setup to …"): follow
   https://github.com/g-ab/stylist/blob/main/APPLY.md. In short: save it to a file as it is, then run
   `python3 <stylist>/export.py <this repo> <that file>`. Logos changed in Stylist are inside it.
-- **"upgrade Stylist"**: run `python3 <stylist>/export.py <this repo>` (no setup). The look must not change:
-  if "Changed tokens" lists anything, show it before committing.
+- **"upgrade Stylist"**: run `python3 <stylist>/export.py <this repo>` (no setup), then follow its report
+  (APPLY.md, "Other requests"). The look must not change: if it lists changed tokens, show them before committing.
 - **New brand files as a .zip** (Stylist's "Download brand files", for logos too big for the setup):
   replace the files in brand/ with it.
 

@@ -4,7 +4,7 @@ let pTgt='css',pFile=0,pBuilt=null;
 const RECIPE_KEYS=['id','fam','sat','warm','tint','shStr','shSoft','sh','motion','sup','supFam','ui','mono','radius','pill','dens','unit','h','focus','icons','track'];
 function recipeSettings(){return Object.fromEntries(RECIPE_KEYS.map(k=>[k,k==='track'?{base:trackOf().base}:S[k]]))}
 function buildPackage(tg){const core=coreCSS(tg),snap=parseCSS(core);
-  const cj={stylist:SCHEMA,framework:FRAMEWORK,app:APP.name,target:tg,exported:new Date().toISOString(),
+  const cj={stylist:SCHEMA,version:VERSION,framework:FRAMEWORK,app:APP.name,target:tg,exported:new Date().toISOString(),
     settings:recipeSettings(),
     fontFiles:[S.ui,S.mono].filter(n=>custom[n]),brand:brandFiles().map(f=>f.name),pins:APP.pins,snapshot:snap,changelog:APP.changelog};
   return {snap,files:[

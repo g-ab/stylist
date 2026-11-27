@@ -242,6 +242,40 @@ async def main():
         check("no page errors (send)", not serr, serr[:3])
         await sp.close()
 
+        # 6f. Safe upgrades: the version is shown and written; upgrading never changes a value the app has
+        vp, verr = await open_page(browser)
+        ver = await vp.evaluate("({shown:$('ver').textContent,v:VERSION,json:JSON.parse(buildPackage('css').files[0].text).version,head:coreCSS('css').split(String.fromCharCode(10))[0]})")
+        check("version shown and written", ver["shown"] == "v" + ver["v"] and ver["json"] == ver["v"] and f"Stylist {ver['v']}" in ver["head"], ver)
+        with tempfile.TemporaryDirectory() as tmp:
+            for fx in sorted((root / "tests" / "fixtures").glob("v*-*")):
+                app = Path(tmp) / fx.name
+                shutil.copytree(fx, app)
+                r = subprocess.run([sys.executable, str(root / "export.py"), str(app)], capture_output=True, text=True)
+                check(f"upgrade keeps every value ({fx.name})", r.returncode == 0 and "No token values changed" in r.stdout, r.stdout[-300:] + r.stderr[-200:])
+            # an app made before letter spacing (framework 4, Stylist 1.4): the upgrade adds tokens, changes none
+            old = Path(tmp) / "old-app"
+            shutil.copytree(root / "tests" / "fixtures" / "v5-css", old)
+            j = json.loads((old / "stylist.json").read_text())
+            j["framework"] = 4
+            j.pop("version", None)
+            j["settings"].pop("track", None)
+            for m in ("light", "dark"):
+                j["snapshot"][m] = {k: v for k, v in j["snapshot"].get(m, {}).items() if not k.startswith("tracking")}
+            (old / "stylist.json").write_text(json.dumps(j))
+            (old / "stylist-theme.css").write_text("\n".join(l for l in (old / "stylist-theme.css").read_text().split("\n") if "--tracking" not in l))
+            r = subprocess.run([sys.executable, str(root / "export.py"), str(old)], capture_output=True, text=True)
+            check("upgrade from an older version: new tokens, nothing changed", r.returncode == 0 and "No token values changed" in r.stdout and "made with Stylist 1.4" in r.stdout and "letter spacing" in r.stdout and "--tracking" in r.stdout and "--tracking: 0em" in (old / "stylist-theme.css").read_text(), r.stdout[-400:] + r.stderr[-200:])
+            # a renamed token: the old name keeps working (alias) and the app's code that uses it is listed
+            ren = [{"since": "9.9", "from": "old-sheet", "to": "sheet"}]
+            al = await vp.evaluate("""async(ren)=>{TOKEN_RENAMES.push(...ren);S={...PRESETS[0]};apply();const css=coreCSS('css'),pk=buildPackage('css');
+                await openFiles(pk.files.map(f=>new File([f.text],f.name.split('/').pop())));const o={alias:css.includes('--old-sheet: var(--sheet);'),review:APP.review.length};TOKEN_RENAMES.length=0;return o}""", ren)
+            code = Path(tmp) / "v5-css" / "app.css"
+            code.write_text(".card {\n  background: var(--old-sheet);\n}\n")
+            r = subprocess.run([sys.executable, str(root / "export.py"), str(code.parent)], capture_output=True, text=True, env={**os.environ, "STYLIST_EXTRA_RENAMES": json.dumps(ren)})
+            check("renamed tokens keep working and are listed", al["alias"] and al["review"] == 0 and r.returncode == 0 and "app.css:2" in r.stdout and "--old-sheet: var(--sheet)" in (code.parent / "stylist-theme.css").read_text(), {**al, "out": r.stdout[-300:]})
+        check("no page errors (versions)", not verr, verr[:3])
+        await vp.close()
+
         # 7. The export dialog keeps its download button in view, even in small windows
         for w, h in [(1440, 900), (820, 650), (560, 800)]:
             pg, errors = await open_page(browser, w, h)

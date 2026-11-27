@@ -26,9 +26,20 @@ Stylist is gab's styling tool.
 - Before publishing, get the artifact's live version. If it isn't the version this repo last published (see the latest "Published" line in `CHANGELOG.md`), someone changed the artifact outside the repo: download it, compare it with `python3 build.py --check <file>`, and bring those changes into `src/` first. Never overwrite them.
 - After publishing, note the new version id in `CHANGELOG.md` and copy `docs/interface.md` to the project doc if it changed.
 
-## Rules that keep files compatible
-- **Adding a styleable property:** bump `FRAMEWORK`, give older files a default in `migrate()`, and add the property to `stylist.json` settings.
-- **Every package Stylist ever exported must keep opening:** when the framework changes, add a fixture of the old version to `tests/fixtures/`.
+## Rules that keep upgrades safe
+An app upgrades with `export.py <app>` (no setup). It reads which version made the app's files, translates them to
+the current one, and must never change a value the app already has. To keep that true:
+- **Versions:** `VERSION` (`<format>.<framework>`, in `02-app-layer.js`) is shown in the header and written into
+  `stylist.json` and the theme's header. Bump it with `FRAMEWORK`, and when a token is renamed.
+- **Adding a styleable property:** bump `FRAMEWORK` and `VERSION`, add a line to `FRAMEWORK_NOTES`, give older files
+  a default in `migrate()` **that reproduces how they looked**, and add the key to `RECIPE_KEYS`.
+- **Renaming a token:** never just rename it. Add `{since, from, to}` to `TOKEN_RENAMES`: exports keep the old name
+  pointing to the new one, and export.py lists app code still using it. Remove an entry only in a new major version
+  (`VERSION` 2.x), with a note in `CHANGELOG.md` under "Upgrading".
+- **Removing a token:** same as renaming (point it somewhere sensible), or a major version.
+- **Every version's packages must keep opening and upgrade unchanged:** before bumping `FRAMEWORK`, save real
+  packages of the current version to `tests/fixtures/v<framework>-<library>`. The tests upgrade every fixture
+  and fail if any existing value changes.
 - `--clay` and the `.clay` preview classes are Cast's clay-material colour (pottery clay).
 - Settings are stored in Stylist's own terms; a library (shadcn, Radix) only changes captions, greyed controls and the export.
 
