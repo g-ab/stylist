@@ -89,7 +89,9 @@ async def main():
         keys = await pg.evaluate("RECIPE_KEYS")
         check("copy setup is a full recipe", set(keys) <= set(block["settings"]) and "pins" in block and block["settings"]["radius"] == 16, list(block)[:6])
         steps = await pg.evaluate("$('copy').textContent")
-        check("copy setup explains itself to any AI", "Send to your agent" in steps and "github.com/g-ab/stylist" in setup and "export.py" in setup and "Exit code 2" in setup and "first time" in setup and "Claude" not in setup, steps)
+        apply_md = (Path(__file__).resolve().parent.parent / "APPLY.md").read_text()
+        check("setup is short and points to APPLY.md", "Send to your agent" in steps and setup.startswith("Apply this Stylist setup to Fixture.") and "blob/main/APPLY.md" in setup and len(setup) < 2500 and "Claude" not in setup
+              and all(w in apply_md for w in ("export.py", "Exit code 2", "First time", "upgrade Stylist", "Removed in Stylist")), {"chars": len(setup), "start": setup[:60]})
         import shutil, subprocess, tempfile
         root = Path(__file__).resolve().parent.parent
         with tempfile.TemporaryDirectory() as tmp:
@@ -201,7 +203,7 @@ async def main():
             load = """async(fs)=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();await openFiles(fs.map(([n,t])=>new File([t],n.split('/').pop())));return true}"""
             await sp.evaluate(load, app_payload(app))
             t0 = await sp.evaluate("(()=>{S={...S,radius:20};apply();return setupText()})()")
-            check("send: unchanged logos stay out", "stylist-file" not in t0 and '"brand"' not in t0 and "none changed" in t0, t0[-200:])
+            check("send: unchanged logos stay out", "stylist-file" not in t0 and '"brand"' not in t0, t0[-200:])
             t1 = await sp.evaluate("(n)=>{APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:n}};apply();return setupText()}", NEW)
             r = export(app, t1)
             check("send: a changed logo is written", r.returncode == 0 and (app / "brand" / "logo.svg").read_text().strip() == NEW and "brand/logo.svg" in r.stdout and "--radius-lg: 12px → 20px" in r.stdout, {"code": r.returncode, "logo": (app / "brand" / "logo.svg").read_text()[:90], "out": r.stdout[-260:], "err": r.stderr[-200:]})

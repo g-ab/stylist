@@ -1,6 +1,7 @@
 # Changelog
 
 ## 27 Nov 2026
+- **Shorter setup:** its first line asks the AI to apply it and links to `APPLY.md` (the steps, kept in this repo); the settings are compact JSON. About 750 characters instead of 4,000, and nothing else to type when pasting.
 - **Send to your agent** (was "Copy setup for AI"): a panel shows what's included, with Copy or Download file. Logos you changed in Stylist travel with the setup, only those; the export stops instead of overwriting if one arrived damaged or the app's logo changed since loading. Too-big logos fall back to Download brand files.
 - **"Copy setup for AI"** (was "for Claude"): the copied text now explains itself to any AI assistant or agent, with the steps to apply it.
 - **The app's AI instructions write themselves:** the first export adds a Stylist section to the app's `AGENTS.md` (and a `CLAUDE.md` pointing to it), and every later run keeps it current. No more pasting the block by hand.

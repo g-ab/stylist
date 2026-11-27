@@ -29,7 +29,7 @@ function renderSend(){const d=brandDelta(),svgs=d.files.filter(f=>/\.svg$/.test(
   $('sendList').innerHTML=rows;
   const file=svgs.length>0||sendText.length>12000;
   $('sendCopy').classList.toggle('pri',!file);$('sendDl').classList.toggle('pri',file);
-  $('sendHint').textContent=`${file?'Download it and attach the file':'Copy it and paste it'} in ${APP.name}’s AI chat, then say “restyle the app” (or “style this app with Stylist” the first time).`}
+  $('sendHint').textContent=file?`Download it, attach it in ${APP.name}’s AI chat and say “apply this”.`:`Copy it and paste it in ${APP.name}’s AI chat. Nothing else to type.`}
 function openSend(){renderSend();$('sendmod').hidden=false}
 const closeSend=()=>{$('sendmod').hidden=true};
 $('copy').onclick=openSend;$('sendClose').onclick=closeSend;$('sendmod').onclick=e=>{if(e.target===$('sendmod'))closeSend()};

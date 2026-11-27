@@ -10,14 +10,14 @@ Your app keeps its Stylist files in its own repo: `stylist.json` (your settings)
 ### Style a new app
 1. Design the style at https://g-ab.github.io/stylist/. Pick the app's library at the top of the panel: CSS, shadcn or Radix.
 2. Share → **Send to your agent…**, then **Copy** or **Download file**.
-3. Paste it (or attach the file) in your app's AI chat and say **"style this app with Stylist"**.
+3. Paste it in your app's AI chat: nothing else to type. (A downloaded file: attach it and say **"apply this"**.)
 
-The setup explains itself, so any AI can follow it: it gets Stylist and runs `export.py`, which adds the Stylist files and a Stylist section to the app's `AGENTS.md` (so "restyle the app" and "upgrade Stylist" work later, with any AI). Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos you added in the Brand tab travel with it.
+The setup's first line asks the AI to apply it and links to [APPLY.md](APPLY.md), the steps any AI follows: it gets Stylist and runs `export.py`, which adds the Stylist files and a Stylist section to the app's `AGENTS.md` (so "restyle the app" and "upgrade Stylist" work later, with any AI). Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos you added in the Brand tab travel with it.
 
 ### Restyle an app
 1. Load its current style: Share menu (or the Custom view) → **Open from GitHub…**, type the repo (e.g. `g-ab/cast`) or paste its link, then **Open**.
 2. Change the style.
-3. Share → **Send to your agent…**, **Copy** or **Download file**, then paste or attach it in the app's AI chat and say **"restyle the app"**.
+3. Share → **Send to your agent…**, then paste it in the app's AI chat (or attach the file and say **"apply this"**).
 
 The AI runs `export.py` with your setup, shows which values changed, and commits. It stops if someone edited the theme file by hand, so nothing is overwritten.
 
