@@ -1,5 +1,8 @@
 # Changelog
 
+## 28 Nov 2026
+- **Send to your agent, simpler:** one line on what's included, notes only when needed, and one button picked by size: Copy when it fits a chat box (under 8,000 characters), Download file when it doesn't.
+
 ## 27 Nov 2026
 - **Safe upgrades:** Stylist shows its version (v1.5) and writes it into every app's files. An upgrade reads the app's version, translates its files, and reports what's new, which tokens changed (none expected) and where the app's code uses renamed tokens, which keep working through aliases. Tests make sure an upgrade never changes an existing value.
 - **Shorter setup:** its first line asks the AI to apply it and links to `APPLY.md` (the steps, kept in this repo); the settings are compact JSON. About 750 characters instead of 4,000, and nothing else to type when pasting.

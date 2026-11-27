@@ -234,11 +234,16 @@ async def main():
             await sp.evaluate("(n)=>{APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:n}};apply()}", NEW)
             await sp.click("#amBtn")
             await sp.click("#copy")
-            pnl = await sp.evaluate("({open:!$('sendmod').hidden,list:$('sendList').innerText,dl:$('sendDl').classList.contains('pri'),label:$('copy').textContent})")
+            pnl = await sp.evaluate("({open:!$('sendmod').hidden,sum:$('sendSum').innerText,copy:!$('sendCopy').hidden,dl:!$('sendDl').hidden,link:!$('sendDlLink').hidden,next:$('sendHint').innerText,label:$('copy').textContent})")
             async with sp.expect_download() as dl:
-                await sp.click("#sendDl")
+                await sp.click("#sendDlLink")
             fname = (await dl.value).suggested_filename
-            check("send: the panel", pnl["open"] and "1 logo you changed" in pnl["list"] and pnl["dl"] and "Send to your agent" in pnl["label"] and fname.endswith("-stylist-setup.md"), {**pnl, "file": fname})
+            check("send: short setup → Copy", pnl["open"] and "1 changed logo" in pnl["sum"] and pnl["copy"] and not pnl["dl"] and pnl["link"] and "Nothing else to type" in pnl["next"] and "Send to your agent" in pnl["label"] and fname.endswith("-stylist-setup.md"), {**pnl, "file": fname})
+            # a heavier logo makes it too long to paste: Download only, with the reason
+            await sp.evaluate("""()=>{const p=Array.from({length:260},(_,i)=>`<rect x="${i%40}" y="${i%10}" width="1" height="1" fill="#${(i*2654435761>>>8&0xffffff).toString(16).padStart(6,'0')}"/>`).join('');
+              APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 10">${p}</svg>`}};apply();openSend()}""")
+            lng = await sp.evaluate("({len:sendText.length,copy:!$('sendCopy').hidden,dl:!$('sendDl').hidden,link:!$('sendDlLink').hidden,notes:$('sendNotes').innerText,next:$('sendHint').innerText})")
+            check("send: too long → Download only", lng["len"] > 8000 and not lng["copy"] and lng["dl"] and not lng["link"] and "Too long to paste" in lng["notes"] and "apply this" in lng["next"], lng)
         check("no page errors (send)", not serr, serr[:3])
         await sp.close()
 
