@@ -60,5 +60,5 @@
 .sendnotes li{position:relative;padding-left:14px;font-size:12px;line-height:1.45;color:#7a4a00}
 .sendnotes li::before{content:"";position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:50%;background:#c27a00}
 .sendact{display:flex;justify-content:flex-end;gap:8px;padding:18px}
-.sendact .btn{padding:8px 16px}
+.sendact .btn{flex:none;width:auto;padding:8px 16px}
 .sendact .btn[hidden]{display:none}
