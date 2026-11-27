@@ -1,6 +1,6 @@
 // ---- the package ----
 let pTgt='css',pFile=0,pBuilt=null;
-// the settings a recipe carries (stylist.json, and "Copy setup for Claude")
+// the settings a recipe carries (stylist.json, and "Copy setup for AI")
 const RECIPE_KEYS=['id','fam','sat','warm','tint','shStr','shSoft','sh','motion','sup','supFam','ui','mono','radius','pill','dens','unit','h','focus','icons','track'];
 function recipeSettings(){return Object.fromEntries(RECIPE_KEYS.map(k=>[k,k==='track'?{base:trackOf().base}:S[k]]))}
 function buildPackage(tg){const core=coreCSS(tg),snap=parseCSS(core);

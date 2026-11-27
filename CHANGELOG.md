@@ -1,5 +1,10 @@
 # Changelog
 
+## 27 Nov 2026
+- **"Copy setup for AI"** (was "for Claude"): the copied text now explains itself to any AI assistant or agent, with the steps to apply it.
+- **Style a new app from a setup:** `export.py` adds all the Stylist files to an app that has none yet.
+- Open from GitHub: one field, clearer copy.
+
 ## 26 Nov 2026
 - **Open from GitHub:** load an app's style straight from its repo (Share menu or Custom view). Remembers the last repo; "Copy link" makes a link that opens Stylist with that app loaded.
 - Browser settings are now saved under new names: settings kept in the browser before this update reset once. Re-open the app's files to get a style back.

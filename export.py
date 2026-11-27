@@ -5,12 +5,18 @@
 
 APP_DIR  the app's folder holding its Stylist files (stylist.json, stylist-theme.css,
          app-tokens.css, components.json, brand/…).
-SETUP    optional: what Stylist's "Copy setup for Claude" copied, saved to a file
-         (the JSON block, with or without the text around it). Without it, the app's
-         own stylist.json is used, so the files are simply regenerated.
+SETUP    what Stylist's "Copy setup for AI" copied, saved to a file (the JSON block,
+         with or without the text around it). Without it, the app's own stylist.json is
+         used, so the files are regenerated in the latest format: an upgrade.
+
+First time (APP_DIR has no stylist.json yet): a SETUP is required, and every package
+file is added to APP_DIR. Connecting the app's own styles to the tokens comes after,
+by hand or by an AI (see README, "Style a new app").
 
 It runs Stylist's own code (dist/index.html, headless), so the files are exactly what
-the Export package dialog would give:
+the Export package dialog would give.
+
+For an app that already uses Stylist:
   1. open the app's current files, as "Open app style…" does;
   2. stop if the theme file was edited by hand since the last export: those edits must
      be matched, pinned or reverted in Stylist first, never overwritten silently;
@@ -20,6 +26,7 @@ the Export package dialog would give:
   5. print which token values changed, for the commit message and the review.
 
 Exit codes: 0 done · 1 bad input · 2 hand edits to resolve first.
+
 Needs: pip install playwright && python3 -m playwright install chromium
 (or STYLIST_CHROME=/path/to/chrome).
 """
@@ -64,8 +71,9 @@ def app_files(app_dir):
 
 async def run(app_dir, setup):
     files = app_files(app_dir)
-    if not any(n == "stylist.json" for n, _ in files):
-        sys.exit(f"export: no stylist.json in {app_dir}")
+    first = not any(n == "stylist.json" for n, _ in files)
+    if first and not setup:
+        sys.exit(f"export: {app_dir} has no stylist.json yet. To style it for the first time, pass the setup copied from Stylist.")
     async with async_playwright() as p:
         kw = {"executable_path": os.environ["STYLIST_CHROME"]} if os.environ.get("STYLIST_CHROME") else {}
         browser = await p.chromium.launch(args=["--no-sandbox"], **kw)
@@ -76,17 +84,17 @@ async def run(app_dir, setup):
         await page.goto(PAGE)
         await page.wait_for_timeout(300)
         out = await page.evaluate(
-            """async([files,setup])=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();
-            await openFiles(files.map(([n,t])=>new File([t],n)));
+            """async([files,setup,first])=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();
+            if(!first)await openFiles(files.map(([n,t])=>new File([t],n)));
             if(APP.review.length)return {review:APP.review.map(r=>`${r.kind} --${r.v}: ${r.from??'(none)'} → ${r.to??'(none)'}`)};
-            const before=APP.snapshot||parseCSS(coreCSS(APP.target));
+            const before=first?{light:{},dark:{}}:(APP.snapshot||parseCSS(coreCSS(APP.target)));
             if(setup){const cj=migrate({stylist:1,framework:FRAMEWORK,...setup});S=sanitizeS({...S,...cj.settings});
               if(cj.pins)APP.pins={light:{},dark:{},...cj.pins};if(cj.target&&TGT[cj.target])APP.target=cj.target;if(cj.app)APP.name=cj.app;apply()}
             const pk=buildPackage(APP.target),after=pk.snap,changed=[];
             for(const m of ['light','dark'])for(const k of new Set([...Object.keys(before[m]||{}),...Object.keys(after[m]||{})])){
               const a=(before[m]||{})[k],b=(after[m]||{})[k];if(a!==b)changed.push(`${m} --${k}: ${a??'(none)'} → ${b??'(none)'}`)}
             return {target:APP.target,files:pk.files.map(f=>[f.name,f.text]),changed}}""",
-            [files, setup],
+            [files, setup, first],
         )
         await browser.close()
     if errors:
@@ -98,7 +106,7 @@ async def run(app_dir, setup):
         print("Open these files in Stylist (Custom view → Open app style…) to match, pin or revert each one, then export again.")
         sys.exit(2)
 
-    have = {n for n, _ in files} | ALWAYS
+    have = {n for n, _ in out["files"]} if first else {n for n, _ in files} | ALWAYS
     written, skipped = [], []
     for name, text in out["files"]:
         if name.startswith("brand/") or name in have:
@@ -110,6 +118,11 @@ async def run(app_dir, setup):
         else:
             skipped.append(name)
 
+    if first:
+        print(f"First time: added the Stylist files for {out['target']} ({', '.join(written)}).")
+        print("Next: load stylist-theme.css, then app-tokens.css, then stylist-icons.css before the app's own styles,")
+        print("and switch the app's styles to the tokens one area at a time (README: Style a new app).")
+        return
     print(f"Target: {out['target']}")
     print("Changed tokens:" if out["changed"] else "No token values changed.")
     for line in out["changed"]:

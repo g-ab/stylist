@@ -88,6 +88,8 @@ async def main():
         block = json.loads(setup[setup.index("{"):setup.rindex("}") + 1])
         keys = await pg.evaluate("RECIPE_KEYS")
         check("copy setup is a full recipe", set(keys) <= set(block["settings"]) and "pins" in block and block["settings"]["radius"] == 16, list(block)[:6])
+        steps = await pg.evaluate("$('copy').textContent")
+        check("copy setup explains itself to any AI", "Copy setup for AI" in steps and "github.com/g-ab/stylist" in setup and "export.py" in setup and "Exit code 2" in setup and "first time" in setup and "Claude" not in setup, steps)
         import shutil, subprocess, tempfile
         root = Path(__file__).resolve().parent.parent
         with tempfile.TemporaryDirectory() as tmp:
@@ -102,6 +104,19 @@ async def main():
             (app / "stylist-theme.css").write_text(theme.replace("--radius-lg: 16px", "--radius-lg: 10px"))
             r3 = subprocess.run([sys.executable, str(root / "export.py"), str(app), str(Path(tmp) / "setup.txt")], capture_output=True, text=True)
             check("export.py stops on hand edits", r3.returncode == 2 and "radius-lg" in r3.stdout, r3.stdout[-200:])
+            # first time: an app folder with no Stylist files gets the whole package from a setup
+            new = Path(tmp) / "new-app"
+            new.mkdir()
+            (new / "index.html").write_text("<!doctype html><title>New</title>")
+            r4 = subprocess.run([sys.executable, str(root / "export.py"), str(new), str(Path(tmp) / "setup.txt")], capture_output=True, text=True)
+            added = sorted(p.name for p in new.iterdir())
+            check("export.py styles a new app", r4.returncode == 0 and {"stylist.json", "stylist-theme.css", "app-tokens.css"} <= set(added) and "First time" in r4.stdout and "--radius-lg: 16px" in (new / "stylist-theme.css").read_text(), added)
+            r5 = subprocess.run([sys.executable, str(root / "export.py"), str(new)], capture_output=True, text=True)
+            check("export.py on the new app again: nothing changes", r5.returncode == 0 and "No token values changed" in r5.stdout, r5.stdout[-200:] + r5.stderr[-200:])
+            empty = Path(tmp) / "empty"
+            empty.mkdir()
+            r6 = subprocess.run([sys.executable, str(root / "export.py"), str(empty)], capture_output=True, text=True)
+            check("export.py asks for a setup on a new app", r6.returncode == 1 and "first time" in r6.stderr, r6.stderr[-200:])
 
         check("no page errors (main page)", not errors, errors[:3])
         await pg.close()
