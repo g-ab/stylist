@@ -1200,8 +1200,8 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
   <div class="xcard gh">
     <div class="xhead"><h2 id="ghTitle">Open from GitHub</h2><button id="ghClose" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
     <form class="ghbody" id="ghForm">
-      <label>Repository<input id="ghRepo" placeholder="owner/repo, or a github.com link" autocomplete="off" spellcheck="false" required></label>
-      <p class="ghnote">Public repos. Stylist reads the app’s style files as they are on GitHub now. Files in a subfolder? Paste that folder’s GitHub link.</p>
+      <p class="ghnote">Stylist reads your app’s style files as they are on GitHub. Public repos only. Files in a subfolder? Paste that folder’s link.</p>
+      <label>Repo link or name<input id="ghRepo" placeholder="github.com/g-ab/cast" autocomplete="off" spellcheck="false" required></label>
       <p class="ghmsg" id="ghMsg" role="status"></p>
     </form>
     <div class="xfoot"><button class="lnk" id="ghLink" type="button" title="A link that opens Stylist with this app’s style already loaded">Copy link</button><p></p><button class="btn" id="ghCancel" type="button">Cancel</button><button class="btn pri" id="ghGo" type="submit" form="ghForm">Open</button></div>
@@ -2429,7 +2429,7 @@ $('ghmod').onclick=e=>{if(e.target===$('ghmod'))closeGh()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ghmod').hidden)closeGh()});
 $('ghRepo').oninput=()=>{$('ghLink').hidden=!ghParse($('ghRepo').value)};
 $('ghForm').onsubmit=async e=>{e.preventDefault();const g=ghParse($('ghRepo').value);
-  if(!g){$('ghMsg').textContent='Use owner/repo, for example g-ab/cast, or paste the repo’s github.com link.';return}
+  if(!g){$('ghMsg').textContent='Paste the repo’s link, like github.com/g-ab/cast, or just g-ab/cast.';return}
   $('ghGo').disabled=true;$('ghMsg').textContent=`Reading ${ghLabel(g)}…`;
   try{if(await ghOpen(g))closeGh();else $('ghMsg').textContent=`No Stylist files found in ${ghLabel(g)}. Check the folder, and that the repo is public.`}
   catch(err){$('ghMsg').textContent='GitHub can’t be reached from here. This works on the Stylist website (g-ab.github.io/stylist), with an internet connection.'}

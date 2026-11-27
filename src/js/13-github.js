@@ -31,7 +31,7 @@ $('ghmod').onclick=e=>{if(e.target===$('ghmod'))closeGh()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ghmod').hidden)closeGh()});
 $('ghRepo').oninput=()=>{$('ghLink').hidden=!ghParse($('ghRepo').value)};
 $('ghForm').onsubmit=async e=>{e.preventDefault();const g=ghParse($('ghRepo').value);
-  if(!g){$('ghMsg').textContent='Use owner/repo, for example g-ab/cast, or paste the repo’s github.com link.';return}
+  if(!g){$('ghMsg').textContent='Paste the repo’s link, like github.com/g-ab/cast, or just g-ab/cast.';return}
   $('ghGo').disabled=true;$('ghMsg').textContent=`Reading ${ghLabel(g)}…`;
   try{if(await ghOpen(g))closeGh();else $('ghMsg').textContent=`No Stylist files found in ${ghLabel(g)}. Check the folder, and that the repo is public.`}
   catch(err){$('ghMsg').textContent='GitHub can’t be reached from here. This works on the Stylist website (g-ab.github.io/stylist), with an internet connection.'}
