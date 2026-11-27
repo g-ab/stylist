@@ -279,6 +279,8 @@ main.dk .bgpick [aria-pressed="true"]{box-shadow:inset 0 0 0 1px rgba(255,255,25
 .btn.brdl{display:block;width:100%;margin-top:12px;flex:none}
 .btn.brdl:disabled{opacity:.45;cursor:default}
 .ver{margin-left:6px;font:500 10.5px/1 "Geist Mono",ui-monospace,monospace;color:#8a929c;letter-spacing:.02em;align-self:center}
+.liblist .lsep{margin:4px 0;border:0;border-top:1px solid #e6e8eb}
+.liblist .lreset{display:flex;align-items:center;gap:8px}
 /* ---------- preview (themed by variables) ---------- */
 .pv{letter-spacing:var(--tracking,0em);--icon-stroke:2;--ctl-xs:24px;--ctl-sm:28px;--ctl-lg:44px;--focus-width:2px;--focus-offset:2px;--focus-ring:0 0 #0000;--focus-outline:none;--r-xs:3px;--r-2xl:16px;--r-round:0px;--r-sm:4px;--r-md:6px;--r-lg:8px;--r-xl:12px;--bar:44px;--ctl:36px;--inset:4px;--gap:8px;--fs:14px;
   background:var(--paper);color:var(--ink);font:var(--fs)/1.45 var(--font-ui);border-radius:10px;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
@@ -875,12 +877,14 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
 <body>
 <aside>
   <div class="ah">
-    <div class="amenu libdd"><button class="ttl" id="libBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Stylist: choose the destination" title="Destination: None"><h1>Stylist</h1><span class="ver" id="ver" title="Stylist’s version: written into every app’s files"></span><svg viewBox="0 0 10 10"><path d="M2.5 4l2.5 2.5L7.5 4"/></svg></button>
+    <div class="amenu libdd"><button class="ttl" id="libBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Stylist: choose the destination" title="Destination: CSS"><h1>Stylist</h1><span class="ver" id="ver" title="Stylist’s version: written into every app’s files"></span><svg viewBox="0 0 10 10"><path d="M2.5 4l2.5 2.5L7.5 4"/></svg></button>
       <div class="amlist liblist" id="libSeg" role="listbox" aria-label="Destination" hidden>
         <div class="lh">Destination</div>
-        <button role="option" data-t="css"><b>None</b><small>Plain CSS variables, no component library</small></button>
+        <button role="option" data-t="css"><b>CSS</b><small>Plain CSS variables, no component library</small></button>
         <button role="option" data-t="shadcn"><b>shadcn</b><small>shadcn/ui on Tailwind v4</small></button>
         <button role="option" data-t="radix"><b>Radix</b><small>Radix Themes</small></button>
+        <hr class="lsep">
+        <button type="button" class="lreset" id="reset"><svg viewBox="0 0 16 16"><path d="M3.5 8.5A4.5 4.5 0 1 0 8 4H5"/><path d="M6.5 2L4.5 4l2 2"/></svg>Reset to defaults</button>
       </div>
     </div>
     <div class="ahr">
@@ -892,8 +896,6 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
         <button role="menuitem" id="mPkg"><svg viewBox="0 0 16 16"><path d="M2.5 5L8 2.5 13.5 5v6L8 13.5 2.5 11z"/><path d="M2.5 5L8 7.5 13.5 5M8 7.5v6"/></svg>Export package…</button>
         <button role="menuitem" id="mOpen"><svg viewBox="0 0 16 16"><path d="M2 4.5a1 1 0 0 1 1-1h3l1.5 1.5H13a1 1 0 0 1 1 1V12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>Open app style…</button>
         <button role="menuitem" id="mGh"><svg viewBox="0 0 16 16" style="fill:currentColor;stroke:none"><path d="M8 1.8a6.2 6.2 0 0 0-2 12.1c.3 0 .4-.1.4-.3v-1.1c-1.7.4-2.1-.8-2.1-.8-.3-.7-.7-.9-.7-.9-.6-.4 0-.4 0-.4.6 0 1 .6 1 .6.5 1 1.5.7 1.8.5.1-.4.2-.7.4-.8-1.4-.2-2.8-.7-2.8-3 0-.7.2-1.2.6-1.6 0-.2-.3-.8.1-1.6 0 0 .5-.2 1.7.6a5.8 5.8 0 0 1 3.1 0c1.2-.8 1.7-.6 1.7-.6.3.8.1 1.4.1 1.6.4.4.6 1 .6 1.6 0 2.4-1.4 2.9-2.8 3 .2.2.4.6.4 1.1v1.7c0 .2.1.3.4.3A6.2 6.2 0 0 0 8 1.8z"/></svg>Open from GitHub…</button>
-        <hr>
-        <button role="menuitem" id="reset"><svg viewBox="0 0 16 16"><path d="M3.5 8.5A4.5 4.5 0 1 0 8 4H5"/><path d="M6.5 2L4.5 4l2 2"/></svg>Reset to defaults</button>
       </div>
     </div>
     </div>
@@ -1653,7 +1655,7 @@ document.querySelectorAll('[data-sh]').forEach(x=>x.addEventListener('input',()=
 $('shOp').addEventListener('input',e=>{const v=Math.round(+e.target.value*2)/2;if(!isFinite(v)||e.target.value==='')return;S.sh={...shOf(),op:Math.max(0,Math.min(60,v))};apply()});
 $('shColor').addEventListener('input',e=>{S.sh={...shOf(),color:e.target.value};apply()});
 $('mode').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.v;$('mode').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));apply()};
-$('reset').onclick=()=>{S={...PRESETS[0]};apply();toast('Back to the defaults')};
+$('reset').onclick=()=>{S={...PRESETS[0]};apply();libClose();toast('Back to the defaults')};
 // ---- views ----
 $('views').onclick=e=>{const b=e.target.closest('button');if(!b)return;$('views').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
   showView(b.dataset.v)};
@@ -2126,14 +2128,14 @@ const LENS_OFF={
   radix:{fshape:'Radix always draws an outline.',fw:'Radix fixes the width at 2px.',foff:'Radix sets the offset per component.',h:'In Radix, sizes 1–4 follow its space scale (6, 8, 10, 12 × unit). Change the spacing unit instead.'},
   shadcn:{fshape:'shadcn components draw a ring.',fw:'Set in component code: ring-[3px].',foff:'Set in component code.'}};
 function renderLens(){const L=APP.target,off=LENS_OFF[L]||{};
-  document.querySelectorAll('#libSeg button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===L));$('libBtn').title='Destination: '+({css:'None',tw:'Tailwind',shadcn:'shadcn',radix:'Radix'}[L]||'None');
+  document.querySelectorAll('#libSeg button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===L));$('libBtn').title='Destination: '+({css:'CSS',tw:'Tailwind',shadcn:'shadcn',radix:'Radix'}[L]||'CSS');
   document.querySelectorAll('[data-lens-ctl]').forEach(el=>{const why=off[el.dataset.lensCtl]||'';el.classList.toggle('off',!!why);
     el.querySelectorAll('input,button').forEach(x=>x.disabled=!!why);
     const w=el.dataset.lensCtl==='h'?document.querySelector('.hwhy'):el.querySelector('.why');if(w)w.textContent=why});
 }
 const libClose=()=>{$('libSeg').hidden=true;$('libBtn').setAttribute('aria-expanded','false')};
 $('libBtn').onclick=e=>{e.stopPropagation();const o=$('libSeg').hidden;amClose();$('libSeg').hidden=!o;$('libBtn').setAttribute('aria-expanded',String(o));if(o)($('libSeg').querySelector('[aria-selected="true"]')||$('libSeg').querySelector('button')).focus()};
-$('libSeg').onclick=e=>{const b=e.target.closest('button');if(b){APP.target=b.dataset.t;saveApp();apply();libClose();$('libBtn').focus()}};
+$('libSeg').onclick=e=>{const b=e.target.closest('button[role="option"]');if(b){APP.target=b.dataset.t;saveApp();apply();libClose();$('libBtn').focus()}};
 $('libSeg').onkeydown=e=>{const bs=[...$('libSeg').querySelectorAll('button')],i=bs.indexOf(document.activeElement);if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();bs[(i+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length].focus()}else if(e.key==='Escape'){libClose();$('libBtn').focus()}};
 document.addEventListener('mousedown',e=>{if(!e.target.closest('.libdd'))libClose()});
 // ---- control height fields (px, moving one unit per arrow press) ----

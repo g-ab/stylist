@@ -19,7 +19,7 @@ Stylist never edits component code. It owns the core tokens and edits only where
 **Tailwind on its own is not a target (removed 22 Nov 2026):** it's a CSS framework with no components, Stylist exports styles, and the shadcn export already carries the Tailwind parts shadcn needs (`--spacing`, corner sizes). A Tailwind-only app can read the Plain CSS variables (`bg-(--sheet)`, `h-(--control-md)`). Files exported for Tailwind open as Plain CSS. **Chakra UI v3** was considered: it would map well (50–950 palettes plus semantic tokens), but its theme is a TypeScript `createSystem` config, not CSS, so it means a new export format. Parked until an app uses Chakra.
 
 ## The library lens (not coupling)
-- The library choice is a dropdown in the panel's top bar, next to Share (shows "No library", "shadcn" or "Radix"). It's `APP.target` (`css` | `shadcn` | `radix`), the same setting the Custom view and the package use.
+- The library choice is a dropdown in the panel's top bar, next to Share (shows "CSS", "shadcn" or "Radix", then "Reset to defaults"). It's `APP.target` (`css` | `shadcn` | `radix`), the same setting the Custom view and the package use.
 - **Settings are always stored in Stylist's terms, never a library's.** The library only adds a caption under a control (`lensText()`: "Radix · --radius-factor 1", "shadcn · h-9") and greys out what that library fixes (`LENS_OFF`), with the reason.
 - Greyed controls, the panel demos and the preview show what that library actually draws (`effHpx()`, `effFocus()`, `effBar()`), while Stylist's values stay saved and come back on switching library.
 - Exports only write each library's documented tokens, never its internal classes or component variables (checked against Radix Themes 3.3.0's stylesheet).

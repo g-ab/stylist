@@ -24,14 +24,14 @@ const LENS_OFF={
   radix:{fshape:'Radix always draws an outline.',fw:'Radix fixes the width at 2px.',foff:'Radix sets the offset per component.',h:'In Radix, sizes 1–4 follow its space scale (6, 8, 10, 12 × unit). Change the spacing unit instead.'},
   shadcn:{fshape:'shadcn components draw a ring.',fw:'Set in component code: ring-[3px].',foff:'Set in component code.'}};
 function renderLens(){const L=APP.target,off=LENS_OFF[L]||{};
-  document.querySelectorAll('#libSeg button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===L));$('libBtn').title='Destination: '+({css:'None',tw:'Tailwind',shadcn:'shadcn',radix:'Radix'}[L]||'None');
+  document.querySelectorAll('#libSeg button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===L));$('libBtn').title='Destination: '+({css:'CSS',tw:'Tailwind',shadcn:'shadcn',radix:'Radix'}[L]||'CSS');
   document.querySelectorAll('[data-lens-ctl]').forEach(el=>{const why=off[el.dataset.lensCtl]||'';el.classList.toggle('off',!!why);
     el.querySelectorAll('input,button').forEach(x=>x.disabled=!!why);
     const w=el.dataset.lensCtl==='h'?document.querySelector('.hwhy'):el.querySelector('.why');if(w)w.textContent=why});
 }
 const libClose=()=>{$('libSeg').hidden=true;$('libBtn').setAttribute('aria-expanded','false')};
 $('libBtn').onclick=e=>{e.stopPropagation();const o=$('libSeg').hidden;amClose();$('libSeg').hidden=!o;$('libBtn').setAttribute('aria-expanded',String(o));if(o)($('libSeg').querySelector('[aria-selected="true"]')||$('libSeg').querySelector('button')).focus()};
-$('libSeg').onclick=e=>{const b=e.target.closest('button');if(b){APP.target=b.dataset.t;saveApp();apply();libClose();$('libBtn').focus()}};
+$('libSeg').onclick=e=>{const b=e.target.closest('button[role="option"]');if(b){APP.target=b.dataset.t;saveApp();apply();libClose();$('libBtn').focus()}};
 $('libSeg').onkeydown=e=>{const bs=[...$('libSeg').querySelectorAll('button')],i=bs.indexOf(document.activeElement);if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();bs[(i+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length].focus()}else if(e.key==='Escape'){libClose();$('libBtn').focus()}};
 document.addEventListener('mousedown',e=>{if(!e.target.closest('.libdd'))libClose()});
 // ---- control height fields (px, moving one unit per arrow press) ----

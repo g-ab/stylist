@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Library dropdown:** "None" is now **CSS**, and **Reset to defaults** moved there from the Share menu.
 - **Send to your agent, simpler:** one line saying what to do, then [Download file] [Copy] when it fits a chat box (under 8,000 characters), or Download file alone when it doesn't.
 
 ## 27 Nov 2026
