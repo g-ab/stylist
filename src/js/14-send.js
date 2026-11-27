@@ -21,17 +21,14 @@ const PASTE_MAX=8000; // characters: longer than this, a paste may be cut or tur
 function renderSend(){const d=brandDelta(),svgs=d.files.filter(f=>/\.svg$/.test(f.name));
   sendText=setupText(d);
   const own=[S.ui,S.mono].filter(n=>custom[n]),long=sendText.length>PASTE_MAX,app=escH(APP.name);
-  // one line: what's in it
-  $('sendSum').innerHTML='Style settings'+(svgs.length?` · ${svgs.length} changed logo${svgs.length>1?'s':''} <span>(${svgs.map(f=>escH(f.name.replace('brand/',''))).join(', ')})</span>`:'');
+  $('sendSum').textContent=long?'Download the file and ask your agent “apply this”.':'Copy and paste the styling settings in your app’s agent chat.';
   // notes only when something needs your attention
   $('sendNotes').innerHTML=[
-    long?`Too long to paste (${kb(sendText.length)}): download it instead.`:'',
     d.tooBig?`Changed logos are too big to include (${kb(d.tooBig)}): Brand tab → Download brand files, and give that .zip too.`:'',
     d.removed.length?`Removed in Stylist: ${d.removed.map(n=>escH(n.replace('brand/',''))).join(', ')}. Your agent will ask before deleting them.`:'',
     own.length?`Your own font file (${escH(own.join(', '))}) isn’t included: add it to the app yourself.`:''].filter(Boolean).map(t=>`<li>${t}</li>`).join('');
-  // one way to send it: Copy when it fits, Download when it doesn't
-  $('sendCopy').hidden=long;$('sendDl').hidden=!long;$('sendDlLink').hidden=long;
-  $('sendHint').textContent=long?`Attach it in ${APP.name}’s AI chat and say “apply this”.`:`Paste it in ${APP.name}’s AI chat. Nothing else to type.`}
+  // Copy when it fits a paste, with Download beside it; Download alone (as the main action) when it doesn't
+  $('sendCopy').hidden=long;$('sendDl').classList.toggle('pri',long)}
 function openSend(){renderSend();$('sendmod').hidden=false}
 const closeSend=()=>{$('sendmod').hidden=true};
 $('copy').onclick=openSend;$('sendClose').onclick=closeSend;$('sendmod').onclick=e=>{if(e.target===$('sendmod'))closeSend()};
@@ -41,6 +38,6 @@ $('sendCopy').onclick=async()=>{if(await copyStr(sendText)){toast(`Copied. Paste
 const sendDownload=async()=>{const name=(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist-setup.md',blob=new Blob([sendText],{type:'text/markdown'});
   if(DLS){try{await DLS.save({filename:name,data:blob});toast(`Saved. Attach it in ${APP.name}’s AI chat and say “apply this”.`);closeSend()}catch(e){if(!(e&&e.code==='declined'))toast('Download isn’t available here. Use Copy instead')}return}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);toast(`Saved. Attach it in ${APP.name}’s AI chat and say “apply this”.`);closeSend()};
-$('sendDl').onclick=sendDownload;$('sendDlLink').onclick=sendDownload;
+$('sendDl').onclick=sendDownload;
 
 $('ver').textContent='v'+VERSION;

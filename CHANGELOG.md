@@ -1,7 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
-- **Send to your agent, simpler:** one line on what's included, notes only when needed, and one button picked by size: Copy when it fits a chat box (under 8,000 characters), Download file when it doesn't.
+- **Send to your agent, simpler:** one line saying what to do, then [Download file] [Copy] when it fits a chat box (under 8,000 characters), or Download file alone when it doesn't.
 
 ## 27 Nov 2026
 - **Safe upgrades:** Stylist shows its version (v1.5) and writes it into every app's files. An upgrade reads the app's version, translates its files, and reports what's new, which tokens changed (none expected) and where the app's code uses renamed tokens, which keep working through aliases. Tests make sure an upgrade never changes an existing value.
