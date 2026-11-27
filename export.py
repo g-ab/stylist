@@ -76,18 +76,55 @@ def teach(app_dir, first):
     return ", ".join(done)
 
 
+def fnv(text):
+    """Fingerprint of a text file, the same as Stylist's fnv(): FNV-1a over UTF-8, line endings normalised."""
+    h = 0x811C9DC5
+    for byte in text.replace("\r\n", "\n").strip().encode("utf-8"):
+        h = ((h ^ byte) * 0x01000193) & 0xFFFFFFFF
+    return f"{h:08x}"
+
+
 def read_setup(path):
+    """The JSON block, and the files written after it (logos you changed in Stylist)."""
     text = Path(path).read_text(encoding="utf-8")
-    start, end = text.find("{"), text.rfind("}")
-    if start < 0 or end < start:
+    m = re.search(r"```json\s*\n(.*?)\n```", text, re.S)
+    raw = m.group(1) if m else text[text.find("{"):text.rfind("}") + 1]
+    if not raw.strip():
         sys.exit("export: no JSON found in the setup")
     try:
-        setup = json.loads(text[start:end + 1])
+        setup = json.loads(raw)
     except json.JSONDecodeError as e:
         sys.exit(f"export: the setup isn't valid JSON ({e})")
     if "settings" not in setup:
         sys.exit("export: the setup has no settings")
+    setup["_files"] = {name: body for name, body in re.findall(r"<!-- stylist-file (\S+) -->\s*\n````\w*\n(.*?)\n````", text, re.S)}
     return setup
+
+
+def check_brand(app_dir, setup):
+    """Logos in the setup: arrived intact, and the app's files are still the ones the setup was made from."""
+    brand = (setup or {}).get("brand") or {}
+    files = (setup or {}).get("_files", {})
+    problems, todo = [], []
+    for e in brand.get("files", []):
+        name = e.get("name", "")
+        if not name.startswith("brand/") or ".." in name:
+            problems.append(f"{name}: not a brand file path")
+            continue
+        body = files.get(name)
+        if body is None or fnv(body) != e.get("hash"):
+            problems.append(f"{name}: arrived damaged or incomplete. Send the setup again, as a file.")
+            continue
+        cur = app_dir / name
+        if name.endswith(".svg"):
+            if cur.exists() and e.get("base") is None:
+                problems.append(f"{name}: the app already has this file, and the setup wasn't made from it. Load the app in Stylist first (Open from GitHub), then send again.")
+            elif cur.exists() and fnv(cur.read_text(encoding="utf-8")) != e["base"]:
+                problems.append(f"{name}: changed in the app since the setup was made.")
+            elif not cur.exists() and e.get("base") is not None:
+                problems.append(f"{name}: removed from the app since the setup was made.")
+        todo.append((name, body))
+    return problems, todo, brand.get("removed", [])
 
 
 def app_files(app_dir):
@@ -101,7 +138,7 @@ def app_files(app_dir):
     return files
 
 
-async def run(app_dir, setup):
+async def run(app_dir, setup, brand_files=(), removed=()):
     files = app_files(app_dir)
     first = not any(n == "stylist.json" for n, _ in files)
     if first and not setup:
@@ -126,7 +163,7 @@ async def run(app_dir, setup):
             for(const m of ['light','dark'])for(const k of new Set([...Object.keys(before[m]||{}),...Object.keys(after[m]||{})])){
               const a=(before[m]||{})[k],b=(after[m]||{})[k];if(a!==b)changed.push(`${m} --${k}: ${a??'(none)'} → ${b??'(none)'}`)}
             return {target:APP.target,files:pk.files.map(f=>[f.name,f.text]),changed}}""",
-            [files, setup, first],
+            [files, {k: v for k, v in setup.items() if k != "_files"} if setup else None, first],
         )
         await browser.close()
     if errors:
@@ -141,7 +178,9 @@ async def run(app_dir, setup):
     have = {n for n, _ in out["files"]} if first else {n for n, _ in files} | ALWAYS
     written, skipped = [], []
     for name, text in out["files"]:
-        if name.startswith("brand/") or name in have:
+        if name.startswith("brand/"):
+            continue  # logos come only from the setup's own brand files (below), never regenerated
+        if name in have:
             dest = app_dir / name
             dest.parent.mkdir(exist_ok=True)
             if not dest.exists() or dest.read_text(encoding="utf-8") != text:
@@ -150,6 +189,15 @@ async def run(app_dir, setup):
         else:
             skipped.append(name)
 
+    for name, body in brand_files:
+        dest = app_dir / name
+        dest.parent.mkdir(exist_ok=True)
+        body = body.replace("\r\n", "\n").strip() + "\n"
+        if not dest.exists() or dest.read_text(encoding="utf-8") != body:
+            dest.write_text(body, encoding="utf-8")
+            written.append(name)
+    if removed:
+        print("Removed in Stylist, still in the app (ask before deleting): " + ", ".join(removed))
     taught = teach(app_dir, first)
     if taught:
         written.append(taught)
@@ -174,7 +222,13 @@ def main():
     if not app_dir.is_dir():
         sys.exit(f"export: {app_dir} isn't a folder")
     setup = read_setup(sys.argv[2]) if len(sys.argv) == 3 else None
-    asyncio.run(run(app_dir, setup))
+    problems, brand_files, removed = check_brand(app_dir, setup)
+    if problems:
+        print("Stopped: the logos in this setup don't match the app:")
+        for line in problems:
+            print("  " + line)
+        sys.exit(2)
+    asyncio.run(run(app_dir, setup, brand_files, removed))
 
 
 if __name__ == "__main__":

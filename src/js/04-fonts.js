@@ -82,4 +82,3 @@ $('shOp').addEventListener('input',e=>{const v=Math.round(+e.target.value*2)/2;i
 $('shColor').addEventListener('input',e=>{S.sh={...shOf(),color:e.target.value};apply()});
 $('mode').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.v;$('mode').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));apply()};
 $('reset').onclick=()=>{S={...PRESETS[0]};apply();toast('Back to the defaults')};
-$('copy').onclick=async()=>{const t=setupText();$('setup').textContent=t;try{await navigator.clipboard.writeText(t);toast(`Copied. Paste it in ${APP.name}'s AI chat.`)}catch(e){const el=$('setup');el.hidden=false;const r=document.createRange();r.selectNodeContents(el);const g=getSelection();g.removeAllRanges();g.addRange(r);toast(`Copy the selected setup and paste it in ${APP.name}'s AI chat`)}};

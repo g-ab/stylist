@@ -89,7 +89,7 @@ async def main():
         keys = await pg.evaluate("RECIPE_KEYS")
         check("copy setup is a full recipe", set(keys) <= set(block["settings"]) and "pins" in block and block["settings"]["radius"] == 16, list(block)[:6])
         steps = await pg.evaluate("$('copy').textContent")
-        check("copy setup explains itself to any AI", "Copy setup for AI" in steps and "github.com/g-ab/stylist" in setup and "export.py" in setup and "Exit code 2" in setup and "first time" in setup and "Claude" not in setup, steps)
+        check("copy setup explains itself to any AI", "Send to your agent" in steps and "github.com/g-ab/stylist" in setup and "export.py" in setup and "Exit code 2" in setup and "first time" in setup and "Claude" not in setup, steps)
         import shutil, subprocess, tempfile
         root = Path(__file__).resolve().parent.parent
         with tempfile.TemporaryDirectory() as tmp:
@@ -178,6 +178,67 @@ async def main():
         names = zipfile.ZipFile(await d.path()).namelist()
         check("download brand files", b0 and d.suggested_filename.endswith("-brand.zip") and names and all(n.startswith("brand/") for n in names) and "brand/mark.svg" in names and not berr, {"off_when_empty": b0, "files": names, "errors": berr[:2]})
         await bp.close()
+
+        # 6e. Send to your agent: logos travel only when changed, checked on arrival
+        OLD = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 10"><rect width="40" height="10" fill="#111"/></svg>'
+        NEW = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 10"><rect width="40" height="10" rx="3" fill="#0b5fd0"/></svg>'
+        def make_app(base):
+            app = base / "app"
+            shutil.copytree(root / "tests" / "fixtures" / "v5-css", app)
+            (app / "brand").mkdir()
+            (app / "brand" / "logo.svg").write_text(OLD + "\n")
+            return app
+        def app_payload(app):
+            fs = [[f.name, f.read_text()] for f in sorted(app.iterdir()) if f.is_file()]
+            return fs + [["brand/" + f.name, f.read_text()] for f in sorted((app / "brand").glob("*.svg"))]
+        def export(app, text):
+            sf = app.parent / "setup.md"
+            sf.write_text(text)
+            return subprocess.run([sys.executable, str(root / "export.py"), str(app), str(sf)], capture_output=True, text=True)
+        sp, serr = await open_page(browser)
+        with tempfile.TemporaryDirectory() as tmp:
+            app = make_app(Path(tmp))
+            load = """async(fs)=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();await openFiles(fs.map(([n,t])=>new File([t],n.split('/').pop())));return true}"""
+            await sp.evaluate(load, app_payload(app))
+            t0 = await sp.evaluate("(()=>{S={...S,radius:20};apply();return setupText()})()")
+            check("send: unchanged logos stay out", "stylist-file" not in t0 and '"brand"' not in t0 and "none changed" in t0, t0[-200:])
+            t1 = await sp.evaluate("(n)=>{APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:n}};apply();return setupText()}", NEW)
+            r = export(app, t1)
+            check("send: a changed logo is written", r.returncode == 0 and (app / "brand" / "logo.svg").read_text().strip() == NEW and "brand/logo.svg" in r.stdout and "--radius-lg: 12px → 20px" in r.stdout, {"code": r.returncode, "logo": (app / "brand" / "logo.svg").read_text()[:90], "out": r.stdout[-260:], "err": r.stderr[-200:]})
+        with tempfile.TemporaryDirectory() as tmp:
+            app = make_app(Path(tmp))
+            await sp.evaluate(load, app_payload(app))
+            t1 = await sp.evaluate("(n)=>{APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:n}};apply();return setupText()}", NEW)
+            r = export(app, t1.replace('rx="3"', 'rx="4"'))
+            check("send: a damaged logo stops it", r.returncode == 2 and "damaged" in r.stdout and (app / "brand" / "logo.svg").read_text().strip() == OLD, r.stdout[-200:])
+            (app / "brand" / "logo.svg").write_text(OLD.replace("#111", "#222"))
+            r = export(app, t1)
+            check("send: a logo changed in the app stops it", r.returncode == 2 and "changed in the app" in r.stdout, r.stdout[-200:])
+        with tempfile.TemporaryDirectory() as tmp:
+            app = make_app(Path(tmp))
+            t2 = await sp.evaluate("(n)=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};APP.brand={logo:{light:{name:'logo.svg',svg:n}}};apply();return setupText()}", NEW)
+            r = export(app, t2)
+            check("send: made without loading the app, it asks first", r.returncode == 2 and "Load the app in Stylist first" in r.stdout and (app / "brand" / "logo.svg").read_text().strip() == OLD, r.stdout[-200:])
+            await sp.evaluate(load, app_payload(app))
+            big = await sp.evaluate("""()=>{const p=Array.from({length:900},(_,i)=>`<rect x="${i%40}" y="${i%10}" width="1" height="1" fill="#${(i*2654435761>>>8&0xffffff).toString(16).padStart(6,'0')}"/>`).join('');
+              APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 10">${p}</svg>`}};apply();const d=brandDelta();return {n:d.files.length,big:d.tooBig,text:setupText(d)}}""")
+            check("send: logos too big fall back to the download", big["n"] == 0 and big["big"] > 30 * 1024 and "Download brand files" in big["text"] and "stylist-file" not in big["text"], {k: big[k] for k in ("n", "big")})
+            await sp.evaluate(load, app_payload(app))
+            rm = await sp.evaluate("(()=>{delete APP.brand.logo.light;apply();return setupText()})()")
+            r = export(app, rm)
+            check("send: a removed logo is listed, not deleted", r.returncode == 0 and "ask before deleting" in r.stdout and (app / "brand" / "logo.svg").exists(), r.stdout[-200:])
+            # the panel: what's included, Download suggested when logos travel, file download
+            await sp.evaluate(load, app_payload(app))
+            await sp.evaluate("(n)=>{APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:n}};apply()}", NEW)
+            await sp.click("#amBtn")
+            await sp.click("#copy")
+            pnl = await sp.evaluate("({open:!$('sendmod').hidden,list:$('sendList').innerText,dl:$('sendDl').classList.contains('pri'),label:$('copy').textContent})")
+            async with sp.expect_download() as dl:
+                await sp.click("#sendDl")
+            fname = (await dl.value).suggested_filename
+            check("send: the panel", pnl["open"] and "1 logo you changed" in pnl["list"] and pnl["dl"] and "Send to your agent" in pnl["label"] and fname.endswith("-stylist-setup.md"), {**pnl, "file": fname})
+        check("no page errors (send)", not serr, serr[:3])
+        await sp.close()
 
         # 7. The export dialog keeps its download button in view, even in small windows
         for w, h in [(1440, 900), (820, 650), (560, 800)]:

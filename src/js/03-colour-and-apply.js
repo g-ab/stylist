@@ -113,19 +113,26 @@ function apply(){
   if(typeof renderCustom==='function')renderCustom();
   try{localStorage.setItem('stylist.style.v1',JSON.stringify(S))}catch(e){}
 }
-function setupText(){ // the full recipe, with the steps spelled out so any AI assistant or agent can apply it
+function setupText(d){ // the full recipe, with the steps spelled out so any AI assistant or agent can apply it
+  d=d||brandDelta();
   const cj={stylist:SCHEMA,framework:FRAMEWORK,app:APP.name,target:APP.target,settings:recipeSettings(),pins:APP.pins};
+  if(d.files.length||d.removed.length)cj.brand={files:d.files.map(f=>({name:f.name,hash:f.hash,base:f.base})),removed:d.removed};
   const own=[S.ui,S.mono].filter(n=>custom[n]),lib={css:'plain CSS',shadcn:'shadcn',radix:'Radix Themes'}[APP.target]||APP.target;
+  const logos=d.files.length?'Logos: the ones changed in Stylist are at the end of this message; export.py writes them into the app.'
+    :d.tooBig?`Logos: the ones changed in Stylist are too big to include here (${Math.round(d.tooBig/1024)} KB): they come as a separate .zip from Stylist's "Download brand files"; replace the files in brand/ with it.`
+    :'Logos: none changed, so the app keeps its own.';
   return [`# Stylist setup for ${APP.name}`,'',
     `This sets ${APP.name}'s look (colours, type, corners, shadows, spacing, icons, motion) for ${lib}, with Stylist: https://github.com/g-ab/stylist`,'',
     'To apply it to the app\'s code (for an AI assistant or agent, or a person in a terminal):',
     '1. Clone https://github.com/g-ab/stylist and run `python3 build.py` in it. Needs Python 3, `pip install playwright` and `python3 -m playwright install chromium`.',
-    '2. Save this whole message to a file and run `python3 <stylist>/export.py <app folder> <that file>`.',
-    '   - The app already has a stylist.json: its Stylist files are updated, and every token value that changed is listed. Exit code 2 means the theme file was edited by hand: show that list and stop, never overwrite it.',
+    '2. Save this whole message (or keep the attached file as it is) and run `python3 <stylist>/export.py <app folder> <that file>`.',
+    '   - The app already has a stylist.json: its Stylist files are updated, and every token value that changed is listed. Exit code 2 means something in the app changed since this setup was made (the theme file edited by hand, a logo replaced) or a file arrived damaged: show the message and stop, never overwrite.',
     '   - The app has no stylist.json yet (first time): the Stylist files are added, plus a Stylist section in the app\'s AGENTS.md so later requests work. Then load them before the app\'s own styles (stylist-theme.css, app-tokens.css, stylist-icons.css) and switch the app\'s styles to the tokens one area at a time, without changing its layout. Guide: https://github.com/g-ab/stylist#style-a-new-app',
     '3. Show what changed, then commit.','',
-    'Not included: logos and favicon (Stylist\'s Brand tab → Download brand files)'+(own.length?`, and your own font file (${own.join(', ')}): add it to the app`:'')+'.','',
-    '```json',JSON.stringify(cj,null,1),'```',''].join('\n');
+    logos+(d.removed.length?` Removed in Stylist: ${d.removed.join(', ')}. Don't delete them in the app without asking.`:'')+(own.length?` Not included: your own font file (${own.join(', ')}): add it to the app.`:''),'',
+    '```json',JSON.stringify(cj,null,1),'```',
+    ...(d.files.length?['','## Brand files','Written by export.py to these paths in the app. Keep them exactly as they are.',
+      ...d.files.flatMap(f=>['',`<!-- stylist-file ${f.name} -->`,'````'+(/\.svg$/.test(f.name)?'svg':/\.css$/.test(f.name)?'css':'markdown'),f.text.replace(/\r\n/g,'\n').trim(),'````'])]:[]),''].join('\n');
 }
 function swatch(p){const c=p.exact?p.exact.light:(()=>{const s=S;S={...p};const d=derive('light');S=s;return d})();return `<span class="sw"><i style="background:${c.paper}"></i><i style="background:${c.sheet}"></i><i style="background:${c.ink}"></i><i style="background:${c.accent}"></i></span>`}
 $('presets').innerHTML=PRESETS.map(p=>`<button class="pre" role="option" data-id="${p.id}">${swatch(p)}<span><b>${p.name}</b><small>${p.desc}</small></span></button>`).join('');

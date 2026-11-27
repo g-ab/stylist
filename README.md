@@ -9,19 +9,19 @@ Your app keeps its Stylist files in its own repo: `stylist.json` (your settings)
 
 ### Style a new app
 1. Design the style at https://g-ab.github.io/stylist/. Pick the app's library at the top of the panel: CSS, shadcn or Radix.
-2. Share → **Copy setup for AI**.
-3. Paste it in your app's AI chat and say **"style this app with Stylist"**.
+2. Share → **Send to your agent…**, then **Copy** or **Download file**.
+3. Paste it (or attach the file) in your app's AI chat and say **"style this app with Stylist"**.
 
-The setup explains itself, so any AI can follow it: it gets Stylist and runs `export.py`, which adds the Stylist files and a Stylist section to the app's `AGENTS.md` (so "restyle the app" and "upgrade Stylist" work later, with any AI). Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos aren't in the setup: in Stylist's Brand tab, **Download brand files** and give the .zip to the AI as well.
+The setup explains itself, so any AI can follow it: it gets Stylist and runs `export.py`, which adds the Stylist files and a Stylist section to the app's `AGENTS.md` (so "restyle the app" and "upgrade Stylist" work later, with any AI). Then it connects the app's styles to the tokens one area at a time (colours, corners, shadows, spacing…) without changing the layout. Logos you added in the Brand tab travel with it.
 
 ### Restyle an app
 1. Load its current style: Share menu (or the Custom view) → **Open from GitHub…**, type the repo (e.g. `g-ab/cast`) or paste its link, then **Open**.
 2. Change the style.
-3. Share → **Copy setup for AI**, paste it in the app's AI chat and say **"restyle the app"**.
+3. Share → **Send to your agent…**, **Copy** or **Download file**, then paste or attach it in the app's AI chat and say **"restyle the app"**.
 
 The AI runs `export.py` with your setup, shows which values changed, and commits. It stops if someone edited the theme file by hand, so nothing is overwritten.
 
-New logos? Drop them in the Brand tab, **Download brand files**, and give the .zip to the app's AI to replace its `brand/` folder.
+**Logos:** only the ones you changed in Stylist travel with the setup; the app keeps the others as they are. The panel shows what's included. The export stops instead of overwriting if a logo arrived damaged or changed in the app since you loaded it. Very large logos (over 30 KB in total) don't fit: the panel says so, and you use Brand tab → **Download brand files** instead.
 
 Stylist remembers the repo, so loading it again is one click. **Copy link** in that dialog gives an address that opens Stylist with the app already loaded. Public repos only, and only on the Stylist website. No repo? Share → **Open app style…** and pick the files yourself.
 
@@ -34,7 +34,7 @@ The AI runs `export.py` with no new settings: the files are rewritten in Stylist
 Run the same thing yourself from a copy of this repo:
 ```
 python3 build.py
-python3 export.py path/to/your-app setup.txt  # style a new app, or restyle (setup.txt = what you copied)
+python3 export.py path/to/your-app setup.md   # style a new app, or restyle (setup.md = what you copied or downloaded)
 python3 export.py path/to/your-app            # upgrade
 ```
 For a new app, you then connect its styles to the tokens yourself.
@@ -47,7 +47,7 @@ Requests like "restyle the app" only work because the app's instructions file ex
 pip install -r requirements-dev.txt && python3 -m playwright install chromium
 python3 build.py          # src/ → dist/index.html
 python3 tests/run.py      # the checks; all must pass before publishing
-python3 export.py APP_DIR [SETUP]   # style, restyle or upgrade an app from a pasted "Copy setup for AI"
+python3 export.py APP_DIR [SETUP]   # style, restyle or upgrade an app from "Send to your agent"
 ```
 `dist/index.html` is a single self-contained page; open it in a browser to try it locally.
 
