@@ -8,7 +8,7 @@ Stylist sits above any design system. It defines what can be styled (colour, typ
 Your app keeps its Stylist files in its own repo: `stylist.json` (your settings), `stylist-theme.css`, `app-tokens.css`, `stylist-icons.css`, `components.json` and `brand/`. Any AI assistant that can work in that repo and run commands (Claude, Codex, Cursor…), or you in a terminal, keeps them up to date.
 
 ### Style a new app
-1. Design the style at https://g-ab.github.io/stylist/. Pick the app's library at the top of the panel: No library, shadcn or Radix.
+1. Design the style at https://g-ab.github.io/stylist/. Pick the app's library at the top of the panel: CSS, shadcn or Radix.
 2. Share → **Copy setup for AI**.
 3. Paste it in your app's AI chat and say **"style this app with Stylist"**.
 4. Add the block from [Teach your app's AI](#teach-your-apps-ai) to the app's `AGENTS.md` or `CLAUDE.md`, so restyling and upgrading work later.
