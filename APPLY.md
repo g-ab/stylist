@@ -34,6 +34,14 @@ changed in Stylist after it. Applying it means writing the app's Stylist files f
 3. Values the app needs that aren't Stylist's (a brand colour for one feature, say) go in `app-tokens.css`.
    Never edit `stylist-theme.css` by hand: it's regenerated.
 4. With shadcn or Radix, the theme file uses the library's own variable names: import it after the library's styles.
+5. **Fill `components.json`** so Stylist's App preview shows the app's own components, styled live. List the
+   components that make the app recognisable and aren't plain controls (a canvas, a card, a toolbar, a title bar…),
+   up to about 8. Each entry is `{"name", "html", "css"}`:
+   - `html`: a small, static snapshot of the component as the app renders it, with realistic content.
+   - `css`: the styles it needs, self-contained, using the tokens (`var(--radius-lg)`, `var(--accent)`…) wherever
+     the app does. No build step, no external images or fonts (inline SVG is fine).
+   - `tokens` is optional: Stylist works out which tokens each one uses.
+   Keep `"app"` at the top as the app's name. Commit it on its own.
 
 ## Other requests
 - **"upgrade Stylist":** run `python3 <stylist>/export.py <app folder>` with no setup. It reads which Stylist made
@@ -41,7 +49,11 @@ changed in Stylist after it. Applying it means writing the app's Stylist files f
   - "Upgrade: … made with Stylist X, now Y. New since then: …": what the upgrade brings.
   - "No token values changed": expected; the look stays the same. If it lists **changed** tokens instead, show
     them to the user before committing. **New** tokens are fine: they're additions the app doesn't use yet.
+    After committing the upgrade, **offer to connect them**: say what each new token styles and where the app
+    would use it, and on a yes wire them in, one area per commit, without changing anything else.
   - "Older token names in the app's code": names Stylist renamed. They keep working (the theme keeps the old
     name pointing to the new one); offer to switch them, in a separate commit.
   Commit as "Upgrade Stylist to Y" with what's new.
 - **A brand .zip** (Stylist's "Download brand files"): replace the files in the app's `brand/` with it.
+- **The app gets a new component, or one changes a lot:** update its entry in `components.json` in the same
+  commit (First time, step 5), so Stylist's App preview stays true to the app.

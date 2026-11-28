@@ -1,6 +1,8 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Agent instructions:** APPLY.md now says how a new app fills `components.json` (so App preview shows its components) and to keep it current, and to offer to connect new tokens after an upgrade. The Stylist block in each app's `AGENTS.md` says the same; `export.py` reminds while `components.json` is empty.
+- **README** rewritten for a first-time reader: what Stylist is and what you need, up front; the load-first stop and fonts explained.
 - **Fix:** with an app loaded, the start screen stayed on screen above the workspace.
 - **Close app warns about unsent changes:** if the style changed since it was loaded and was never copied, downloaded or exported, Close app asks first (Cancel, Send to agent first, Close anyway).
 - **One place for each action:** opening an app lives on the start screen (and Reload in the app menu), so Open app style / Open from GitHub left the Export menu and the Custom tab, and the Open from GitHub dialog is gone. Copy link to this app moved to the app menu. The empty states in App preview and Custom are gone; App preview says so when a loaded app has no components.

@@ -294,11 +294,18 @@ async def run(app_dir, setup, brand_files=(), removed=()):
     if fonts:
         print("The app loads Google fonts itself (" + ", ".join(fonts) + "). stylist-theme.css loads the fonts now:")
         print("  remove those lines (the font link and its preconnects) in the same commit, or they keep loading other fonts.")
+    comps = app_dir / "components.json"
+    try:
+        no_comps = not (json.loads(comps.read_text(encoding="utf-8")).get("components") if comps.exists() else None)
+    except (json.JSONDecodeError, AttributeError):
+        no_comps = True
     if first:
         print(f"First time: added the Stylist files for {out['target']} ({', '.join(written)}).")
         print("Next: load stylist-theme.css, then app-tokens.css, then stylist-icons.css before the app's own styles,")
-        print("and switch the app's styles to the tokens one area at a time (README: Style a new app).")
+        print("switch the app's styles to the tokens one area at a time, then fill components.json (APPLY.md, First time).")
         return
+    if no_comps:
+        print("components.json lists none of the app's components: add them (APPLY.md, First time, step 5) so Stylist's App preview shows them.")
     print(f"Target: {out['target']}")
     if was_version and vtuple(was_version) < vtuple(out["version"]):
         new = [out["notes"][str(f)] for f in range(was_fw + 1, out["framework"] + 1) if str(f) in out["notes"]]

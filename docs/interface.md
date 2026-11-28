@@ -105,7 +105,7 @@ Stylist never edits component code. It owns the core tokens and edits only where
 - `app-tokens.css`: header "Stylist app tokens". Light values go in `:root` (Radix: `.radix-themes`). The dark block is `:root[data-theme="dark"]` (plus the media query) for Plain CSS, `.dark` for shadcn, and the Radix dark selector for Radix. Load it after the core file.
 - `icon-setup.md` + `stylist-icons.css` (Lucide, Tabler) or `stylist-icons.tsx` (Phosphor): see Icons.
 - `brand/*.svg`, `brand/brand.css`, `brand/README.md`: see Brand.
-- `components.json`: `{app, components:[{name, tokens, html, css}]}`. Stylist renders each one in a shadow root, themed with exactly the variables the exported files define (for Radix, also its runtime `--radius-1…6`). Each component is marked "Follows heights" (uses height tokens or `h-N`) or "Fixed Npx" (a hard-coded height in the control range, 16–64px).
+- `components.json`: `{app, components:[{name, tokens, html, css}]}`. Stylist renders each one in a shadow root, themed with exactly the variables the exported files define (for Radix, also its runtime `--radius-1…6`). Filled by the app's agent (APPLY.md, First time, step 5: up to ~8 recognisable components, static html + self-contained css on the tokens; `tokens` optional), and kept current when components change; export.py prints a reminder while it lists none. Each component is marked "Follows heights" (uses height tokens or `h-N`) or "Fixed Npx" (a hard-coded height in the control range, 16–64px).
 - "Export tokens…" (quick copy) offers CSS variables, shadcn, Radix and JSON.
 
 ## Restyling an app from a setup (26 Nov 2026)

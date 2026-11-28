@@ -139,7 +139,7 @@ async def main():
             (app2 / "index.html").write_text('<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">\n')
             r8 = subprocess.run([sys.executable, str(root / "export.py"), str(app2)], capture_output=True, text=True)
             imp = await pg.evaluate("()=>{S={...S,ui:'Inter',mono:'Reddit Mono'};apply();return ['css','shadcn','radix'].map(t=>coreCSS(t).split('\\n').slice(0,3).join(' '))}")
-            check("fonts load from the theme; the app's own link is listed", '@import url("https://fonts.googleapis.com/css?family=' in th and r8.returncode == 0 and "index.html:1" in r8.stdout
+            check("fonts load from the theme; the app's own link is listed", '@import url("https://fonts.googleapis.com/css?family=' in th and r8.returncode == 0 and "index.html:1" in r8.stdout and "lists none" not in r8.stdout
                   and all("family=Inter:400,500,600|Reddit+Mono:400,500,600" in x for x in imp), (th[:200], r8.stdout[-200:], [x[:160] for x in imp]))
             # first time: an app folder with no Stylist files gets the whole package from a setup
             new = Path(tmp) / "new-app"
@@ -147,7 +147,7 @@ async def main():
             (new / "index.html").write_text("<!doctype html><title>New</title>")
             r4 = subprocess.run([sys.executable, str(root / "export.py"), str(new), str(Path(tmp) / "setup.txt")], capture_output=True, text=True)
             added = sorted(p.name for p in new.iterdir())
-            check("export.py styles a new app", r4.returncode == 0 and {"stylist.json", "stylist-theme.css", "app-tokens.css"} <= set(added) and "First time" in r4.stdout and "--radius-lg: 16px" in (new / "stylist-theme.css").read_text(), added)
+            check("export.py styles a new app", r4.returncode == 0 and {"stylist.json", "stylist-theme.css", "app-tokens.css"} <= set(added) and "First time" in r4.stdout and "fill components.json" in r4.stdout and "--radius-lg: 16px" in (new / "stylist-theme.css").read_text(), added)
             r5 = subprocess.run([sys.executable, str(root / "export.py"), str(new)], capture_output=True, text=True)
             check("export.py on the new app again: nothing changes", r5.returncode == 0 and "No token values changed" in r5.stdout, r5.stdout[-200:] + r5.stderr[-200:])
             agents = (new / "AGENTS.md").read_text() if (new / "AGENTS.md").exists() else ""
