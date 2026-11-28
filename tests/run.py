@@ -90,11 +90,6 @@ async def main():
             return {odd,foot,usage,accent:[...(cu.accent||[])]}}""")
         check("used by: real components only, shown in Tokens", not ub["odd"] and "Accent hover" in ub["foot"] and "--accent-strong" in ub["foot"] and "Button" in ub["accent"] and not ub["usage"], ub)
 
-        # 6c. With no app loaded, the Custom tab is an empty state that offers to load one or start a new one
-        es = await pg.evaluate("""()=>{const keep=APP;APP=appDefault();showView('cus');const b=$('cusBody'),r={empty:!!b.querySelector('.ap-empty'),acts:[...b.querySelectorAll('[data-act]')].map(x=>x.dataset.act)};
-            b.querySelector('[data-act="new"]').click();r.after=!!b.querySelector('.ap-empty');APP=keep;saveApp();apply();showView('comp');return r}""")
-        check("custom tab: empty state until an app is loaded", es["empty"] and {"gh", "open", "new"} <= set(es["acts"]) and not es["after"], es)
-
         # 6b. "Copy setup for Claude" carries the full recipe, and export.py turns it into the files
         import shutil, subprocess, tempfile
         root = Path(__file__).resolve().parent.parent
@@ -186,18 +181,17 @@ async def main():
                 await route.fulfill(status=404, body="", headers={"Access-Control-Allow-Origin": "*"})
         gh, gerr = await open_page(browser)
         await gh.route(re.compile(r"https://raw\.githubusercontent\.com/.*"), raw)
-        await gh.click("#shareBtn") if await gh.query_selector("#shareBtn") else None
-        await gh.evaluate("openGh()")
-        await gh.fill("#ghRepo", "https://github.com/g-ab/cast")
-        await gh.click("#ghGo")
+        await gh.evaluate("closeApp()")
+        await gh.fill("#stRepo", "https://github.com/g-ab/cast")
+        await gh.click("#stGhGo")
         await gh.wait_for_timeout(500)
-        g1 = await gh.evaluate("({hidden:$('ghmod').hidden,src:APP.source,review:APP.review.length,radius:S.radius,track:trackOf().base,last:localStorage.getItem('stylist.gh.v1')})")
+        g1 = await gh.evaluate("({hidden:$('start').hidden,src:APP.source,review:APP.review.length,radius:S.radius,track:trackOf().base,last:localStorage.getItem('stylist.gh.v1')})")
         check("open from GitHub", g1["hidden"] and "g-ab/cast" in g1["src"] and g1["review"] == 0 and g1["radius"] == 12 and g1["track"] == 0.01 and "g-ab/cast" in (g1["last"] or ""), g1)
-        await gh.evaluate("openGh()")
-        await gh.fill("#ghRepo", "g-ab/nothing-here")
-        await gh.click("#ghGo")
+        await gh.evaluate("closeApp()")
+        await gh.fill("#stRepo", "g-ab/nothing-here")
+        await gh.click("#stGhGo")
         await gh.wait_for_timeout(400)
-        g2 = await gh.evaluate("({hidden:$('ghmod').hidden,msg:$('ghMsg').textContent})")
+        g2 = await gh.evaluate("({hidden:$('start').hidden,msg:$('stGhMsg').textContent})")
         check("open from GitHub: repo without Stylist files", not g2["hidden"] and "No Stylist files" in g2["msg"], g2)
         await gh.goto(PAGE + "?app=g-ab/cast")
         await gh.wait_for_timeout(700)

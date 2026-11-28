@@ -19,7 +19,7 @@ changed in Stylist after it. Applying it means writing the app's Stylist files f
    - **Exit code 2:** the setup wasn't made from the app's current style (the app wasn't loaded in Stylist first,
      or it changed since), something in the app changed since the setup was made (the theme file edited by hand,
      a logo replaced), or a logo arrived damaged. Show the message to the user and stop. Never overwrite.
-     They resolve it in Stylist (Share → Open from GitHub…) and send a new setup.
+     They resolve it in Stylist (load the app again: app menu → Reload from GitHub, or Open from GitHub on the start screen) and send a new setup.
    - **"Removed in Stylist":** those logos were removed in Stylist but are still in the app. Ask before deleting.
    - **"The app loads Google fonts itself":** `stylist-theme.css` loads the fonts it uses. Remove the listed lines
      (the font link and its preconnects) in the same commit, so a font changed in Stylist is the one the app shows.

@@ -23,22 +23,6 @@ async function ghOpen(g){const files=await ghFetch(g);
   APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);if(APP.origin)APP.origin.from='github:'+ghLabel(g);saveApp();apply();
   ghLast={repo:`${g.owner}/${g.repo}`,path:g.path};try{localStorage.setItem('stylist.gh.v1',JSON.stringify(ghLast))}catch(e){}
   return true}
-function openGh(){$('ghRepo').value=ghLast?ghLast.repo+(ghLast.path?'/'+ghLast.path:''):'';$('ghMsg').textContent='';
-  $('ghLink').hidden=!ghLast;$('ghGo').disabled=false;$('ghmod').hidden=false;setTimeout(()=>$('ghRepo').focus(),0)}
-const closeGh=()=>{$('ghmod').hidden=true};
-$('mGh').onclick=openGh;$('ghClose').onclick=closeGh;$('ghCancel').onclick=closeGh;
-$('ghmod').onclick=e=>{if(e.target===$('ghmod'))closeGh()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ghmod').hidden)closeGh()});
-$('ghRepo').oninput=()=>{$('ghLink').hidden=!ghParse($('ghRepo').value)};
-$('ghForm').onsubmit=async e=>{e.preventDefault();const g=ghParse($('ghRepo').value);
-  if(!g){$('ghMsg').textContent='Paste the repo’s link, like github.com/g-ab/cast, or just g-ab/cast.';return}
-  $('ghGo').disabled=true;$('ghMsg').textContent=`Reading ${ghLabel(g)}…`;
-  try{if(await ghOpen(g))closeGh();else $('ghMsg').textContent=`No Stylist files found in ${ghLabel(g)}. Check the folder, and that the repo is public.`}
-  catch(err){$('ghMsg').textContent='GitHub can’t be reached from here. This works on the Stylist website (g-ab.github.io/stylist), with an internet connection.'}
-  $('ghGo').disabled=false};
-$('ghLink').onclick=async()=>{const g=ghParse($('ghRepo').value);if(!g)return;
-  const url=`${location.origin}${location.pathname}?app=${ghLabel(g)}`;
-  try{await navigator.clipboard.writeText(url);toast('Link copied: it opens Stylist with this app loaded')}catch(e){$('ghMsg').textContent=url}};
 // a link with ?app=owner/repo opens that app straight away
 {const q=new URLSearchParams(location.search).get('app'),g=q&&ghParse(q);
   if(g)ghOpen(g).then(ok=>{if(!ok)toast(`No Stylist files found in ${ghLabel(g)}`)}).catch(()=>toast('GitHub can’t be reached from here'))}

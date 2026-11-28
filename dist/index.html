@@ -466,15 +466,6 @@ body.noapp .tb-what{display:inline}
 @media (max-width:680px){.pbody{grid-template-columns:minmax(0,1fr);grid-template-rows:150px minmax(0,1fr)}.xfoot{flex-wrap:wrap}.xfoot p{flex-basis:100%}}
 
 /* Open from GitHub */
-.xcard.gh{width:min(480px,92vw);height:auto;grid-template-rows:auto auto auto}
-.ghbody{display:grid;gap:12px;padding:6px 18px 0}
-.ghbody label{display:grid;gap:5px;font-size:12.5px;font-weight:500;color:#1d232b}
-.ghbody label small{font-weight:400;color:#8a929c}
-.ghbody input{height:34px;padding:0 10px;border:1px solid #d5d9df;border-radius:7px;font:12.5px "Geist Mono",ui-monospace,monospace;color:#1d232b;background:#fff}
-.ghbody input:focus{outline:2px solid #1d232b;outline-offset:-1px;border-color:transparent}
-.ghnote{margin:0;font-size:12px;line-height:1.45;color:#6b7480}
-.ghmsg{margin:0;min-height:1em;font-size:12px;line-height:1.45;color:#9a5b00}
-.ghmsg:empty{display:none}
 .lnk{border:0;background:none;padding:6px 0;font:inherit;font-size:12.5px;color:#4b5460;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .lnk:hover{color:#1d232b}
 .lnk[hidden]{display:none}
@@ -498,7 +489,6 @@ body.noapp .tb-what{display:inline}
 .ap-head h4{margin:0;font:600 15px "Instrument Sans",system-ui,sans-serif;color:var(--ink)}.ap-head p{margin:2px 0 18px;font-size:12.5px;color:var(--muted)}
 .ap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .ap-item{margin:0;display:grid;gap:8px}.ap-item figcaption{font:500 11.5px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
-.ap-alt{margin-top:18px!important;font-size:13px}.ap-alt .lnk{border:0;background:none;padding:0;font:inherit;color:#1d232b;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 /* ---------- component gallery (themed by the same variables) ---------- */
 .pv.gal{padding:8px 8px 28px;display:grid;gap:34px;background:transparent;box-shadow:none;border-radius:0;overflow:visible}
 .gal .k-sec{display:grid;gap:12px}
@@ -959,6 +949,7 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
     <div class="amlist applist" id="appList" role="menu" aria-label="App" hidden>
       <div class="ainfo" id="appInfo"></div>
       <hr>
+      <button role="menuitem" id="mLink"><svg viewBox="0 0 16 16"><path d="M6.5 9.5l3-3M7 4.5l1-1a2.8 2.8 0 0 1 4 4l-1 1M9 11.5l-1 1a2.8 2.8 0 0 1-4-4l1-1"/></svg>Copy link to this app</button>
       <button role="menuitem" id="mReload"><svg viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.5M13 2.5v3h-3"/></svg>Reload from GitHub</button>
       <button role="menuitem" id="mRevert"><svg viewBox="0 0 16 16"><path d="M3.5 8.5A4.5 4.5 0 1 0 8 4H5"/><path d="M6.5 2L4.5 4l2 2"/></svg><span id="mRevertL">Revert to loaded style</span></button>
       <button role="menuitem" id="mRename"><svg viewBox="0 0 16 16"><path d="M10.5 2.5l3 3L6 13H3v-3z"/></svg>Rename…</button>
@@ -974,9 +965,6 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
       <div class="amlist" id="amList" hidden role="menu">
         <button role="menuitem" id="export"><svg viewBox="0 0 16 16"><path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5"/></svg>Export tokens…</button>
         <button role="menuitem" id="mPkg"><svg viewBox="0 0 16 16"><path d="M2.5 5L8 2.5 13.5 5v6L8 13.5 2.5 11z"/><path d="M2.5 5L8 7.5 13.5 5M8 7.5v6"/></svg>Export package…</button>
-        <hr>
-        <button role="menuitem" id="mOpen"><svg viewBox="0 0 16 16"><path d="M2 4.5a1 1 0 0 1 1-1h3l1.5 1.5H13a1 1 0 0 1 1 1V12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>Open app style…</button>
-        <button role="menuitem" id="mGh"><svg viewBox="0 0 16 16" style="fill:currentColor;stroke:none"><path d="M8 1.8a6.2 6.2 0 0 0-2 12.1c.3 0 .4-.1.4-.3v-1.1c-1.7.4-2.1-.8-2.1-.8-.3-.7-.7-.9-.7-.9-.6-.4 0-.4 0-.4.6 0 1 .6 1 .6.5 1 1.5.7 1.8.5.1-.4.2-.7.4-.8-1.4-.2-2.8-.7-2.8-3 0-.7.2-1.2.6-1.6 0-.2-.3-.8.1-1.6 0 0 .5-.2 1.7.6a5.8 5.8 0 0 1 3.1 0c1.2-.8 1.7-.6 1.7-.6.3.8.1 1.4.1 1.6.4.4.6 1 .6 1.6 0 2.4-1.4 2.9-2.8 3 .2.2.4.6.4 1.1v1.7c0 .2.1.3.4.3A6.2 6.2 0 0 0 8 1.8z"/></svg>Open from GitHub…</button>
       </div>
     </div>
     <button class="btn pri tbb" id="copy">Send to agent</button>
@@ -1268,17 +1256,6 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
     <div class="xhead"><h2 id="sendTitle">Send to your agent</h2><button id="sendClose" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
     <div class="sendbody"><p class="sendsum" id="sendSum"></p><ul class="sendnotes" id="sendNotes"></ul></div>
     <div class="sendact"><button class="btn" id="sendDl" type="button">Download file</button><button class="btn pri" id="sendCopy" type="button">Copy</button></div>
-  </div>
-</div>
-<div class="xmod" id="ghmod" hidden role="dialog" aria-modal="true" aria-labelledby="ghTitle">
-  <div class="xcard gh">
-    <div class="xhead"><h2 id="ghTitle">Open from GitHub</h2><button id="ghClose" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
-    <form class="ghbody" id="ghForm">
-      <p class="ghnote">Stylist reads your app’s style files as they are on GitHub. Public repos only. Files in a subfolder? Paste that folder’s link.</p>
-      <label>Repo link or name<input id="ghRepo" placeholder="github.com/g-ab/cast" autocomplete="off" spellcheck="false" required></label>
-      <p class="ghmsg" id="ghMsg" role="status"></p>
-    </form>
-    <div class="xfoot"><button class="lnk" id="ghLink" type="button" title="A link that opens Stylist with this app’s style already loaded">Copy link</button><p></p><button class="btn" id="ghCancel" type="button">Cancel</button><button class="btn pri" id="ghGo" type="submit" form="ghForm">Open</button></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -2007,7 +1984,7 @@ async function downloadZip(files,name,done){const blob=zip(files); // true when 
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);return true}
 async function saveZip(){if(await downloadZip(pBuilt.files,(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist.zip','Package saved'))commitExport()}
 function openPkg(){pTgt=APP.target;pFile=Math.max(0,buildPackage(pTgt).files.findIndex(f=>f.name==='stylist-theme.css'));renderPkg();$('pmod').hidden=false}
-$('mPkg').onclick=openPkg;$('mOpen').onclick=()=>$('appFiles').click();
+$('mPkg').onclick=openPkg;
 $('appFiles').onchange=e=>{if(e.target.files.length)openFiles(e.target.files);e.target.value=''};
 $('ptgt').onclick=e=>{const b=e.target.closest('button');if(b){const cur=pBuilt&&pBuilt.files[pFile]&&pBuilt.files[pFile].name;pTgt=b.dataset.t;const fs=buildPackage(pTgt).files;pFile=Math.max(0,fs.findIndex(f=>f.name===cur));renderPkg()}};
 $('pfiles').onclick=e=>{const b=e.target.closest('button');if(b){pFile=+b.dataset.i;renderPkg()}};
@@ -2091,17 +2068,11 @@ function mountComp(host,c,tv){for(const k in tv)host.style.setProperty('--'+k,tv
   const sr=host.shadowRoot||host.attachShadow({mode:'open'});sr.innerHTML=`<style>:host{display:block;color:var(--ink,var(--foreground));font:14px/1.45 var(--font-ui,var(--font-sans,system-ui))}${c.css}</style>${compBrand(c.html)}`}
 function renderCustom(){
   const el=$('cusBody');if(!el||$('vCus').hidden)return;
-  if(!appLoaded()){el.innerHTML=`<div class="ap-empty"><h3>No app loaded yet</h3>
-      <p>This tab is about your app: its custom tokens and components, changes made outside Stylist, and what was kept. Load your app to see them here.</p>
-      <p>You can also drop the app’s files here: <code>stylist.json</code>, <code>components.json</code> and the CSS files.</p>
-      <div class="ap-acts"><button class="btn pri" data-act="gh" type="button">Open from GitHub…</button><button class="btn" data-act="open" type="button">Open app style…</button></div>
-      <p class="ap-alt">Styling an app that has no Stylist files yet? <button class="lnk" data-act="new" type="button">Start a new app</button></p></div>`;return}
   const t=tokens(),T=APP.tokens,tg=APP.target,R=APP.review||[],sw=v=>isColor(v)?`<span class="c-sw" style="background:${escH(v)}"></span>`:'';
   let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||''))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
-    <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn" data-act="open">Open app style…</button><button class="k-btn" data-act="gh">Open from GitHub…</button><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
+    <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
     <div class="k-row" style="gap:20px;align-items:flex-end"><label class="k-field">App name<input class="k-input" data-f="name" value="${escH(APP.name)}"></label>
-    <div class="k-field" style="width:auto">Exports to<div class="k-seg" data-f="target">${Object.entries(TGT).map(([k,v])=>`<button data-v="${k}" aria-pressed="${k===tg}">${v}</button>`).join('')}</div></div>
-    <button class="k-btn ghost sm" data-act="reset" style="margin-left:auto">Start over, no app</button></div>
+    <div class="k-field" style="width:auto">Exports to<div class="k-seg" data-f="target">${Object.entries(TGT).map(([k,v])=>`<button data-v="${k}" aria-pressed="${k===tg}">${v}</button>`).join('')}</div></div></div>
     <div class="c-drop">Drop the app’s files here: stylist.json, stylist-theme.css, app-tokens.css, components.json, and brand SVGs (logo, mark, favicon)</div></div>`;
   // changes + pins
   const pins=[];for(const m of ['light','dark'])for(const k in APP.pins[m]||{})pins.push({m,k,v:APP.pins[m][k]});
@@ -2145,11 +2116,7 @@ function renderCustom(){
 const cus=$('vCus');
 cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   const a=b.dataset.act;
-  if(a==='open')$('appFiles').click();
-  if(a==='gh')openGh();
-  else if(a==='pkg')openPkg();
-  else if(a==='new'){APP.source='New app, not exported yet';APP.origin={new:true,style:[],sent:[],loaded:today(),base:{settings:{...S},pins:{light:{},dark:{}}}};saveApp();apply()}
-  else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Started over: no app loaded')}
+  if(a==='pkg')openPkg();
   else if(a==='addtok'){const n=$('newTok').value.trim().replace(/^--/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
     if(!n){toast('Give the token a name');return}if(APP.tokens[n]){toast(`--${n} already exists`);return}
     if(coreNames().includes(n)){toast(`--${n} is a core token. Pick another name`);return}
@@ -2528,22 +2495,6 @@ async function ghOpen(g){const files=await ghFetch(g);
   APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);if(APP.origin)APP.origin.from='github:'+ghLabel(g);saveApp();apply();
   ghLast={repo:`${g.owner}/${g.repo}`,path:g.path};try{localStorage.setItem('stylist.gh.v1',JSON.stringify(ghLast))}catch(e){}
   return true}
-function openGh(){$('ghRepo').value=ghLast?ghLast.repo+(ghLast.path?'/'+ghLast.path:''):'';$('ghMsg').textContent='';
-  $('ghLink').hidden=!ghLast;$('ghGo').disabled=false;$('ghmod').hidden=false;setTimeout(()=>$('ghRepo').focus(),0)}
-const closeGh=()=>{$('ghmod').hidden=true};
-$('mGh').onclick=openGh;$('ghClose').onclick=closeGh;$('ghCancel').onclick=closeGh;
-$('ghmod').onclick=e=>{if(e.target===$('ghmod'))closeGh()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ghmod').hidden)closeGh()});
-$('ghRepo').oninput=()=>{$('ghLink').hidden=!ghParse($('ghRepo').value)};
-$('ghForm').onsubmit=async e=>{e.preventDefault();const g=ghParse($('ghRepo').value);
-  if(!g){$('ghMsg').textContent='Paste the repo’s link, like github.com/g-ab/cast, or just g-ab/cast.';return}
-  $('ghGo').disabled=true;$('ghMsg').textContent=`Reading ${ghLabel(g)}…`;
-  try{if(await ghOpen(g))closeGh();else $('ghMsg').textContent=`No Stylist files found in ${ghLabel(g)}. Check the folder, and that the repo is public.`}
-  catch(err){$('ghMsg').textContent='GitHub can’t be reached from here. This works on the Stylist website (g-ab.github.io/stylist), with an internet connection.'}
-  $('ghGo').disabled=false};
-$('ghLink').onclick=async()=>{const g=ghParse($('ghRepo').value);if(!g)return;
-  const url=`${location.origin}${location.pathname}?app=${ghLabel(g)}`;
-  try{await navigator.clipboard.writeText(url);toast('Link copied: it opens Stylist with this app loaded')}catch(e){$('ghMsg').textContent=url}};
 // a link with ?app=owner/repo opens that app straight away
 {const q=new URLSearchParams(location.search).get('app'),g=q&&ghParse(q);
   if(g)ghOpen(g).then(ok=>{if(!ok)toast(`No Stylist files found in ${ghLabel(g)}`)}).catch(()=>toast('GitHub can’t be reached from here'))}
@@ -2590,16 +2541,14 @@ const sendDownload=async()=>{const name=(APP.name||'app').toLowerCase().replace(
 $('sendDl').onclick=sendDownload;
 
 $('ver').textContent='v'+VERSION;
-// ---- App preview: the loaded app's own components (its components.json), styled live; an empty state until there is one ----
+// ---- App preview: the loaded app's own components (its components.json), styled live; a note while the app has none ----
 function renderAppPreview(){const el=$('appBody');if(!el)return;const comps=APP.components||[];
-  if(!comps.length){el.innerHTML=`<div class="ap-empty"><h3>No app loaded yet</h3>
-      <p>App preview shows your app’s own components, styled live. Load your app to see them here.</p>
-      <p>Starting a new app? Style it with the Components view for now. Once your app has components in its <code>components.json</code>, they show up here.</p>
-      <div class="ap-acts"><button class="btn pri" data-act="gh" type="button">Open from GitHub…</button><button class="btn" data-act="open" type="button">Open app style…</button></div></div>`;return}
+  if(!comps.length){el.innerHTML=`<div class="ap-empty"><h3>No components from ${escH(APP.name||'this app')} yet</h3>
+      <p>App preview shows the components listed in the app’s <code>components.json</code>, styled live. ${APP.origin&&APP.origin.new?'A new app has none until its agent adds them.':'This app’s files have none.'}</p>
+      <p>Meanwhile, the Components view shows Stylist’s own components with your style.</p></div>`;return}
   el.innerHTML=`<div class="ap-head"><h4>${escH(APP.name)}</h4><p>${comps.length} component${comps.length>1?'s':''} from the app, styled exactly as its files style it.</p></div>
     <div class="ap-grid">${comps.map((c,i)=>`<figure class="ap-item"><div class="ap-host" data-ci="${i}"></div><figcaption>${escH(c.name)}</figcaption></figure>`).join('')}</div>`;
   const tv=themeVars(APP.target);el.querySelectorAll('.ap-host').forEach(h=>mountComp(h,comps[+h.dataset.ci],tv))}
-$('appBody').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='gh')openGh();if(b.dataset.act==='open')$('appFiles').click()});
 // ---- App bar: which app is being styled, where it came from, and what can be done with it ----
 // The menu reads APP and APP.origin (see 02-app-layer.js): source, load date, the style as loaded (for Revert).
 const appClose=()=>{$('appList').hidden=true;$('appBtn').setAttribute('aria-expanded','false')};
@@ -2614,7 +2563,7 @@ function renderAppBar(){const on=appLoaded(),o=APP.origin,gh=!!(o&&String(o.from
   $('appInfo').innerHTML=on?`<b class="ai-n">${escH(APP.name||'Untitled app')}</b>`+
     (o?`<span>${o.new?'New app, not exported yet':gh?`From GitHub · <code>${escH(o.from.slice(7))}</code>`:'Opened from files'}</span>`+(o.loaded?`<span>${o.new?'Started':'Loaded'} ${escH(dateLabel(o.loaded))}${made?` · made with Stylist ${escH(String(made))}`:''}</span>`:''):`<span>${escH(APP.source||'')}</span>`)
     :'<b class="ai-n">No app loaded</b><span>Open your app’s style, or start a new one.</span>';
-  $('mReload').hidden=!gh;
+  $('mReload').hidden=!gh;$('mLink').hidden=!gh;
   $('mRevert').hidden=!(o&&o.base);$('mRevertL').textContent=o&&o.new?'Back to the start':'Revert to loaded style';
   $('mRename').hidden=!on;$('mClose').hidden=!on;
   document.querySelectorAll('#libSeg button').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.t===APP.target)))}
@@ -2627,6 +2576,8 @@ document.addEventListener('mousedown',e=>{if(!e.target.closest('.appdd'))appClos
 $('libSeg').onclick=e=>{const b=e.target.closest('button[data-t]');if(!b)return;APP.target=b.dataset.t;saveApp();apply();appClose();$('appBtn').focus()};
 $('mReload').onclick=async()=>{appClose();const g=ghParse(APP.origin.from.slice(7));if(!g)return;toast(`Reading ${ghLabel(g)}…`);
   try{if(!await ghOpen(g))toast('No Stylist files found there anymore')}catch(err){toast('Couldn’t read it from GitHub')}};
+$('mLink').onclick=async()=>{appClose();const url=`${location.origin}${location.pathname}?app=${APP.origin.from.slice(7)}`;
+  try{await navigator.clipboard.writeText(url);toast('Link copied: it opens Stylist with this app loaded')}catch(e){toast(url)}};
 $('mRevert').onclick=()=>{const b=APP.origin&&APP.origin.base;appClose();if(!b)return;S=sanitizeS({...b.settings});APP.pins=JSON.parse(JSON.stringify(b.pins||{light:{},dark:{}}));saveApp();apply();
   toast(APP.origin.new?'Back to how it started':'Back to the style as loaded')};
 $('mRename').onclick=()=>{const box=$('appInfo'),cur=APP.name||'';box.innerHTML=`<label class="ai-ren"><span>App name</span><input id="appRen" value="${escH(cur)}" maxlength="60" autocomplete="off"></label>`;

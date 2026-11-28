@@ -181,9 +181,9 @@ def check_origin(app_dir, setup):
     except (json.JSONDecodeError, AttributeError):
         return [f"{name}'s stylist.json isn't valid JSON, so the setup can't be checked against it."]
     if not frm.get("style") or frm.get("new"):
-        return [f"This setup wasn't made from {name}'s current style. Load it in Stylist first (Share → Open from GitHub…), then send again."]
+        return [f"This setup wasn't made from {name}'s current style. Load it in Stylist first (Open from GitHub on Stylist's start screen), then send again."]
     if fp not in frm["style"]:
-        return [f"{name}'s style changed since it was loaded in Stylist" + (f" on {frm['loaded']}" if frm.get("loaded") else "") + ". Load it again (Share → Open from GitHub…), then send again."]
+        return [f"{name}'s style changed since it was loaded in Stylist" + (f" on {frm['loaded']}" if frm.get("loaded") else "") + ". Load it again (app menu → Reload from GitHub), then send again."]
     return []
 
 
@@ -261,7 +261,7 @@ async def run(app_dir, setup, brand_files=(), removed=()):
         print(f"Stopped: the theme file was edited by hand since the last export ({len(out['review'])} values):")
         for line in out["review"]:
             print("  " + line)
-        print("Open these files in Stylist (Custom view → Open app style…) to match, pin or revert each one, then export again.")
+        print("Load the app in Stylist again (app menu → Reload from GitHub, or Open app style on the start screen) to match, pin or revert each one, then export again.")
         sys.exit(2)
 
     have = {n for n, _ in out["files"]} if first else {n for n, _ in files} | ALWAYS

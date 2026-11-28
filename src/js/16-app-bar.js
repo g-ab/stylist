@@ -12,7 +12,7 @@ function renderAppBar(){const on=appLoaded(),o=APP.origin,gh=!!(o&&String(o.from
   $('appInfo').innerHTML=on?`<b class="ai-n">${escH(APP.name||'Untitled app')}</b>`+
     (o?`<span>${o.new?'New app, not exported yet':gh?`From GitHub · <code>${escH(o.from.slice(7))}</code>`:'Opened from files'}</span>`+(o.loaded?`<span>${o.new?'Started':'Loaded'} ${escH(dateLabel(o.loaded))}${made?` · made with Stylist ${escH(String(made))}`:''}</span>`:''):`<span>${escH(APP.source||'')}</span>`)
     :'<b class="ai-n">No app loaded</b><span>Open your app’s style, or start a new one.</span>';
-  $('mReload').hidden=!gh;
+  $('mReload').hidden=!gh;$('mLink').hidden=!gh;
   $('mRevert').hidden=!(o&&o.base);$('mRevertL').textContent=o&&o.new?'Back to the start':'Revert to loaded style';
   $('mRename').hidden=!on;$('mClose').hidden=!on;
   document.querySelectorAll('#libSeg button').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.t===APP.target)))}
@@ -25,6 +25,8 @@ document.addEventListener('mousedown',e=>{if(!e.target.closest('.appdd'))appClos
 $('libSeg').onclick=e=>{const b=e.target.closest('button[data-t]');if(!b)return;APP.target=b.dataset.t;saveApp();apply();appClose();$('appBtn').focus()};
 $('mReload').onclick=async()=>{appClose();const g=ghParse(APP.origin.from.slice(7));if(!g)return;toast(`Reading ${ghLabel(g)}…`);
   try{if(!await ghOpen(g))toast('No Stylist files found there anymore')}catch(err){toast('Couldn’t read it from GitHub')}};
+$('mLink').onclick=async()=>{appClose();const url=`${location.origin}${location.pathname}?app=${APP.origin.from.slice(7)}`;
+  try{await navigator.clipboard.writeText(url);toast('Link copied: it opens Stylist with this app loaded')}catch(e){toast(url)}};
 $('mRevert').onclick=()=>{const b=APP.origin&&APP.origin.base;appClose();if(!b)return;S=sanitizeS({...b.settings});APP.pins=JSON.parse(JSON.stringify(b.pins||{light:{},dark:{}}));saveApp();apply();
   toast(APP.origin.new?'Back to how it started':'Back to the style as loaded')};
 $('mRename').onclick=()=>{const box=$('appInfo'),cur=APP.name||'';box.innerHTML=`<label class="ai-ren"><span>App name</span><input id="appRen" value="${escH(cur)}" maxlength="60" autocomplete="off"></label>`;
