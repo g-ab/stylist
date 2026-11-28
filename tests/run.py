@@ -83,6 +83,13 @@ async def main():
             return {n:document.querySelectorAll('#tokBody [data-copy]').length,bad:bad.length}}""")
         check("swatches copy as hex", hx["n"] > 50 and hx["bad"] == 0, hx)
 
+        # 6a. "Used by" names only real components (no gallery helpers like hrow/hlab), and the Custom view has no Usage card
+        ub = await pg.evaluate("""()=>{showView('tok');const names=new Set(Object.values(KNAME)),cu=coreUsage(),odd=[...new Set(Object.values(cu).flatMap(s=>[...s]))].filter(n=>!names.has(n));
+            const el=document.querySelector('#tokBody [data-name="--accent-strong"]');showUse(el);const foot=el.closest('.t-card').querySelector('.t-use').innerText;
+            showView('cus');const usage=[...document.querySelectorAll('#cusBody h4')].some(h=>h.textContent==='Usage');showView('comp');
+            return {odd,foot,usage,accent:[...(cu.accent||[])]}}""")
+        check("used by: real components only, shown in Tokens", not ub["odd"] and "Accent hover" in ub["foot"] and "--accent-strong" in ub["foot"] and "Button" in ub["accent"] and not ub["usage"], ub)
+
         # 6b. "Copy setup for Claude" carries the full recipe, and export.py turns it into the files
         setup = await pg.evaluate("()=>{S={...PRESETS[0],radius:16,fam:'teal'};APP.name='Fixture';APP.target='css';apply();return setupText()}")
         block = json.loads(setup[setup.index("{"):setup.rindex("}") + 1])

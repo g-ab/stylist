@@ -73,3 +73,11 @@
 .toks .t-sh small{font-size:12px;color:var(--muted)}
 .toks .t-pin{font:500 10px var(--font-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--accent-text)}
 
+/* tokens view: "used by" line at the foot of a card */
+.toks .t-use{display:grid;gap:4px;min-height:40px;padding-top:12px;border-top:1px solid var(--rule);font-size:12px}
+.toks .t-use code{font:11px var(--font-mono)}
+.toks .t-use .t-ub{display:flex;flex-wrap:wrap;gap:4px 10px}
+.toks .t-use em{font-style:normal;color:var(--ink)}
+.toks .t-use em.cu{color:var(--accent-text)}
+.toks [data-name]:not([data-copy]){border-radius:6px;outline:none}
+.toks [data-name]:not([data-copy]):focus-visible{box-shadow:0 0 0 2px var(--accent-line)}

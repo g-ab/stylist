@@ -43,8 +43,15 @@ function resolveReview(id,act){const r=APP.review.find(x=>x.id===id);if(!r)retur
 const KNAME={btn:'Button',field:'Field',input:'Input',sel:'Select',opt:'Option',check:'Checkbox',radio:'Radio',switch:'Switch',range:'Slider',tabs:'Tabs',seg:'Segmented',menu:'Menu',tip:'Tooltip',toast:'Toast',card:'Card',badge:'Badge',table:'Table',panel:'Panel',link:'Link',or:'Divider',list:'List',li:'List',lt:'List',th:'Thumbnail',mut:'Text',av:'Avatar',stats:'Stats',bars:'Chart',leg:'Chart',set:'Setting',val:'Setting',tl:'Timeline',empty:'Empty state',canvas:'Canvas',tag:'Tag',glz:'Swatch'};
 let CU=null;
 function coreUsage(){if(CU)return CU;CU={};for(const ss of document.styleSheets){let rules;try{rules=ss.cssRules}catch(e){continue}
-  for(const r of rules){if(!r.selectorText)continue;const k=(r.selectorText.match(/\.k-([a-z]+)/)||[])[1];if(!k)continue;const nm=KNAME[k]||k;
-    for(const v of r.style.cssText.matchAll(/var\(--([\w-]+)/g)){const t=PREVIEW_BACK[v[1]]||v[1];(CU[t]||(CU[t]=new Set)).add(nm)}}}return CU}
+  // only named components count: layout helpers of the gallery (k-hrow, k-hlab…) are skipped, and in ".k-hrow .k-btn" the Button is the one styled
+  for(const r of rules){if(!r.selectorText)continue;
+    const nms=new Set(r.selectorText.split(',').map(s=>[...s.matchAll(/\.k-([a-z]+)/g)].map(m=>m[1]).filter(k=>KNAME[k]).pop()).filter(Boolean).map(k=>KNAME[k]));if(!nms.size)continue;
+    for(const v of r.style.cssText.matchAll(/var\(--([\w-]+)/g)){const t=PREVIEW_BACK[v[1]]||v[1];for(const nm of nms)(CU[t]||(CU[t]=new Set)).add(nm)}}}return CU}
+// what reads a token: Stylist's components, the loaded app's components (directly or through an app token pointing at it), and app tokens pointing at it
+function usedBy(n){const core=[...(coreUsage()[n]||[])],app=new Set,T=APP.tokens;
+  for(const c of APP.components||[]){const u=compUses(c,APP.target);if(u.includes(n))app.add(c.name);for(const k of u)if(T[k]&&T[k].ref===n)app.add(`${c.name} (via --${k})`)}
+  for(const k in T)if(T[k].ref===n)app.add('--'+k);
+  return {core:core.sort(),app:[...app]}}
 // height tokens (any library's) or Tailwind h-N classes = follows; raw px heights = fixed
 function heightStatus(c){const css=c.css||'',html=c.html||'';
   if(/height\s*:\s*[^;}]*var\(--(control|ctl|bar|base-button-height|text-field-height|select-trigger-height|space-[5-8])/.test(css)||/class="[^"]*\bh-\d+\b/.test(html))return {f:1};

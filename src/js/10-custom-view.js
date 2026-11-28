@@ -49,15 +49,6 @@ function renderCustom(){
   h+=`<div class="k-card c-card"><div class="blk-h"><div><h4>Custom components</h4><p>Rendered with the variables Stylist exports for ${TGT[tg]}, so a change here is what the app gets.${tg==='tw'?' Utility classes aren’t compiled here: give each snippet its own CSS.':''}</p></div><span class="k-badge">${comps.length}</span></div>
     ${comps.length?`<div class="c-comps">${comps.map(({c,uses,hs},i)=>`<div class="c-comp"><div class="k-row sb"><b>${escH(c.name)}</b>${hs?` <span class="k-badge${hs.f?" acc":""}" title="${hs.f?"Uses the control height tokens":"Hard-coded height: won’t follow Stylist’s heights"}">${hs.f?"Follows heights":"Fixed "+escH(hs.v)}</span>`:""}<span class="k-mut">${uses.length} tokens</span></div><div class="c-host" data-ci="${i}"></div><div class="c-toks">${uses.map(u=>`<span class="k-badge${T[u]?' acc':''}">--${escH(u)}</span>`).join('')}</div></div>`).join('')}</div>`
     :'<p class="c-empty">No components.json yet. Add one to preview the app’s custom components here.</p>'}</div>`;
-  // usage
-  const cu=coreUsage(),use={},add=(tok,who,cls)=>{(use[tok]||(use[tok]=[])).push({who,cls})};
-  for(const k in cu)for(const w of cu[k])add(k,w,'');
-  for(const {c,uses} of comps)for(const u of uses){add(u,c.name,'cu');if(T[u]&&T[u].ref)add(T[u].ref,`${c.name} (via --${u})`,'cu')}
-  for(const n in T)if(T[n].ref)add(T[n].ref,`--${n}`,'cu');
-  const val=k=>T[k]?resolveApp(T[k],mode,t[mode]):t[mode][k];
-  const urows=Object.keys(use).sort((a,b)=>(!!T[b]-!!T[a])||a.localeCompare(b)).map(k=>{const v=val(k);
-    return `<div class="c-use" data-u="${escH(k)}">${v&&isColor(v)?`<span class="c-sw" style="background:${escH(v)}"></span>`:'<span></span>'}<code>--${escH(k)}${T[k]?' <span class="t-pin">app</span>':''}</code><span class="by">${[...new Map(use[k].map(x=>[x.who,x])).values()].map(x=>`<em class="${x.cls}">${escH(x.who)}</em>`).join('')}</span></div>`}).join('');
-  h+=`<div class="k-card c-card"><div class="blk-h"><div><h4>Usage</h4><p>What each token touches: core components in black, the app’s own in accent. Change one and everything listed changes with it.</p></div><input class="k-input c-filter" data-f="ufilter" placeholder="Find a token"></div>${urows}</div>`;
   // changelog
   const log=APP.changelog;
   h+=`<div class="k-card c-card"><div class="blk-h"><div><h4>Changelog</h4><p>Every value kept, matched or reverted after an edit outside Stylist. Saved in stylist.json.</p></div></div>
@@ -92,7 +83,6 @@ cus.addEventListener('change',e=>{const x=e.target;
     APP.tokens[n]=x.value==='@pin'?{light:resolveApp(d,'light',t.light),dark:resolveApp(d,'dark',t.dark)}:{ref:x.value,...(d.ref&&d.pct?{pct:d.pct}:{})};saveApp();apply()}
   else if(x.dataset.pct){const d=APP.tokens[x.dataset.pct],v=Math.max(1,Math.min(100,Math.round(+x.value||100)));if(v>=100)delete d.pct;else d.pct=v;saveApp();apply()}
   else if(x.dataset.raw){const [n,m]=x.dataset.raw.split('|');APP.tokens[n][m]=x.value.trim();saveApp();apply()}});
-cus.addEventListener('input',e=>{if(e.target.dataset.f==='ufilter'){const q=e.target.value.trim().toLowerCase().replace(/^--/,'');cus.querySelectorAll('.c-use').forEach(r=>r.hidden=!!q&&!r.dataset.u.includes(q))}});
 cus.addEventListener('dragover',e=>{e.preventDefault();$('cusBody').classList.add('drag')});
 cus.addEventListener('dragleave',e=>{if(!cus.contains(e.relatedTarget))$('cusBody').classList.remove('drag')});
 cus.addEventListener('drop',e=>{e.preventDefault();$('cusBody').classList.remove('drag');if(e.dataTransfer.files.length)openFiles(e.dataTransfer.files)});

@@ -30,11 +30,6 @@
 .cus .c-miss code{color:var(--danger)}
 .cus .c-toks{display:flex;flex-wrap:wrap;gap:4px}
 .cus .c-toks .k-badge{height:20px;font:500 10.5px var(--font-mono)}
-.cus .c-use{display:grid;grid-template-columns:18px minmax(140px,.8fr) 2fr;gap:12px;align-items:start;padding:8px 0;border-top:1px solid var(--rule);font-size:12.5px}
-.cus .c-use .c-sw{margin-top:1px}
-.cus .c-use span.by{display:flex;flex-wrap:wrap;gap:4px 10px;color:var(--muted)}
-.cus .c-use span.by em{font-style:normal;color:var(--ink)}
-.cus .c-use span.by em.cu{color:var(--accent-text)}
 .cus .c-log{list-style:none;margin:0;padding:0;display:grid}
 .cus .c-log li{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:8px 0;border-top:1px solid var(--rule);font-size:12.5px}
 .cus .c-log li small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
