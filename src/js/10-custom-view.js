@@ -72,7 +72,7 @@ cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return
   if(a==='open')$('appFiles').click();
   if(a==='gh')openGh();
   else if(a==='pkg')openPkg();
-  else if(a==='new'){APP.source='New app, not exported yet';APP.origin={new:true,style:[],sent:[],loaded:today()};saveApp();apply()}
+  else if(a==='new'){APP.source='New app, not exported yet';APP.origin={new:true,style:[],sent:[],loaded:today(),base:{settings:{...S},pins:{light:{},dark:{}}}};saveApp();apply()}
   else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Started over: no app loaded')}
   else if(a==='addtok'){const n=$('newTok').value.trim().replace(/^--/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
     if(!n){toast('Give the token a name');return}if(APP.tokens[n]){toast(`--${n} already exists`);return}

@@ -1,6 +1,6 @@
 // ---- share/export menu ----
 const amClose=()=>{$('amList').hidden=true;$('amBtn').setAttribute('aria-expanded','false')};
-$('amBtn').onclick=e=>{e.stopPropagation();if(typeof libClose==='function')libClose();const o=$('amList').hidden;$('amList').hidden=!o;$('amBtn').setAttribute('aria-expanded',String(o))};
+$('amBtn').onclick=e=>{e.stopPropagation();if(typeof appClose==='function')appClose();const o=$('amList').hidden;$('amList').hidden=!o;$('amBtn').setAttribute('aria-expanded',String(o))};
 $('amList').addEventListener('click',()=>amClose());
 document.addEventListener('mousedown',e=>{if(!e.target.closest('.amenu'))amClose()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')amClose()});
@@ -83,7 +83,7 @@ async function openFiles(list){
   APP={...APP,name:cj&&cj.app||APP.name,target:tg,pins:cj?cj.pins:{light:{},dark:{}},changelog:cj?cj.changelog:APP.changelog,snapshot:cj&&cj.snapshot||null,exported:cj&&cj.exported||null};
   if(app){const T=parseAppTokens(app.text,tg),cn=new Set(coreNames());for(const n in T)if(cn.has(n)){delete T[n];toast(`--${n} is a core token, so it was left out of the app tokens`)}APP.tokens=T}
   if(comps)APP.components=normComps(comps);
-  APP.review=[];APP.reviewNote='';APP.origin={style:fp0?[fp0]:[],sent:[],loaded:today(),from:'files'};
+  APP.review=[];APP.reviewNote='';APP.origin={style:fp0?[fp0]:[],sent:[],loaded:today(),from:'files',base:{settings:{...S},pins:JSON.parse(JSON.stringify(APP.pins||{light:{},dark:{}}))}};
   if(core){const cur=parseCSS(core.text),snap=APP.snapshot||parseCSS(coreCSS(tg));APP.review=diffCore(snap,cur);
     APP.reviewNote=APP.snapshot?'':'There was no stylist.json, so the file is compared with what Stylist would export now.'}
   const missing=[!cj&&'stylist.json',!core&&'the theme CSS',!app&&'app-tokens.css',!comps&&'components.json'].filter(Boolean);

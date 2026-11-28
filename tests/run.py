@@ -106,7 +106,7 @@ async def main():
         check("copy setup is a full recipe", set(keys) <= set(block["settings"]) and "pins" in block and block["settings"]["radius"] == 16, list(block)[:6])
         steps = await pg.evaluate("$('copy').textContent")
         apply_md = (Path(__file__).resolve().parent.parent / "APPLY.md").read_text()
-        check("setup is short and points to APPLY.md", "Send to your agent" in steps and setup.startswith("Apply this Stylist setup to Fixture.") and "blob/main/APPLY.md" in setup and len(setup) < 2500 and "Claude" not in setup
+        check("setup is short and points to APPLY.md", "Send to agent" in steps and setup.startswith("Apply this Stylist setup to Fixture.") and "blob/main/APPLY.md" in setup and len(setup) < 2500 and "Claude" not in setup
               and all(w in apply_md for w in ("export.py", "Exit code 2", "First time", "upgrade Stylist", "Removed in Stylist")), {"chars": len(setup), "start": setup[:60]})
         with tempfile.TemporaryDirectory() as tmp:
             app = Path(tmp) / "app"
@@ -272,13 +272,12 @@ async def main():
             # the panel: what's included, Download suggested when logos travel, file download
             await sp.evaluate(load, app_payload(app))
             await sp.evaluate("(n)=>{APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:n}};apply()}", NEW)
-            await sp.click("#amBtn")
             await sp.click("#copy")
             pnl = await sp.evaluate("({open:!$('sendmod').hidden,sum:$('sendSum').innerText,copy:!$('sendCopy').hidden&&$('sendCopy').classList.contains('pri'),dl:!$('sendDl').hidden&&!$('sendDl').classList.contains('pri'),label:$('copy').textContent})")
             async with sp.expect_download() as dl:
                 await sp.click("#sendDl")
             fname = (await dl.value).suggested_filename
-            check("send: short setup → Download file + Copy (main)", pnl["open"] and "Copy and paste" in pnl["sum"] and pnl["copy"] and pnl["dl"] and "Send to your agent" in pnl["label"] and fname.endswith("-stylist-setup.md"), {**pnl, "file": fname})
+            check("send: short setup → Download file + Copy (main)", pnl["open"] and "Copy and paste" in pnl["sum"] and pnl["copy"] and pnl["dl"] and "Send to agent" in pnl["label"] and fname.endswith("-stylist-setup.md"), {**pnl, "file": fname})
             # a heavier logo makes it too long to paste: Download only, with the reason
             await sp.evaluate("""()=>{const p=Array.from({length:260},(_,i)=>`<rect x="${i%40}" y="${i%10}" width="1" height="1" fill="#${(i*2654435761>>>8&0xffffff).toString(16).padStart(6,'0')}"/>`).join('');
               APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 10">${p}</svg>`}};apply();openSend()}""")

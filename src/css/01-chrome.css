@@ -2,7 +2,7 @@
 /* ---------- manager chrome (fixed, not themed) ---------- */
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{font:13px/1.45 "Instrument Sans",system-ui,sans-serif;color:#1d232b;background:#e9ebee;display:grid;grid-template-columns:300px 1fr;overflow:hidden}
+body{font:13px/1.45 "Instrument Sans",system-ui,sans-serif;color:#1d232b;background:#e9ebee;display:grid;grid-template-columns:300px 1fr;overflow:hidden;grid-template-rows:56px minmax(0,1fr)}
 aside{background:#fff;border-right:1px solid #dde1e6;display:flex;flex-direction:column;min-height:0}
 .ah{padding:12px 12px 6px 18px;display:flex;align-items:center;justify-content:space-between}
 .amenu{position:relative}
@@ -272,3 +272,26 @@ main.dk .bgpick [aria-pressed="true"]{box-shadow:inset 0 0 0 1px rgba(255,255,25
 .ver{margin-left:6px;font:500 10.5px/1 "Geist Mono",ui-monospace,monospace;color:#8a929c;letter-spacing:.02em;align-self:center}
 .liblist .lsep{margin:4px 0;border:0;border-top:1px solid #e6e8eb}
 .liblist .lreset{display:flex;align-items:center;gap:8px}
+/* ---------- top bar: Stylist, the app being styled, Export and Send ---------- */
+.topbar{grid-column:1/-1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:0 12px 0 20px;background:#f4f5f7;border-bottom:1px solid #dde1e6;min-width:0}
+.tb-l{display:flex;align-items:baseline;min-width:0}
+.tb-l h1{margin:0;font-size:16px;font-weight:600}
+.tb-r{display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.tbb{flex:none;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;font-size:13.5px}
+.tbb .chev,.appbtn .chev{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.4}
+.tb-r .amlist{width:230px}
+.appbtn{display:flex;align-items:center;gap:10px;height:40px;max-width:min(420px,40vw);padding:0 12px 0 14px;border:0;border-radius:9px;background:#e4e7eb;font:inherit;color:#1d232b;cursor:pointer;text-align:left}
+.appbtn:hover,.appbtn[aria-expanded="true"]{background:#dadee3}
+.appbtn .an{display:grid;line-height:1.15;min-width:0}
+.appbtn b{font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbtn small{font:10.5px "Geist Mono",ui-monospace,monospace;color:#5d6774;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appdd .applist{left:50%;right:auto;transform:translateX(-50%);width:300px;padding:6px}
+.applist .ainfo{display:grid;gap:3px;padding:8px 10px 6px;font-size:12.5px;color:#4a5260}
+.applist .ainfo .ai-n{font-size:14px;font-weight:600;color:#1d232b}
+.applist .ainfo code{font:11.5px "Geist Mono",ui-monospace,monospace}
+.applist .ai-ren{display:grid;gap:4px}.applist .ai-ren input{height:32px;padding:0 9px;border:1px solid #1d232b;border-radius:7px;font:inherit;font-size:13.5px;color:#1d232b}
+.applist .lh{padding:6px 10px 4px;font:600 10.5px "Geist Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#6b7480}
+.applist .dest button{display:grid;gap:1px;padding:7px 10px 7px 30px;position:relative}
+.applist .dest button b{font-weight:500}.applist .dest button small{color:#6b7480;font-size:11.5px}
+.applist .dest button[aria-checked="true"]::before{content:"";position:absolute;left:12px;top:12px;width:4px;height:8px;border:solid #1d232b;border-width:0 1.6px 1.6px 0;transform:rotate(45deg)}
+.amlist [hidden]{display:none!important}

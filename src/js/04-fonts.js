@@ -81,4 +81,3 @@ document.querySelectorAll('[data-sh]').forEach(x=>x.addEventListener('input',()=
 $('shOp').addEventListener('input',e=>{const v=Math.round(+e.target.value*2)/2;if(!isFinite(v)||e.target.value==='')return;S.sh={...shOf(),op:Math.max(0,Math.min(60,v))};apply()});
 $('shColor').addEventListener('input',e=>{S.sh={...shOf(),color:e.target.value};apply()});
 $('mode').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.v;$('mode').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));apply()};
-$('reset').onclick=()=>{S={...PRESETS[0]};apply();libClose();toast('Back to the defaults')};
