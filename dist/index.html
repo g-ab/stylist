@@ -311,9 +311,6 @@ main.dk .bgpick [aria-pressed="true"]{box-shadow:inset 0 0 0 1px rgba(255,255,25
 .pv .pen{stroke:var(--pencil);stroke-width:1.5}
 .pv .jt{fill:var(--sheet);stroke:var(--accent-line);stroke-width:1.5}
 .pv .dim{font:600 11px var(--font-mono);fill:var(--accent-text);stroke:none}
-.pv .clay{fill:var(--clay);stroke:none}
-.pv .clay2{fill:var(--clay);stroke:none;filter:brightness(.82)}
-.pv .clay3{fill:var(--clay);stroke:none;filter:brightness(1.1)}
 /* menu + dialog */
 .pv.pad{padding:22px;display:flex;justify-content:center;align-items:flex-start;min-height:100%}
 .pv .menu{width:260px;background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r-lg);box-shadow:var(--shadow-floating);padding:12px}
@@ -425,6 +422,15 @@ main.dk .bgpick [aria-pressed="true"]{box-shadow:inset 0 0 0 1px rgba(255,255,25
 .sendact{display:flex;justify-content:flex-end;gap:8px;padding:18px}
 .sendact .btn{flex:none;width:auto;padding:8px 16px}
 .sendact .btn[hidden]{display:none}
+/* App preview */
+.apv{padding:28px}
+.ap-empty{max-width:440px;margin:48px auto;text-align:center;color:#4b5460;font:14px/1.55 "Instrument Sans",system-ui,sans-serif}
+.ap-empty h3{margin:0 0 8px;font-size:17px;font-weight:600;color:#1d232b}
+.ap-empty p{margin:0 0 10px}.ap-empty code{font:12.5px "Geist Mono",ui-monospace,monospace}
+.ap-acts{display:flex;justify-content:center;gap:8px;margin-top:18px}.ap-acts .btn{flex:none;padding:8px 16px}
+.ap-head h4{margin:0;font:600 15px "Instrument Sans",system-ui,sans-serif;color:var(--ink)}.ap-head p{margin:2px 0 18px;font-size:12.5px;color:var(--muted)}
+.ap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.ap-item{margin:0;display:grid;gap:8px}.ap-item figcaption{font:500 11.5px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
 /* ---------- component gallery (themed by the same variables) ---------- */
 .pv.gal{padding:8px 8px 28px;display:grid;gap:34px;background:transparent;box-shadow:none;border-radius:0;overflow:visible}
 .gal .k-sec{display:grid;gap:12px}
@@ -1009,7 +1015,7 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
       <div class="k-card blk">
         <div class="blk-h"><div><h4>Sign in</h4><p>Pick up where you left off.</p></div></div>
         <label class="k-field w">Email<input class="k-input" placeholder="you@studio.com" value="gab@studio.com"></label>
-        <label class="k-field w">Password<input class="k-input err" type="password" value="clay"><span class="hint err">At least 8 characters.</span></label>
+        <label class="k-field w">Password<input class="k-input err" type="password" value="secret"><span class="hint err">At least 8 characters.</span></label>
         <div class="k-row sb"><label class="k-opt"><input type="checkbox" class="k-check" checked><span>Remember me</span></label><button class="k-link">Forgot?</button></div>
         <button class="k-btn pri w">Sign in</button>
         <div class="k-or"><span>or</span></div>
@@ -1019,7 +1025,7 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
       <div class="k-card blk">
         <div class="blk-h"><div><h4>Recent drawings</h4><p>Saved on this device.</p></div><button class="k-btn ghost sm">View all</button></div>
         <div class="k-list">
-          <div class="k-li on"><span class="k-th"><svg viewBox="0 0 40 30"><path d="M14 26V6h12v20z"/><path d="M26 11c6 0 6 10 0 10"/></svg></span><span class="k-lt"><b>Pitcher vase</b><small>Edited 2 h ago · 3 pieces</small></span><span class="k-badge acc"><i></i>Open</span></div>
+          <div class="k-li on"><span class="k-th"><svg viewBox="0 0 40 30"><path d="M14 26V6h12v20z"/><path d="M26 11c6 0 6 10 0 10"/></svg></span><span class="k-lt"><b>Spring campaign</b><small>Edited 2 h ago · 3 files</small></span><span class="k-badge acc"><i></i>Open</span></div>
           <div class="k-li"><span class="k-th"><svg viewBox="0 0 40 30"><path d="M8 25L20 6l12 19z"/></svg></span><span class="k-lt"><b>Planter</b><small>Yesterday · 4 pieces</small></span><button class="k-btn ghost icon sm" aria-label="More"><svg class="ic" data-i="more"></svg></button></div>
           <div class="k-li"><span class="k-th"><svg viewBox="0 0 40 30"><rect x="9" y="11" width="22" height="14"/><path d="M12 9c2-5 14-5 16 0"/></svg></span><span class="k-lt"><b>Lidded box</b><small>12 Nov · 6 pieces</small></span><span class="k-badge dng"><i></i>Too thin</span></div>
           <div class="k-li"><span class="k-th"><svg viewBox="0 0 40 30"><path d="M10 8h20l-3 18H13z"/></svg></span><span class="k-lt"><b>Tumbler</b><small>3 Nov · 2 pieces</small></span><span class="k-badge">Draft</span></div>
@@ -1027,12 +1033,12 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
       </div>
 
       <div class="k-card blk">
-        <div class="blk-h"><div><h4>Pattern summary</h4><p>Pitcher vase · A4</p></div><span class="k-badge solid">Ready</span></div>
-        <div class="k-stats"><div><small>Pieces</small><b>7</b></div><div><small>Pages</small><b>3</b></div><div><small>Clay</small><b>1.4<em>kg</em></b></div></div>
+        <div class="blk-h"><div><h4>Project summary</h4><p>Spring campaign · Q3</p></div><span class="k-badge solid">Ready</span></div>
+        <div class="k-stats"><div><small>Pieces</small><b>7</b></div><div><small>Pages</small><b>3</b></div><div><small>Storage</small><b>1.4<em>GB</em></b></div></div>
         <div class="k-bars" aria-label="Area per piece"><i style="height:92%"></i><i style="height:64%"></i><i style="height:64%"></i><i class="sup" style="height:38%"></i><i class="sup" style="height:22%"></i><i class="sup" style="height:18%"></i><i class="warn" style="height:9%"></i></div>
         <div class="k-bars-l"><span>A1</span><span>A2</span><span>A3</span><span>B</span><span>C1</span><span>C2</span><span>D</span></div>
         <div class="k-leg"><span><i></i>Walls</span><span class="s"><i></i>Handle &amp; spout</span><span class="w"><i></i>Too thin</span></div>
-        <div class="k-row" style="gap:6px"><span class="k-tag">Stoneware</span><span class="k-tag">5 mm slab</span><span class="k-tag">Cone 6</span></div>
+        <div class="k-row" style="gap:6px"><span class="k-tag">Design</span><span class="k-tag">Marketing</span><span class="k-tag">Q3</span></div>
         <div class="k-panel tint sm"><h4>Piece D is very thin</h4><p>At 3 mm it may crack when drying. Try 5 mm or more.</p></div>
       </div>
 
@@ -1072,8 +1078,8 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
         <div class="blk-h"><div><h4>Activity</h4></div><div class="k-seg sm"><button aria-pressed="true">All</button><button aria-pressed="false">Mine</button></div></div>
         <ol class="k-tl">
           <li><span class="k-av sm b">ML</span><p><b>Marie</b> commented on <b>Piece C</b><span>“Spout needs a 2 mm overlap for joining.”</span><small>10 min ago</small></p></li>
-          <li><span class="tl-dot"></span><p>Pattern downloaded · 3 pages<small>1 h ago</small></p></li>
-          <li><span class="k-av sm">GA</span><p><b>You</b> renamed the drawing to <b>Pitcher vase</b><small>Yesterday</small></p></li>
+          <li><span class="tl-dot"></span><p>Report downloaded · 3 pages<small>1 h ago</small></p></li>
+          <li><span class="k-av sm">GA</span><p><b>You</b> renamed the project to <b>Spring campaign</b><small>Yesterday</small></p></li>
         </ol>
         <div class="k-row nowrap"><input class="k-input" placeholder="Write a comment…"><button class="k-btn icon pri" aria-label="Send"><svg class="ic" data-i="send"></svg></button></div>
       </div>
@@ -1098,7 +1104,7 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
           <div class="k-li"><span class="k-glz" style="background:var(--support-soft);box-shadow:inset 0 0 0 1px var(--support)"></span><span class="k-lt"><b>Shino</b><small>Satin · cone 10</small></span><input type="radio" name="gz" class="k-radio" aria-label="Shino"></div>
           <div class="k-li"><span class="k-glz" style="background:var(--accent)"></span><span class="k-lt"><b>Cobalt wash</b><small>Matte · cone 6</small></span><input type="radio" name="gz" class="k-radio" aria-label="Cobalt wash"></div>
         </div>
-        <button class="k-link" style="justify-self:start"><svg class="ic" data-i="plus"></svg>Add a glaze</button>
+        <button class="k-link" style="justify-self:start"><svg class="ic" data-i="plus"></svg>Add a tag</button>
       </div>
 
       <div class="k-card blk center">
@@ -1108,7 +1114,7 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
       </div>
 
       <div class="k-panel inverse blk">
-        <div class="k-row sb nowrap"><div><h4>Pattern downloaded</h4><p style="margin:0">Pitcher vase pattern.pdf · 3 pages</p></div><button class="k-btn sm">Open</button></div>
+        <div class="k-row sb nowrap"><div><h4>Report downloaded</h4><p style="margin:0">Spring campaign report.pdf · 3 pages</p></div><button class="k-btn sm">Open</button></div>
       </div>
 
       <div class="k-card blk">
@@ -1125,77 +1131,7 @@ textarea.k-input{height:auto;min-height:72px;padding:8px 10px;resize:vertical;li
   <div class="view-pane" id="vMot" hidden><div class="frames"><div class="frame wide"><div class="pv mot" id="motBody"></div></div></div></div>
   <div class="view-pane" id="vBrand" hidden><div class="frames"><div class="frame wide"><div class="pv brv" id="brBody"></div></div></div></div>
   <div class="view-pane" id="vTok" hidden><div class="frames"><div class="frame wide"><div class="pv toks" id="tokBody"></div></div></div></div>
-  <div class="view-pane" id="vApp" hidden>
-  <div class="frames">
-    <div class="frame wide">
-      <div class="pv">
-        <div class="bar">
-          <div class="fl brand"><span class="bp-logo">Your app</span> <span class="sep">/</span><span class="nm">Pitcher vase</span><span class="dot"></span><span class="unit">MM</span></div>
-          <div class="fl tabs"><span class="b on"><svg class="ic" data-i="pencil"></svg>Drawing</span><span class="b"><svg class="ic" data-i="file"></svg>Patterns</span></div>
-          <span class="sp"></span>
-          <div class="fl">
-            <span class="b"><svg class="ic" data-i="pencil"></svg><kbd>P</kbd></span>
-            <span class="b"><svg class="ic" data-i="wand"></svg><kbd>C</kbd></span>
-            <span class="b on"><svg class="ic" data-i="cursor"></svg><kbd>V</kbd></span>
-            <span class="b"><svg class="ic" data-i="measure"></svg><kbd>M</kbd></span>
-            <span class="b"><svg class="ic" data-i="split"></svg><kbd>S</kbd></span>
-            <span class="b"><svg class="ic" data-i="box"></svg>Box</span>
-            <span class="b"><svg class="ic" data-i="eraser"></svg><kbd>E</kbd></span>
-          </div>
-          <div class="fl"><span class="b"><svg class="ic" data-i="fit"></svg><kbd>F</kbd></span></div>
-        </div>
-        <div class="canvas">
-          <div class="view"><span class="vl">TOP</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="ax" d="M0 85H400M200 0V170"/><rect class="sh" x="150" y="45" width="100" height="80"/><circle class="hole" cx="200" cy="85" r="26"/></svg></div>
-          <div class="view"><span class="vl">3D</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="clay2" d="M170 50l40 -18 40 18v80l-40 18-40-18z"/><path class="clay" d="M170 50l40 18v80l-40-18z"/><path class="clay3" d="M210 68l40-18v80l-40 18z"/><path class="clay2" d="M250 70c22 0 22 40 0 40v-8c12 0 12-24 0-24z"/></svg></div>
-          <div class="view"><span class="vl">FRONT</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="ax" d="M0 150H400M200 0V170"/><path class="sel" d="M150 150V45H250V150z"/><path class="sh" d="M250 70c26 0 26 50 0 50v-10c14 0 14-30 0-30z"/><path class="ax" d="M150 135H250" stroke-dasharray="4 3" style="stroke:var(--accent-line)"/><circle class="jt" cx="150" cy="45" r="3.5"/><circle class="jt" cx="250" cy="45" r="3.5"/><circle class="jt" cx="250" cy="150" r="3.5"/><circle class="jt" cx="150" cy="150" r="3.5"/><text class="dim" x="200" y="37" text-anchor="middle">100</text><text class="dim" x="140" y="100" text-anchor="end">105</text></svg></div>
-          <div class="view"><span class="vl">SIDE</span><svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid meet"><path class="ax" d="M0 150H400M200 0V170"/><rect class="sh" x="160" y="45" width="80" height="105"/><path class="pen" d="M270 60c18 6 30 30 22 60"/></svg></div>
-        </div>
-      </div>
-    </div>
-    <div class="frame">
-      <div class="pv pad">
-        <div class="menu">
-          <div class="msec"><h3>File</h3><span class="mb">Open…</span><span class="mb">Save</span><span class="mb">Download pattern</span></div>
-          <div class="msec"><h3>Canvas</h3>
-            <div class="fld">Units<div class="mseg"><span class="on">mm</span><span>cm</span></div></div>
-            <div class="fld">Snap grid<div class="inp">5 mm<svg viewBox="0 0 10 10" width="10" height="10"><path d="M2.5 4l2.5 2.5L7.5 4"/></svg></div></div>
-            <div class="chk"><i><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2 4-4.4"/></svg></i>Snap to grid and to other edges</div>
-          </div>
-          <div class="msec"><h3>Print</h3><div class="fld">Line weight (pt)<div class="inp">0.5</div></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="frame">
-      <div class="pv"><div class="scrim"></div>
-        <div class="dlgwrap"><div class="dlg"><span class="x"><svg class="ic" data-i="close"></svg></span><h4>Save changes?</h4><p>Latest changes are not saved. Saving will download your file.</p><div class="acts"><span class="btn2 dng">Discard</span><span class="btn2 pri">Save</span></div></div></div>
-      </div>
-    </div>
-    <div class="frame wide">
-      <div class="pv"><div class="home">
-        <div class="bar"><div class="fl brand"><span class="bp-logo">Your app</span></div></div>
-        <h3>Recent</h3>
-        <div class="cards">
-          <div class="card"><div class="th"><svg class="new" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg></div><div class="meta"><b>New drawing</b><span>Start empty</span></div></div>
-          <div class="card on"><div class="th"><svg viewBox="0 0 100 70"><path d="M35 62V12h30v50z" style="fill:var(--fill-sel);stroke:var(--ink);stroke-width:1.5"/><path d="M65 25c14 0 14 25 0 25" style="stroke:var(--ink);stroke-width:1.5"/></svg></div><div class="meta"><b>Pitcher vase</b><span>2 hours ago</span></div></div>
-          <div class="card"><div class="th"><svg viewBox="0 0 100 70"><path d="M20 55L50 15l30 40z" style="fill:var(--fill-sel);stroke:var(--ink);stroke-width:1.5"/></svg></div><div class="meta"><b>Planter</b><span>Yesterday</span></div></div>
-          <div class="card"><div class="th"><svg viewBox="0 0 100 70"><rect x="22" y="22" width="56" height="34" style="fill:var(--fill-sel);stroke:var(--ink);stroke-width:1.5"/><path d="M30 20c4-14 36-14 40 0" style="stroke:var(--pencil);stroke-width:1.5"/></svg></div><div class="meta"><b>Lidded box</b><span>12 Nov</span></div></div>
-        </div>
-      </div></div>
-    </div>
-    <div class="frame wide">
-      <div class="pv"><div class="pat">
-        <div class="bar">
-          <div class="fl brand"><span class="bp-logo">Your app</span> <span class="sep">/</span><span class="nm">Pitcher vase</span><span class="unit">MM</span></div>
-          <div class="fl tabs"><span class="b"><svg class="ic" data-i="pencil"></svg>Drawing</span><span class="b on"><svg class="ic" data-i="file"></svg>Patterns</span></div>
-          <span class="sp"></span>
-          <div class="fl"><span class="b"><svg class="ic" data-i="rotate"></svg>Rotate</span><span class="b"><svg class="ic" data-i="page"></svg>Page</span><span class="b"><svg class="ic" data-i="arrange"></svg>Arrange</span></div>
-        </div>
-        <div class="page"><svg viewBox="0 0 210 297"><rect class="pc on" x="20" y="20" width="110" height="120"/><text class="pl" x="75" y="84" text-anchor="middle">A1</text><rect class="pc" x="20" y="160" width="110" height="120"/><text class="pl" x="75" y="224" text-anchor="middle">A2</text><rect class="pc" x="145" y="20" width="50" height="50"/><text class="pl" x="170" y="49" text-anchor="middle">B</text></svg></div>
-        <div class="page"><svg viewBox="0 0 210 297"><rect class="pc" x="20" y="20" width="90" height="120"/><text class="pl" x="65" y="84" text-anchor="middle">A3</text><path class="pc" d="M125 20h40c30 0 30 70 0 70h-40v-18h38c10 0 10-34 0-34h-38z"/><text class="pl" x="150" y="110" text-anchor="middle">C</text></svg></div>
-      </div></div>
-    </div>
-  </div>
-  </div>
+  <div class="view-pane" id="vApp" hidden><div class="frames"><div class="frame wide"><div class="pv apv" id="appBody"></div></div></div></div>
 </main>
 <div class="fpop" id="fpop" hidden role="dialog" aria-label="Choose a font"><input id="fq" placeholder="Search Google Fonts" autocomplete="off" spellcheck="false"><div class="flist" id="flist" role="listbox"></div><label class="fup"><svg viewBox="0 0 16 16"><path d="M8 11V2.5M4.5 6L8 2.5 11.5 6M2.5 11v2.5h11V11"/></svg>Upload a font file (.woff2, .ttf, .otf)<input type="file" id="ffile" accept=".woff2,.woff,.ttf,.otf" hidden></label></div>
 <div class="xmod" id="xmod" hidden role="dialog" aria-modal="true" aria-labelledby="xTitle">
@@ -1327,8 +1263,8 @@ const rem=px=>+(px/16).toFixed(4)+'rem';
 const qUnit=px=>Math.max(UNIT_MIN,Math.min(UNIT_MAX,Math.round(px))), pxs=v=>+v.toFixed(2)+'px';
 // The app's colours today, kept exact for the Current preset.
 const CURRENT={
- light:{paper:'#eceff3',sheet:'#fbfcfd',ink:'#1a2b3c',muted:'#5f6d7c',rule:'#d5dce4',grid:'#e7ecf1','grid-major':'#d0d8e1',axis:'#9aa8b7',accent:'#0b5fd0','accent-strong':'#084aa3','on-accent':'#ffffff',pencil:'#6f757d',fill:'rgba(26,43,60,.05)','fill-sel':'rgba(11,95,208,.10)',hover:'rgba(26,43,60,.06)',danger:'#b4400f',cut:'#d9480f',clay:'#d6b19a'},
- dark:{paper:'#0d131b',sheet:'#121a24',ink:'#dce6f1',muted:'#8d9bab',rule:'#243243',grid:'#18222e','grid-major':'#223042',axis:'#3e5068',accent:'#5ea3ff','accent-strong':'#86baff','on-accent':'#06182f',pencil:'#a3adb8',fill:'rgba(220,230,241,.05)','fill-sel':'rgba(94,163,255,.14)',hover:'rgba(220,230,241,.07)',danger:'#f08a5d',cut:'#ff8a4c',clay:'#a9806a'}
+ light:{paper:'#eceff3',sheet:'#fbfcfd',ink:'#1a2b3c',muted:'#5f6d7c',rule:'#d5dce4',grid:'#e7ecf1','grid-major':'#d0d8e1',axis:'#9aa8b7',accent:'#0b5fd0','accent-strong':'#084aa3','on-accent':'#ffffff',pencil:'#6f757d',fill:'rgba(26,43,60,.05)','fill-sel':'rgba(11,95,208,.10)',hover:'rgba(26,43,60,.06)',danger:'#b4400f'},
+ dark:{paper:'#0d131b',sheet:'#121a24',ink:'#dce6f1',muted:'#8d9bab',rule:'#243243',grid:'#18222e','grid-major':'#223042',axis:'#3e5068',accent:'#5ea3ff','accent-strong':'#86baff','on-accent':'#06182f',pencil:'#a3adb8',fill:'rgba(220,230,241,.05)','fill-sel':'rgba(94,163,255,.14)',hover:'rgba(220,230,241,.07)',danger:'#f08a5d'}
 };
 const TW={"red":[[0.971,0.013,17.4],[0.936,0.032,17.7],[0.885,0.062,18.3],[0.808,0.114,19.6],[0.704,0.191,22.2],[0.637,0.237,25.3],[0.577,0.245,27.3],[0.505,0.213,27.5],[0.444,0.177,26.9],[0.396,0.141,25.7],[0.258,0.092,26.0]],"orange":[[0.98,0.016,73.7],[0.954,0.038,75.2],[0.901,0.076,70.7],[0.837,0.128,66.3],[0.75,0.183,55.9],[0.705,0.213,47.6],[0.646,0.222,41.1],[0.553,0.195,38.4],[0.47,0.157,37.3],[0.408,0.123,38.2],[0.266,0.079,36.3]],"amber":[[0.987,0.022,95.3],[0.962,0.059,95.6],[0.924,0.12,95.7],[0.879,0.169,91.6],[0.828,0.189,84.4],[0.769,0.188,70.1],[0.666,0.179,58.3],[0.555,0.163,49.0],[0.473,0.137,46.2],[0.414,0.112,45.9],[0.279,0.077,45.6]],"yellow":[[0.987,0.026,102.2],[0.973,0.071,103.2],[0.945,0.129,101.5],[0.905,0.182,98.1],[0.852,0.199,91.9],[0.795,0.184,86.0],[0.681,0.162,75.8],[0.554,0.135,66.4],[0.476,0.114,61.9],[0.421,0.095,57.7],[0.286,0.066,53.8]],"lime":[[0.986,0.031,120.8],[0.967,0.067,122.3],[0.938,0.127,124.3],[0.897,0.196,126.7],[0.841,0.238,128.8],[0.768,0.233,130.8],[0.648,0.2,131.7],[0.532,0.157,131.6],[0.453,0.124,130.9],[0.405,0.101,131.1],[0.274,0.072,132.1]],"green":[[0.982,0.018,155.8],[0.962,0.044,156.7],[0.925,0.084,156.0],[0.871,0.15,154.4],[0.792,0.209,151.7],[0.723,0.219,149.6],[0.627,0.194,149.2],[0.527,0.154,150.1],[0.448,0.119,151.3],[0.393,0.095,152.5],[0.266,0.065,152.9]],"emerald":[[0.979,0.021,166.1],[0.95,0.052,163.1],[0.905,0.093,164.2],[0.845,0.143,165.0],[0.765,0.177,163.2],[0.696,0.17,162.5],[0.596,0.145,163.2],[0.508,0.118,165.6],[0.432,0.095,166.9],[0.378,0.077,168.9],[0.262,0.051,172.6]],"teal":[[0.984,0.014,180.7],[0.953,0.051,180.8],[0.91,0.096,180.4],[0.855,0.138,181.1],[0.777,0.152,181.9],[0.704,0.14,182.5],[0.6,0.118,184.7],[0.511,0.096,186.4],[0.437,0.078,188.2],[0.386,0.063,188.4],[0.277,0.046,192.5]],"cyan":[[0.984,0.019,200.9],[0.956,0.045,203.4],[0.917,0.08,205.0],[0.865,0.127,207.1],[0.789,0.154,211.5],[0.715,0.143,215.2],[0.609,0.126,221.7],[0.52,0.105,223.1],[0.45,0.085,224.3],[0.398,0.07,227.4],[0.302,0.056,229.7]],"sky":[[0.977,0.013,236.6],[0.951,0.026,236.8],[0.901,0.058,230.9],[0.828,0.111,230.3],[0.746,0.16,232.7],[0.685,0.169,237.3],[0.588,0.158,242.0],[0.5,0.134,242.7],[0.443,0.11,240.8],[0.391,0.09,240.9],[0.293,0.066,243.2]],"blue":[[0.97,0.014,254.6],[0.932,0.032,255.6],[0.882,0.059,254.1],[0.809,0.105,251.8],[0.707,0.165,254.6],[0.623,0.214,259.8],[0.546,0.245,262.9],[0.488,0.243,264.4],[0.424,0.199,265.6],[0.379,0.146,265.5],[0.282,0.091,267.9]],"indigo":[[0.962,0.018,272.3],[0.93,0.034,272.8],[0.87,0.065,274.0],[0.785,0.115,274.7],[0.673,0.182,276.9],[0.585,0.233,277.1],[0.511,0.262,277.0],[0.457,0.24,277.0],[0.398,0.195,277.4],[0.359,0.144,278.7],[0.257,0.09,281.3]],"violet":[[0.969,0.016,293.8],[0.943,0.029,294.6],[0.894,0.057,293.3],[0.811,0.111,293.6],[0.702,0.183,293.5],[0.606,0.25,292.7],[0.541,0.281,293.0],[0.491,0.27,292.6],[0.432,0.232,292.8],[0.38,0.189,293.7],[0.283,0.141,291.1]],"purple":[[0.977,0.014,308.3],[0.946,0.033,307.2],[0.902,0.063,306.7],[0.827,0.119,306.4],[0.714,0.203,305.5],[0.627,0.265,303.9],[0.558,0.288,302.3],[0.496,0.265,301.9],[0.438,0.218,303.7],[0.381,0.176,305.0],[0.291,0.149,302.7]],"fuchsia":[[0.977,0.017,320.1],[0.952,0.037,318.9],[0.903,0.076,319.6],[0.833,0.145,321.4],[0.74,0.238,322.2],[0.667,0.295,322.1],[0.591,0.293,322.9],[0.518,0.253,323.9],[0.452,0.211,324.6],[0.401,0.17,325.6],[0.293,0.136,325.7]],"pink":[[0.971,0.014,343.2],[0.948,0.028,342.3],[0.899,0.061,343.2],[0.823,0.12,346.0],[0.718,0.202,349.8],[0.656,0.241,354.3],[0.592,0.249,0.6],[0.525,0.223,4.0],[0.459,0.187,3.8],[0.408,0.153,2.4],[0.284,0.109,3.9]],"rose":[[0.969,0.015,12.4],[0.941,0.03,12.6],[0.892,0.058,10.0],[0.81,0.117,11.6],[0.712,0.194,13.4],[0.645,0.246,16.4],[0.586,0.253,17.6],[0.514,0.222,16.9],[0.455,0.188,13.7],[0.41,0.159,10.3],[0.271,0.105,12.1]]};
 const FAMS=Object.keys(TW);
@@ -1369,7 +1305,7 @@ const PRESETS=[
  {id:'current',sup:'analogous',supFam:null,name:'Default',desc:'Stylist’s default palette',ui:'Schibsted Grotesk',mono:'IBM Plex Mono',fam:'blue',sat:100,warm:22,radius:8,pill:false,dens:'default',unit:4,h:{xs:6,sm:7,md:9,lg:11},focus:{shape:'ring',w:2,off:2,str:100},icons:{set:'lucide',stroke:2,weight:'regular'},tint:0,shStr:50,shSoft:50,sh:{color:null,op:8,blur:3,spread:0,x:0,y:1.5},motion:{fast:{d:80,b:0},moderate:{d:160,b:0},slow:{d:240,b:12},exit:75,reduced:'fade'},exact:CURRENT},
  {id:'warm',sup:'split',supFam:null,name:'Warm paper',desc:'Sketchbook cream, emerald',fam:'emerald',sat:100,warm:88},
  {id:'ink',sup:'analogous',supFam:null,name:'Ink',desc:'Near-monochrome, quiet',fam:'blue',sat:22,warm:50},
- {id:'kiln',sup:'split',supFam:null,name:'Kiln',desc:'Warm greys, teal',fam:'teal',sat:100,warm:70}
+ {id:'kiln',sup:'split',supFam:null,name:'Teal',desc:'Warm greys, teal',fam:'teal',sat:100,warm:70}
 ];
 const KEYS=['fam','sat','warm','sup','supFam']; // a colour theme sets only these; fonts, corners and density stay as you set them
 let S={...PRESETS[0]},mode='light';
@@ -1385,23 +1321,12 @@ const FRAMEWORK_NOTES={2:'container tint and shadows',3:'control heights and foc
 // Exports keep each old name pointing to the new one, so app code written for an older version keeps working;
 // export.py lists where the app's code still uses an old name. Remove an entry only in a new major version.
 const TOKEN_RENAMES=[];
-const RESERVED=['grid','grid-major','axis','pencil','fill','cut','clay']; // were Blueprint tokens inside the core; now they live in Blueprint's app layer
-const BP_TOKENS={grid:{ref:'gray-3'},'grid-major':{ref:'gray-5'},axis:{ref:'gray-8'},pencil:{ref:'gray-10'},fill:{ref:'ink',pct:5},
-  cut:{light:'#d9480f',dark:'#ff8a4c'},clay:{light:'#d6b19a',dark:'#a9806a'}};
-const BP_COMPS=[
- {name:'Canvas view',html:'<div class="cv"><span class="vl">FRONT</span><svg viewBox="0 0 300 160"><path class="ax" d="M0 140H300M80 0V160"/><rect class="sel" x="40" y="35" width="110" height="105"/><circle class="hole" cx="95" cy="88" r="22"/><circle class="jt" cx="40" cy="35" r="3.5"/><circle class="jt" cx="150" cy="35" r="3.5"/><circle class="jt" cx="150" cy="140" r="3.5"/><circle class="jt" cx="40" cy="140" r="3.5"/><text class="dim" x="95" y="27" text-anchor="middle">110</text></svg></div>',
-  css:'.cv{position:relative;height:180px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:inset 0 0 0 1px var(--rule);background-color:var(--sheet);background-image:linear-gradient(var(--grid-major) 1px,transparent 1px),linear-gradient(90deg,var(--grid-major) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:50px 50px,50px 50px,10px 10px,10px 10px}.cv svg{position:absolute;inset:0;width:100%;height:100%;fill:none}.vl{position:absolute;top:8px;left:8px;z-index:1;font:600 11px var(--font-mono);letter-spacing:.08em;color:var(--muted);background:var(--sheet);padding:2px 7px;border-radius:var(--radius-md);box-shadow:0 0 0 1px var(--rule)}.ax{stroke:var(--axis)}.sel{fill:var(--fill-sel);stroke:var(--accent-line);stroke-width:1.5}.hole{stroke:var(--cut);stroke-width:1.5;stroke-dasharray:4 3}.jt{fill:var(--sheet);stroke:var(--accent-line);stroke-width:1.5}.dim{font:600 11px var(--font-mono);fill:var(--accent-text)}'},
- {name:'Sketch',html:'<div class="sk"><svg viewBox="0 0 200 120"><path class="shape" d="M50 100V25h70v75z"/><path class="stroke" d="M128 35c26 8 38 38 26 66"/></svg><small>Shape fill · pencil stroke</small></div>',
-  css:'.sk{display:grid;gap:6px;justify-items:center;padding:12px;background:var(--sheet);border-radius:var(--radius-lg);box-shadow:inset 0 0 0 1px var(--rule)}.sk svg{width:100%;height:120px;fill:none}.shape{fill:var(--fill);stroke:var(--ink);stroke-width:1.5}.stroke{stroke:var(--pencil);stroke-width:1.5;stroke-linecap:round}small{font-size:12px;color:var(--muted)}'},
- {name:'3D model',html:'<div class="m3"><span class="tag">3D</span><svg viewBox="0 0 160 130"><path class="f2" d="M40 30l40-18 40 18v70l-40 18-40-18z"/><path class="f1" d="M40 30l40 18v70l-40-18z"/><path class="f3" d="M80 48l40-18v70l-40 18z"/></svg></div>',
-  css:'.m3{position:relative;display:grid;place-items:center;height:150px;background:var(--paper);border-radius:var(--radius-lg)}.m3 svg{height:120px}.f1{fill:var(--clay)}.f2{fill:var(--clay);filter:brightness(.82)}.f3{fill:var(--clay);filter:brightness(1.1)}.tag{position:absolute;top:8px;left:8px;font:600 11px var(--font-mono);letter-spacing:.08em;color:var(--muted)}'},
- {name:'Title bar',html:'<div class="bb"><b class="bp-logo">Your app</b><span class="sep">/</span><span class="nm">Pitcher vase</span><i></i><span class="unit">MM</span></div>',
-  css:'.bb{display:inline-flex;align-items:center;gap:8px;height:var(--bar);padding:0 12px;background:var(--sheet);border-radius:var(--radius-lg);box-shadow:0 0 0 1px var(--rule)}.bb b{font-weight:600}.sep{color:var(--rule)}.nm{color:var(--muted)}.bb i{width:6px;height:6px;border-radius:50%;background:var(--accent)}.unit{font:500 11px var(--font-mono);letter-spacing:.07em;color:var(--muted);border:1px solid var(--rule);border-radius:var(--radius-sm);padding:2px 6px}'}
-];
-const appDefault=()=>({brand:{},name:'Your app',target:'css',tokens:JSON.parse(JSON.stringify(BP_TOKENS)),components:JSON.parse(JSON.stringify(BP_COMPS)),
-  pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'Built-in setup'});
+const RESERVED=['grid','grid-major','axis','pencil','fill','cut','clay']; // never core tokens: names an app may define in its own app tokens
+// a fresh start: no app loaded yet, so no app tokens or components until one is opened (Open from GitHub, Open app style…)
+const appDefault=()=>({brand:{},name:'Your app',target:'css',tokens:{},components:[],
+  pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'No app loaded'});
 let APP=appDefault();
-try{const a=JSON.parse(localStorage.getItem('stylist.app.v1')||'null');if(a)APP={...APP,...a,pins:{light:{},dark:{},...(a.pins||{})}};if(APP.name==='Blueprint')APP.name='Your app';if(APP.brand&&APP.brand.mark){mergeMark(APP.brand);mergeMark(APP.brandBase)}}catch(e){}
+try{const a=JSON.parse(localStorage.getItem('stylist.app.v1')||'null');if(a)APP={...APP,...a,pins:{light:{},dark:{},...(a.pins||{})}};if(APP.name==='Blueprint')APP.name='Your app';if(/^Built-in/.test(APP.source||'')){APP.tokens={};APP.components=[];APP.source='No app loaded'} /* the old built-in setup was Cast's: drop it unless an app was opened */if(APP.brand&&APP.brand.mark){mergeMark(APP.brand);mergeMark(APP.brandBase)}}catch(e){}
 if(APP.target==='tw')APP.target='css'; // Tailwind as a target was retired; files made for it open as Plain CSS
 const saveApp=()=>{try{localStorage.setItem('stylist.app.v1',JSON.stringify(APP))}catch(e){toast('Too big to remember after a reload')}};
 // names in each target: shadcn renames some core tokens; Stylist-only tokens get a stylist- prefix there
@@ -1490,7 +1415,7 @@ function deriveRaw(m){
   const roles=D?{paper:G(1),sheet:G(2),hover:G(4)}:{paper:G(2),sheet:G(1),hover:G(3)};
   return {...roles,ink,muted:G(11),rule:G(6),grid:G(3),'grid-major':G(5),axis:G(8),pencil:G(10),
     accent:A(9),'accent-strong':A(10),'on-accent':a.on,'fill-sel':A(3),'accent-text':A(11),'accent-line':a.line,...support,
-    fill:ok(g.L[11],g.C*1.6,Math.round(g.h),.05),danger:D?'#f08a5d':'#b4400f',cut:D?'#ff8a4c':'#d9480f',clay:D?'#a9806a':'#d6b19a',...scales};
+    fill:ok(g.L[11],g.C*1.6,Math.round(g.h),.05),danger:D?'#f08a5d':'#b4400f',...scales};
 }
 function apply(){
   const c=derive(mode),r=radiusScale(),d=DENS[S.dens],hp=effHpx(),fo=effFocus();
@@ -1547,6 +1472,7 @@ function apply(){
   const p=preset(),edited=p&&KEYS.some(k=>S[k]!==p[k]);
   if(typeof renderTokens==='function')renderTokens();
   if(typeof renderCustom==='function')renderCustom();
+  if(typeof renderAppPreview==='function'&&!$('vApp').hidden)renderAppPreview();
   try{localStorage.setItem('stylist.style.v1',JSON.stringify(S))}catch(e){}
 }
 function setupText(d){ // short: a request line, the settings (compact) and any changed logos; the steps live in APPLY.md
@@ -1660,7 +1586,7 @@ $('reset').onclick=()=>{S={...PRESETS[0]};apply();libClose();toast('Back to the 
 $('views').onclick=e=>{const b=e.target.closest('button');if(!b)return;$('views').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
   showView(b.dataset.v)};
 function showView(v){$('views').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===v));
-  $('vComp').hidden=v!=='comp';$('vApp').hidden=v!=='app';$('vTok').hidden=v!=='tok';$('vCus').hidden=v!=='cus';$('vBrand').hidden=v!=='brand';$('vMot').hidden=v!=='mot';renderTokens();renderCustom();renderBrand();renderMotion();requestAnimationFrame(()=>placeInds(true))}
+  $('vComp').hidden=v!=='comp';$('vApp').hidden=v!=='app';if(v==='app'&&typeof renderAppPreview==='function')renderAppPreview();$('vTok').hidden=v!=='tok';$('vCus').hidden=v!=='cus';$('vBrand').hidden=v!=='brand';$('vMot').hidden=v!=='mot';renderTokens();renderCustom();renderBrand();renderMotion();requestAnimationFrame(()=>placeInds(true))}
 // gallery: tabs and segmented controls respond to clicks
 function slideInd(c,instant){const ind=c.querySelector(':scope>.seg-ind,:scope>.tab-ind'),b=c.querySelector(':scope>[aria-pressed="true"],:scope>[aria-selected="true"]');if(!ind)return;
   if(!b||!b.offsetWidth){ind.style.opacity=0;return}if(instant){ind.style.transition='none'}ind.style.opacity=1;ind.style.width=b.offsetWidth+'px';ind.style.transform=`translateX(${b.offsetLeft}px)`;if(instant){ind.offsetWidth;ind.style.transition=''}}
@@ -1670,8 +1596,7 @@ document.querySelectorAll('.k-tabs').forEach(t=>t.onclick=e=>{const b=e.target.c
 document.querySelectorAll('.k-seg').forEach(t=>t.onclick=e=>{const b=e.target.closest('button');if(b){t.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));slideInd(t)}});
 // ---- Tokens view: a read-only picture of every token, live ----
 const CORE=['paper','sheet','ink','muted','rule','hover','accent','accent-strong','on-accent','fill-sel','accent-text','accent-line','support','support-strong','on-support','support-soft','support-text','danger'];
-const APPT=['grid','grid-major','axis','pencil','fill','cut','clay'];
-const LABEL={paper:'Background',sheet:'Surface',ink:'Text',muted:'Muted text',rule:'Border',accent:'Accent','accent-strong':'Accent hover','on-accent':'On accent','fill-sel':'Selected','hover':'Hover','accent-text':'Accent text','accent-line':'Accent line',support:'Support','support-strong':'Support hover','on-support':'On support','support-soft':'Support soft','support-text':'Support text',danger:'Danger',grid:'Grid','grid-major':'Grid major',axis:'Axis',pencil:'Pencil',fill:'Shape fill',cut:'Hole',clay:'Clay 3D'};
+const LABEL={paper:'Background',sheet:'Surface',ink:'Text',muted:'Muted text',rule:'Border',accent:'Accent','accent-strong':'Accent hover','on-accent':'On accent','fill-sel':'Selected','hover':'Hover','accent-text':'Accent text','accent-line':'Accent line',support:'Support','support-strong':'Support hover','on-support':'On support','support-soft':'Support soft','support-text':'Support text',danger:'Danger'};
 const short=v=>v.replace(/oklch\(([\d.]+) ([\d.]+) ([\d.]+)( \/ ([\d.]+))?\)/,(m,l,c,h,_,a)=>`oklch ${(+l*100).toFixed(0)}% ${(+c).toFixed(3)} ${(+h).toFixed(0)}${a?' /'+a:''}`);
 function renderTokens(){
   const t=tokens(),el=$('tokBody');if(!el||$('vTok').hidden)return;
@@ -1706,7 +1631,7 @@ function renderTokens(){
      <div class="t-fams"><div><span class="t-aa" style="font-family:var(--font-ui)">Aa</span><b>${S.ui}</b><small>Interface · --font-ui</small></div><div><span class="t-aa" style="font-family:var(--font-mono)">01</span><b>${S.mono}</b><small>Numbers &amp; labels · --font-mono</small></div></div>
      <div class="t-tys">${type}</div>
      <div class="t-sub" style="margin-top:14px">Letter spacing · Tracking ${t.track.base}em on all text · the steps follow it</div>
-     <div class="t-trs">${TK.map(k=>`<div class="t-tr"><span class="t-tn"><b>${k[0].toUpperCase()+k.slice(1)}</b><small>--tracking-${k} · ${t.track[k]}em</small></span><span style="letter-spacing:var(--tracking-${k});font:600 ${DENS[S.dens].fs+5}px/1.3 var(--font-ui)">Pitcher vase</span><span style="letter-spacing:var(--tracking-${k});font:600 11px var(--font-mono);text-transform:uppercase;color:var(--muted)">Front W × H</span></div>`).join('')}</div></div>
+     <div class="t-trs">${TK.map(k=>`<div class="t-tr"><span class="t-tn"><b>${k[0].toUpperCase()+k.slice(1)}</b><small>--tracking-${k} · ${t.track[k]}em</small></span><span style="letter-spacing:var(--tracking-${k});font:600 ${DENS[S.dens].fs+5}px/1.3 var(--font-ui)">Spring campaign</span><span style="letter-spacing:var(--tracking-${k});font:600 11px var(--font-mono);text-transform:uppercase;color:var(--muted)">Front W × H</span></div>`).join('')}</div></div>
    <div class="k-card t-card"><div class="blk-h"><div><h4>Shadows</h4></div></div>
      <div class="t-shs">${[['inset','Inset','Inputs, wells'],['raised','Raised','Cards, bars, panels'],['floating','Floating','Menus, popovers, toasts'],['overlay','Overlay','Dialogs']].map(([k,l,j])=>`<div class="t-sh"><span style="box-shadow:var(--shadow-${k})"></span><b>${l}</b><code>--shadow-${k}</code><small>${j}</small></div>`).join('')}</div></div>
    <div class="t-cols three">
@@ -1722,7 +1647,7 @@ function tokens(){const d=DENS[S.dens];
     radius:radiusScale(),nest:nestScale(),motion:motionTokens(),round:S.pill?'9999px':'0px',
     size:{bar:barOf(),control:hPx().md,inset:d.inset,gap:2*unitOf(),text:d.fs,'card-padding':stOf(S.dens).pad*unitOf()},unit:unitOf(),controls:hPx(),focus:focusOf(),icons:iconOf(),track:trackOf(),
     space:Object.fromEntries(SPACE.map(n=>[n,+(n*unitOf()).toFixed(2)])),
-    type:[{name:'Title',size:d.fs,weight:600,sample:'Overview'},{name:'Heading',size:d.fs+1,weight:600,sample:'Save changes?'},{name:'Body',size:d.fs,weight:400,sample:'Sketch the shape in three views.'},{name:'Body strong',size:d.fs,weight:500,sample:'Pitcher vase'},{name:'Small',size:d.fs-1,weight:400,sample:'Latest changes are not saved.'},{name:'Caption',size:d.fs-2,weight:400,sample:'Hidden depth for new pieces'},{name:'Label',size:11,weight:600,mono:true,upper:true,sample:'Front  W × H'},{name:'Number',size:12,weight:400,mono:true,sample:'100 × 105 × 60'}]}}
+    type:[{name:'Title',size:d.fs,weight:600,sample:'Overview'},{name:'Heading',size:d.fs+1,weight:600,sample:'Save changes?'},{name:'Body',size:d.fs,weight:400,sample:'Sketch the shape in three views.'},{name:'Body strong',size:d.fs,weight:500,sample:'Spring campaign'},{name:'Small',size:d.fs-1,weight:400,sample:'Latest changes are not saved.'},{name:'Caption',size:d.fs-2,weight:400,sample:'Hidden depth for new pieces'},{name:'Label',size:11,weight:600,mono:true,upper:true,sample:'Front  W × H'},{name:'Number',size:12,weight:400,mono:true,sample:'100 × 105 × 60'}]}}
 const fontNote=()=>{const g=[S.ui,S.mono].filter((n,i,a)=>!custom[n]&&a.indexOf(n)===i);return g.length?`/* Fonts: https://fonts.google.com/share?selection.family=${g.map(n=>n.replace(/ /g,'+')).join('|')} */\n`:''};
 // shadcn uses Tailwind's 8 shadow sizes: Stylist's levels land on sm, lg and 2xl, the rest are filled in between
 function shadcnShadows(c,M){const D=M==='dark',g=grayScale(D),at=e=>shadowAt(e,D,g);
@@ -2016,14 +1941,22 @@ function refOptions(sel){const c=derive('light'),role=CORE.filter(n=>n in c),grp
 function compBrand(h){h=h.replace(/<b>Blueprint<\/b>/g,'<b class="bp-logo"></b>');const a=brandOf('logo',mode);
   const inner=a?`<img src="${svgSrc(a.svg)}" alt="${escH(APP.name)}" style="height:18px;width:auto;display:block">`:escH(APP.name);
   return h.replace(/(<([a-z][a-z0-9]*)\b[^>]*class="[^"]*\bbp-logo\b[^"]*"[^>]*>)[\s\S]*?(<\/\2>)/g,(m,o,t,c)=>o+inner+c)}
+// the variables the exported files give the app (core + app tokens, current mode), as the app itself would see them
+function themeVars(tg){const p=parseCSS(coreCSS(tg)+'\n'+appCSS(tg)),tv={...p.light,...(mode==='dark'?p.dark:{})};
+  if(tg==='radix'){const {a}=radixNames();for(let i=1;i<=12;i++){tv['accent-'+i]=tv[a+'-'+i];tv['accent-a'+i]=tv[a+'-a'+i]}
+    const f=parseFloat(tv['radius-factor'])||0;[3,4,6,8,12,16].forEach((b,i)=>tv['radius-'+(i+1)]=+(b*f).toFixed(2)+'px')}
+  return tv}
+// one app component in its own shadow root, themed with exactly those variables
+function mountComp(host,c,tv){for(const k in tv)host.style.setProperty('--'+k,tv[k]);
+  const sr=host.shadowRoot||host.attachShadow({mode:'open'});sr.innerHTML=`<style>:host{display:block;color:var(--ink,var(--foreground));font:14px/1.45 var(--font-ui,var(--font-sans,system-ui))}${c.css}</style>${compBrand(c.html)}`}
 function renderCustom(){
   const el=$('cusBody');if(!el||$('vCus').hidden)return;
   const t=tokens(),T=APP.tokens,tg=APP.target,R=APP.review||[],sw=v=>isColor(v)?`<span class="c-sw" style="background:${escH(v)}"></span>`:'';
-  let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||'').replace(/^Built-in .+ setup$/,'Built-in setup'))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
+  let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||''))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
     <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn" data-act="open">Open app style…</button><button class="k-btn" data-act="gh">Open from GitHub…</button><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
     <div class="k-row" style="gap:20px;align-items:flex-end"><label class="k-field">App name<input class="k-input" data-f="name" value="${escH(APP.name)}"></label>
     <div class="k-field" style="width:auto">Exports to<div class="k-seg" data-f="target">${Object.entries(TGT).map(([k,v])=>`<button data-v="${k}" aria-pressed="${k===tg}">${v}</button>`).join('')}</div></div>
-    <button class="k-btn ghost sm" data-act="reset" style="margin-left:auto">Back to built-in setup</button></div>
+    <button class="k-btn ghost sm" data-act="reset" style="margin-left:auto">Start over, no app</button></div>
     <div class="c-drop">Drop the app’s files here: stylist.json, stylist-theme.css, app-tokens.css, components.json, and brand SVGs (logo, mark, favicon)</div></div>`;
   // changes + pins
   const pins=[];for(const m of ['light','dark'])for(const k in APP.pins[m]||{})pins.push({m,k,v:APP.pins[m][k]});
@@ -2067,11 +2000,8 @@ function renderCustom(){
     ${log.length?`<ol class="c-log">${log.map(e=>`<li><time>${escH(e.date)}</time><div><code>${escH(e.token)}</code> · ${escH(e.mode||'')} · <b>${escH(e.action)}</b>${e.from!=null||e.to!=null?` · ${escH(short(String(e.from??'–')))} → ${escH(short(String(e.to??'–')))}`:''}${e.note?`<small>${escH(e.note)}</small>`:''}${e.reason?`<small>Why: ${escH(e.reason)}</small>`:''}</div></li>`).join('')}</ol>`:'<p class="c-empty">Nothing yet.</p>'}</div>`;
   el.innerHTML=h;
   // mount components in their own shadow roots, themed exactly as the exported files would theme the app
-  const p=parseCSS(coreCSS(tg)+'\n'+appCSS(tg)),tv={...p.light,...(mode==='dark'?p.dark:{})};
-  if(tg==='radix'){const {a}=radixNames();for(let i=1;i<=12;i++){tv['accent-'+i]=tv[a+'-'+i];tv['accent-a'+i]=tv[a+'-a'+i]}
-    const f=parseFloat(tv['radius-factor'])||0;[3,4,6,8,12,16].forEach((b,i)=>tv['radius-'+(i+1)]=+(b*f).toFixed(2)+'px')}
-  el.querySelectorAll('.c-host').forEach(host=>{const c=APP.components[+host.dataset.ci];for(const k in tv)host.style.setProperty('--'+k,tv[k]);
-    const sr=host.attachShadow({mode:'open'});sr.innerHTML=`<style>:host{display:block;color:var(--ink,var(--foreground));font:14px/1.45 var(--font-ui,var(--font-sans,system-ui))}${c.css}</style>${compBrand(c.html)}`;
+  const tv=themeVars(tg);
+  el.querySelectorAll('.c-host').forEach(host=>{const c=APP.components[+host.dataset.ci];mountComp(host,c,tv);
     // tokens the snippet uses that this target's files don't define: they'd be missing in the real app too
     const miss=[...new Set([...(c.html+' '+c.css).matchAll(/var\(--([\w-]+)/g)].map(m=>m[1]))].filter(v=>tv[v]==null);
     if(miss.length){const d=document.createElement('p');d.className='c-miss';d.innerHTML=`Not defined for ${TGT[tg]}: ${miss.map(v=>`<code>--${escH(v)}</code>`).join(' ')}. Rename them to this target’s tokens, or add them as app tokens.`;host.after(d)}});
@@ -2082,7 +2012,7 @@ cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return
   if(a==='open')$('appFiles').click();
   if(a==='gh')openGh();
   else if(a==='pkg')openPkg();
-  else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Back to the built-in setup')}
+  else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Started over: no app loaded')}
   else if(a==='addtok'){const n=$('newTok').value.trim().replace(/^--/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
     if(!n){toast('Give the token a name');return}if(APP.tokens[n]){toast(`--${n} already exists`);return}
     if(coreNames().includes(n)){toast(`--${n} is a core token. Pick another name`);return}
@@ -2321,11 +2251,11 @@ function renderBrand(){renderBrandSlots();
     <div class="b-row"><div class="b-rl"><b>Avatars</b><small>The symbol as the app’s avatar, in lists and menus</small></div>
       <div class="b-rv">${HK.map(k=>{const z=effHpx()[k];return `<figure><span class="av${mFull()?'':' sym'}" style="width:${z}px;height:${z}px">${mark(mFull()?z:Math.round(z*.62))}</span><figcaption>${k} · ${z}px</figcaption></figure>`}).join('')}</div></div>
     <div class="b-row"><div class="b-rl"><b>Header bar</b><small>The logo in the title bar: ${Math.round(effHpx().sm*.7)}px tall in a ${effBar()}px bar</small></div>
-      <div class="b-rv"><span class="hbar" style="height:${effBar()}px">${logo(Math.round(effHpx().sm*.7))}<span class="hnav"><b>Overview</b><span>Drawings</span><span>Settings</span></span></span></div></div>
+      <div class="b-rv"><span class="hbar" style="height:${effBar()}px">${logo(Math.round(effHpx().sm*.7))}<span class="hnav"><b>Overview</b><span>Projects</span><span>Settings</span></span></span></div></div>
   </div>${brandFitNote()?`<div class="b-lab">${brandFitNote().replace(/^ · /,'')}</div>`:''}</div>
   <h3>In context</h3>
-  <div class="b-card"><div class="b-hdr"><span class="lg">${logo(20)}</span><nav><b>Overview</b><span>Drawings</span><span>Patterns</span><span>Settings</span></nav><span class="sp"></span><span class="k-av sm">GA</span></div>
-    <div class="b-page">${mark(40)}<h4>Pitcher vase</h4></div><div class="b-lab">Header</div></div>
+  <div class="b-card"><div class="b-hdr"><span class="lg">${logo(20)}</span><nav><b>Overview</b><span>Projects</span><span>Reports</span><span>Settings</span></nav><span class="sp"></span><span class="k-av sm">GA</span></div>
+    <div class="b-page">${mark(40)}<h4>Spring campaign</h4></div><div class="b-lab">Header</div></div>
   <div class="b-card"><div class="b-sign"><div class="k-card"><span class="mk">${mark(44)}</span><h4>Sign in to ${escH(APP.name)}</h4>
     <label class="k-field" style="width:auto">Email<input class="k-input" value="gab@studio.com"></label><button class="k-btn pri">Sign in</button></div></div><div class="b-lab">Sign in</div></div>
   <div class="b-card"><div class="b-tabs"><span class="b-tab on"><span class="fv">${img('favicon')||'<i></i>'}</span>${escH(APP.name)}: Overview</span><span class="b-tab"><span class="fv"><i></i></span>Docs</span></div>
@@ -2375,7 +2305,7 @@ function renderMotion(){const el=$('motBody');if(!el||$('vMot').hidden)return;co
     el.innerHTML=`<div class="m-bar"><button class="k-btn" id="mReplay">Replay</button><label class="k-chk"><input type="checkbox" class="k-check" id="mSlow"> Slow motion ×5</label><label class="k-chk"><input type="checkbox" class="k-check" id="mRedPrev"> Preview reduced motion</label><span class="sp"></span></div>
     <h3>Springs</h3><div class="m-card"><div class="m-curves">${MK.map(k=>`<div class="m-cv" data-k="${k}"><b>${k[0].toUpperCase()+k.slice(1)}</b><small>${MJOB[k]}</small><div class="cv"></div><code></code></div>`).join('')}</div></div>
     <h3>In use</h3><div class="m-demos">
-      <div class="m-card m-demo"><b>Hover highlight</b><small>Fast · one highlight glides to the nearest row</small><div class="m-list" id="mList"><span class="m-hl" id="mHl"></span>${['Pitcher vase','Planter','Lidded box','Tumbler','Bowl'].map(n=>`<div class="it">${n}</div>`).join('')}</div></div>
+      <div class="m-card m-demo"><b>Hover highlight</b><small>Fast · one highlight glides to the nearest row</small><div class="m-list" id="mList"><span class="m-hl" id="mHl"></span>${['Spring campaign','Onboarding','Pricing page','Q3 report','Brand refresh'].map(n=>`<div class="it">${n}</div>`).join('')}</div></div>
       <div class="m-card m-demo"><b>Tabs and switch</b><small>Moderate · indicators and toggles</small><div class="m-tabs" id="mTabs"><span class="m-ind" id="mInd"></span><button aria-selected="true">Front</button><button>Side</button><button>Top</button></div>
         <div class="m-sw" style="margin-top:16px"><input type="checkbox" class="k-switch" id="mSw" checked> Number the pieces</div></div>
       <div class="m-card m-demo"><b>Dropdown</b><small>Moderate in · quicker exit out</small><div class="m-ddw"><button class="k-btn" id="mDdBtn">Actions</button><div class="m-dd" id="mDd"><div>Duplicate</div><div>Rename</div><div>Export…</div></div></div><div style="height:118px"></div></div>
@@ -2529,6 +2459,16 @@ const sendDownload=async()=>{const name=(APP.name||'app').toLowerCase().replace(
 $('sendDl').onclick=sendDownload;
 
 $('ver').textContent='v'+VERSION;
+// ---- App preview: the loaded app's own components (its components.json), styled live; an empty state until there is one ----
+function renderAppPreview(){const el=$('appBody');if(!el)return;const comps=APP.components||[];
+  if(!comps.length){el.innerHTML=`<div class="ap-empty"><h3>No app loaded yet</h3>
+      <p>App preview shows your app’s own components, styled live. Load your app to see them here.</p>
+      <p>Starting a new app? Style it with the Components view for now. Once your app has components in its <code>components.json</code>, they show up here.</p>
+      <div class="ap-acts"><button class="btn pri" data-act="gh" type="button">Open from GitHub…</button><button class="btn" data-act="open" type="button">Open app style…</button></div></div>`;return}
+  el.innerHTML=`<div class="ap-head"><h4>${escH(APP.name)}</h4><p>${comps.length} component${comps.length>1?'s':''} from the app, styled exactly as its files style it.</p></div>
+    <div class="ap-grid">${comps.map((c,i)=>`<figure class="ap-item"><div class="ap-host" data-ci="${i}"></div><figcaption>${escH(c.name)}</figcaption></figure>`).join('')}</div>`;
+  const tv=themeVars(APP.target);el.querySelectorAll('.ap-host').forEach(h=>mountComp(h,comps[+h.dataset.ci],tv))}
+$('appBody').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='gh')openGh();if(b.dataset.act==='open')$('appFiles').click()});
 </script>
 </body>
 </html>

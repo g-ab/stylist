@@ -28,9 +28,6 @@
 .pv .pen{stroke:var(--pencil);stroke-width:1.5}
 .pv .jt{fill:var(--sheet);stroke:var(--accent-line);stroke-width:1.5}
 .pv .dim{font:600 11px var(--font-mono);fill:var(--accent-text);stroke:none}
-.pv .clay{fill:var(--clay);stroke:none}
-.pv .clay2{fill:var(--clay);stroke:none;filter:brightness(.82)}
-.pv .clay3{fill:var(--clay);stroke:none;filter:brightness(1.1)}
 /* menu + dialog */
 .pv.pad{padding:22px;display:flex;justify-content:center;align-items:flex-start;min-height:100%}
 .pv .menu{width:260px;background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r-lg);box-shadow:var(--shadow-floating);padding:12px}

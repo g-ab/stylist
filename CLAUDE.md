@@ -38,7 +38,7 @@ the current one, and must never change a value the app already has. To keep that
 - **Every version's packages must keep opening and upgrade unchanged:** before bumping `FRAMEWORK`, save real
   packages of the current version to `tests/fixtures/v<framework>-<library>`. The tests upgrade every fixture
   and fail if any existing value changes.
-- `--clay` and the `.clay` preview classes are Cast's clay-material colour (pottery clay).
+- Stylist knows no app: no app tokens, components or sample content of any app are built in. App preview shows only the components of the app that is loaded.
 - Settings are stored in Stylist's own terms; a library (shadcn, Radix) only changes captions, greyed controls and the export.
 
 ## Style

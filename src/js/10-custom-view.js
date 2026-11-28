@@ -5,14 +5,22 @@ function refOptions(sel){const c=derive('light'),role=CORE.filter(n=>n in c),grp
 function compBrand(h){h=h.replace(/<b>Blueprint<\/b>/g,'<b class="bp-logo"></b>');const a=brandOf('logo',mode);
   const inner=a?`<img src="${svgSrc(a.svg)}" alt="${escH(APP.name)}" style="height:18px;width:auto;display:block">`:escH(APP.name);
   return h.replace(/(<([a-z][a-z0-9]*)\b[^>]*class="[^"]*\bbp-logo\b[^"]*"[^>]*>)[\s\S]*?(<\/\2>)/g,(m,o,t,c)=>o+inner+c)}
+// the variables the exported files give the app (core + app tokens, current mode), as the app itself would see them
+function themeVars(tg){const p=parseCSS(coreCSS(tg)+'\n'+appCSS(tg)),tv={...p.light,...(mode==='dark'?p.dark:{})};
+  if(tg==='radix'){const {a}=radixNames();for(let i=1;i<=12;i++){tv['accent-'+i]=tv[a+'-'+i];tv['accent-a'+i]=tv[a+'-a'+i]}
+    const f=parseFloat(tv['radius-factor'])||0;[3,4,6,8,12,16].forEach((b,i)=>tv['radius-'+(i+1)]=+(b*f).toFixed(2)+'px')}
+  return tv}
+// one app component in its own shadow root, themed with exactly those variables
+function mountComp(host,c,tv){for(const k in tv)host.style.setProperty('--'+k,tv[k]);
+  const sr=host.shadowRoot||host.attachShadow({mode:'open'});sr.innerHTML=`<style>:host{display:block;color:var(--ink,var(--foreground));font:14px/1.45 var(--font-ui,var(--font-sans,system-ui))}${c.css}</style>${compBrand(c.html)}`}
 function renderCustom(){
   const el=$('cusBody');if(!el||$('vCus').hidden)return;
   const t=tokens(),T=APP.tokens,tg=APP.target,R=APP.review||[],sw=v=>isColor(v)?`<span class="c-sw" style="background:${escH(v)}"></span>`:'';
-  let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||'').replace(/^Built-in .+ setup$/,'Built-in setup'))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
+  let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||''))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
     <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn" data-act="open">Open app style…</button><button class="k-btn" data-act="gh">Open from GitHub…</button><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
     <div class="k-row" style="gap:20px;align-items:flex-end"><label class="k-field">App name<input class="k-input" data-f="name" value="${escH(APP.name)}"></label>
     <div class="k-field" style="width:auto">Exports to<div class="k-seg" data-f="target">${Object.entries(TGT).map(([k,v])=>`<button data-v="${k}" aria-pressed="${k===tg}">${v}</button>`).join('')}</div></div>
-    <button class="k-btn ghost sm" data-act="reset" style="margin-left:auto">Back to built-in setup</button></div>
+    <button class="k-btn ghost sm" data-act="reset" style="margin-left:auto">Start over, no app</button></div>
     <div class="c-drop">Drop the app’s files here: stylist.json, stylist-theme.css, app-tokens.css, components.json, and brand SVGs (logo, mark, favicon)</div></div>`;
   // changes + pins
   const pins=[];for(const m of ['light','dark'])for(const k in APP.pins[m]||{})pins.push({m,k,v:APP.pins[m][k]});
@@ -56,11 +64,8 @@ function renderCustom(){
     ${log.length?`<ol class="c-log">${log.map(e=>`<li><time>${escH(e.date)}</time><div><code>${escH(e.token)}</code> · ${escH(e.mode||'')} · <b>${escH(e.action)}</b>${e.from!=null||e.to!=null?` · ${escH(short(String(e.from??'–')))} → ${escH(short(String(e.to??'–')))}`:''}${e.note?`<small>${escH(e.note)}</small>`:''}${e.reason?`<small>Why: ${escH(e.reason)}</small>`:''}</div></li>`).join('')}</ol>`:'<p class="c-empty">Nothing yet.</p>'}</div>`;
   el.innerHTML=h;
   // mount components in their own shadow roots, themed exactly as the exported files would theme the app
-  const p=parseCSS(coreCSS(tg)+'\n'+appCSS(tg)),tv={...p.light,...(mode==='dark'?p.dark:{})};
-  if(tg==='radix'){const {a}=radixNames();for(let i=1;i<=12;i++){tv['accent-'+i]=tv[a+'-'+i];tv['accent-a'+i]=tv[a+'-a'+i]}
-    const f=parseFloat(tv['radius-factor'])||0;[3,4,6,8,12,16].forEach((b,i)=>tv['radius-'+(i+1)]=+(b*f).toFixed(2)+'px')}
-  el.querySelectorAll('.c-host').forEach(host=>{const c=APP.components[+host.dataset.ci];for(const k in tv)host.style.setProperty('--'+k,tv[k]);
-    const sr=host.attachShadow({mode:'open'});sr.innerHTML=`<style>:host{display:block;color:var(--ink,var(--foreground));font:14px/1.45 var(--font-ui,var(--font-sans,system-ui))}${c.css}</style>${compBrand(c.html)}`;
+  const tv=themeVars(tg);
+  el.querySelectorAll('.c-host').forEach(host=>{const c=APP.components[+host.dataset.ci];mountComp(host,c,tv);
     // tokens the snippet uses that this target's files don't define: they'd be missing in the real app too
     const miss=[...new Set([...(c.html+' '+c.css).matchAll(/var\(--([\w-]+)/g)].map(m=>m[1]))].filter(v=>tv[v]==null);
     if(miss.length){const d=document.createElement('p');d.className='c-miss';d.innerHTML=`Not defined for ${TGT[tg]}: ${miss.map(v=>`<code>--${escH(v)}</code>`).join(' ')}. Rename them to this target’s tokens, or add them as app tokens.`;host.after(d)}});
@@ -71,7 +76,7 @@ cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return
   if(a==='open')$('appFiles').click();
   if(a==='gh')openGh();
   else if(a==='pkg')openPkg();
-  else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Back to the built-in setup')}
+  else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Started over: no app loaded')}
   else if(a==='addtok'){const n=$('newTok').value.trim().replace(/^--/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
     if(!n){toast('Give the token a name');return}if(APP.tokens[n]){toast(`--${n} already exists`);return}
     if(coreNames().includes(n)){toast(`--${n} is a core token. Pick another name`);return}

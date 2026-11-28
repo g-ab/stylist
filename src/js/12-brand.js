@@ -124,11 +124,11 @@ function renderBrand(){renderBrandSlots();
     <div class="b-row"><div class="b-rl"><b>Avatars</b><small>The symbol as the app’s avatar, in lists and menus</small></div>
       <div class="b-rv">${HK.map(k=>{const z=effHpx()[k];return `<figure><span class="av${mFull()?'':' sym'}" style="width:${z}px;height:${z}px">${mark(mFull()?z:Math.round(z*.62))}</span><figcaption>${k} · ${z}px</figcaption></figure>`}).join('')}</div></div>
     <div class="b-row"><div class="b-rl"><b>Header bar</b><small>The logo in the title bar: ${Math.round(effHpx().sm*.7)}px tall in a ${effBar()}px bar</small></div>
-      <div class="b-rv"><span class="hbar" style="height:${effBar()}px">${logo(Math.round(effHpx().sm*.7))}<span class="hnav"><b>Overview</b><span>Drawings</span><span>Settings</span></span></span></div></div>
+      <div class="b-rv"><span class="hbar" style="height:${effBar()}px">${logo(Math.round(effHpx().sm*.7))}<span class="hnav"><b>Overview</b><span>Projects</span><span>Settings</span></span></span></div></div>
   </div>${brandFitNote()?`<div class="b-lab">${brandFitNote().replace(/^ · /,'')}</div>`:''}</div>
   <h3>In context</h3>
-  <div class="b-card"><div class="b-hdr"><span class="lg">${logo(20)}</span><nav><b>Overview</b><span>Drawings</span><span>Patterns</span><span>Settings</span></nav><span class="sp"></span><span class="k-av sm">GA</span></div>
-    <div class="b-page">${mark(40)}<h4>Pitcher vase</h4></div><div class="b-lab">Header</div></div>
+  <div class="b-card"><div class="b-hdr"><span class="lg">${logo(20)}</span><nav><b>Overview</b><span>Projects</span><span>Reports</span><span>Settings</span></nav><span class="sp"></span><span class="k-av sm">GA</span></div>
+    <div class="b-page">${mark(40)}<h4>Spring campaign</h4></div><div class="b-lab">Header</div></div>
   <div class="b-card"><div class="b-sign"><div class="k-card"><span class="mk">${mark(44)}</span><h4>Sign in to ${escH(APP.name)}</h4>
     <label class="k-field" style="width:auto">Email<input class="k-input" value="gab@studio.com"></label><button class="k-btn pri">Sign in</button></div></div><div class="b-lab">Sign in</div></div>
   <div class="b-card"><div class="b-tabs"><span class="b-tab on"><span class="fv">${img('favicon')||'<i></i>'}</span>${escH(APP.name)}: Overview</span><span class="b-tab"><span class="fv"><i></i></span>Docs</span></div>
@@ -178,7 +178,7 @@ function renderMotion(){const el=$('motBody');if(!el||$('vMot').hidden)return;co
     el.innerHTML=`<div class="m-bar"><button class="k-btn" id="mReplay">Replay</button><label class="k-chk"><input type="checkbox" class="k-check" id="mSlow"> Slow motion ×5</label><label class="k-chk"><input type="checkbox" class="k-check" id="mRedPrev"> Preview reduced motion</label><span class="sp"></span></div>
     <h3>Springs</h3><div class="m-card"><div class="m-curves">${MK.map(k=>`<div class="m-cv" data-k="${k}"><b>${k[0].toUpperCase()+k.slice(1)}</b><small>${MJOB[k]}</small><div class="cv"></div><code></code></div>`).join('')}</div></div>
     <h3>In use</h3><div class="m-demos">
-      <div class="m-card m-demo"><b>Hover highlight</b><small>Fast · one highlight glides to the nearest row</small><div class="m-list" id="mList"><span class="m-hl" id="mHl"></span>${['Pitcher vase','Planter','Lidded box','Tumbler','Bowl'].map(n=>`<div class="it">${n}</div>`).join('')}</div></div>
+      <div class="m-card m-demo"><b>Hover highlight</b><small>Fast · one highlight glides to the nearest row</small><div class="m-list" id="mList"><span class="m-hl" id="mHl"></span>${['Spring campaign','Onboarding','Pricing page','Q3 report','Brand refresh'].map(n=>`<div class="it">${n}</div>`).join('')}</div></div>
       <div class="m-card m-demo"><b>Tabs and switch</b><small>Moderate · indicators and toggles</small><div class="m-tabs" id="mTabs"><span class="m-ind" id="mInd"></span><button aria-selected="true">Front</button><button>Side</button><button>Top</button></div>
         <div class="m-sw" style="margin-top:16px"><input type="checkbox" class="k-switch" id="mSw" checked> Number the pieces</div></div>
       <div class="m-card m-demo"><b>Dropdown</b><small>Moderate in · quicker exit out</small><div class="m-ddw"><button class="k-btn" id="mDdBtn">Actions</button><div class="m-dd" id="mDd"><div>Duplicate</div><div>Rename</div><div>Export…</div></div></div><div style="height:118px"></div></div>

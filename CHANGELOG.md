@@ -1,6 +1,8 @@
 # Changelog
 
 ## 28 Nov 2026
+- **App preview shows your app's own components**, styled live, once an app is loaded. With no app loaded it says so and offers Open from GitHub… / Open app style….
+- **No more Cast inside Stylist:** its tokens, components, cut/clay colours and sample content are gone; a fresh start has no app ("Start over, no app"). Sessions still holding the old built-in setup are cleared once. The Kiln preset is now called Teal.
 - **The old Claude artifact copy is retired:** its link now shows a short page pointing to https://g-ab.github.io/stylist/ (artifact version `1795823422-db07`).
 - **Library dropdown:** "None" is now **CSS**, and **Reset to defaults** moved there from the Share menu.
 - **Send to your agent, simpler:** one line saying what to do, then [Download file] [Copy] when it fits a chat box (under 8,000 characters), or Download file alone when it doesn't.

@@ -54,7 +54,7 @@ function deriveRaw(m){
   const roles=D?{paper:G(1),sheet:G(2),hover:G(4)}:{paper:G(2),sheet:G(1),hover:G(3)};
   return {...roles,ink,muted:G(11),rule:G(6),grid:G(3),'grid-major':G(5),axis:G(8),pencil:G(10),
     accent:A(9),'accent-strong':A(10),'on-accent':a.on,'fill-sel':A(3),'accent-text':A(11),'accent-line':a.line,...support,
-    fill:ok(g.L[11],g.C*1.6,Math.round(g.h),.05),danger:D?'#f08a5d':'#b4400f',cut:D?'#ff8a4c':'#d9480f',clay:D?'#a9806a':'#d6b19a',...scales};
+    fill:ok(g.L[11],g.C*1.6,Math.round(g.h),.05),danger:D?'#f08a5d':'#b4400f',...scales};
 }
 function apply(){
   const c=derive(mode),r=radiusScale(),d=DENS[S.dens],hp=effHpx(),fo=effFocus();
@@ -111,6 +111,7 @@ function apply(){
   const p=preset(),edited=p&&KEYS.some(k=>S[k]!==p[k]);
   if(typeof renderTokens==='function')renderTokens();
   if(typeof renderCustom==='function')renderCustom();
+  if(typeof renderAppPreview==='function'&&!$('vApp').hidden)renderAppPreview();
   try{localStorage.setItem('stylist.style.v1',JSON.stringify(S))}catch(e){}
 }
 function setupText(d){ // short: a request line, the settings (compact) and any changed logos; the steps live in APPLY.md

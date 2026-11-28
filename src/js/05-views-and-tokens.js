@@ -2,7 +2,7 @@
 $('views').onclick=e=>{const b=e.target.closest('button');if(!b)return;$('views').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
   showView(b.dataset.v)};
 function showView(v){$('views').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===v));
-  $('vComp').hidden=v!=='comp';$('vApp').hidden=v!=='app';$('vTok').hidden=v!=='tok';$('vCus').hidden=v!=='cus';$('vBrand').hidden=v!=='brand';$('vMot').hidden=v!=='mot';renderTokens();renderCustom();renderBrand();renderMotion();requestAnimationFrame(()=>placeInds(true))}
+  $('vComp').hidden=v!=='comp';$('vApp').hidden=v!=='app';if(v==='app'&&typeof renderAppPreview==='function')renderAppPreview();$('vTok').hidden=v!=='tok';$('vCus').hidden=v!=='cus';$('vBrand').hidden=v!=='brand';$('vMot').hidden=v!=='mot';renderTokens();renderCustom();renderBrand();renderMotion();requestAnimationFrame(()=>placeInds(true))}
 // gallery: tabs and segmented controls respond to clicks
 function slideInd(c,instant){const ind=c.querySelector(':scope>.seg-ind,:scope>.tab-ind'),b=c.querySelector(':scope>[aria-pressed="true"],:scope>[aria-selected="true"]');if(!ind)return;
   if(!b||!b.offsetWidth){ind.style.opacity=0;return}if(instant){ind.style.transition='none'}ind.style.opacity=1;ind.style.width=b.offsetWidth+'px';ind.style.transform=`translateX(${b.offsetLeft}px)`;if(instant){ind.offsetWidth;ind.style.transition=''}}
@@ -12,8 +12,7 @@ document.querySelectorAll('.k-tabs').forEach(t=>t.onclick=e=>{const b=e.target.c
 document.querySelectorAll('.k-seg').forEach(t=>t.onclick=e=>{const b=e.target.closest('button');if(b){t.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));slideInd(t)}});
 // ---- Tokens view: a read-only picture of every token, live ----
 const CORE=['paper','sheet','ink','muted','rule','hover','accent','accent-strong','on-accent','fill-sel','accent-text','accent-line','support','support-strong','on-support','support-soft','support-text','danger'];
-const APPT=['grid','grid-major','axis','pencil','fill','cut','clay'];
-const LABEL={paper:'Background',sheet:'Surface',ink:'Text',muted:'Muted text',rule:'Border',accent:'Accent','accent-strong':'Accent hover','on-accent':'On accent','fill-sel':'Selected','hover':'Hover','accent-text':'Accent text','accent-line':'Accent line',support:'Support','support-strong':'Support hover','on-support':'On support','support-soft':'Support soft','support-text':'Support text',danger:'Danger',grid:'Grid','grid-major':'Grid major',axis:'Axis',pencil:'Pencil',fill:'Shape fill',cut:'Hole',clay:'Clay 3D'};
+const LABEL={paper:'Background',sheet:'Surface',ink:'Text',muted:'Muted text',rule:'Border',accent:'Accent','accent-strong':'Accent hover','on-accent':'On accent','fill-sel':'Selected','hover':'Hover','accent-text':'Accent text','accent-line':'Accent line',support:'Support','support-strong':'Support hover','on-support':'On support','support-soft':'Support soft','support-text':'Support text',danger:'Danger'};
 const short=v=>v.replace(/oklch\(([\d.]+) ([\d.]+) ([\d.]+)( \/ ([\d.]+))?\)/,(m,l,c,h,_,a)=>`oklch ${(+l*100).toFixed(0)}% ${(+c).toFixed(3)} ${(+h).toFixed(0)}${a?' /'+a:''}`);
 function renderTokens(){
   const t=tokens(),el=$('tokBody');if(!el||$('vTok').hidden)return;
@@ -48,7 +47,7 @@ function renderTokens(){
      <div class="t-fams"><div><span class="t-aa" style="font-family:var(--font-ui)">Aa</span><b>${S.ui}</b><small>Interface · --font-ui</small></div><div><span class="t-aa" style="font-family:var(--font-mono)">01</span><b>${S.mono}</b><small>Numbers &amp; labels · --font-mono</small></div></div>
      <div class="t-tys">${type}</div>
      <div class="t-sub" style="margin-top:14px">Letter spacing · Tracking ${t.track.base}em on all text · the steps follow it</div>
-     <div class="t-trs">${TK.map(k=>`<div class="t-tr"><span class="t-tn"><b>${k[0].toUpperCase()+k.slice(1)}</b><small>--tracking-${k} · ${t.track[k]}em</small></span><span style="letter-spacing:var(--tracking-${k});font:600 ${DENS[S.dens].fs+5}px/1.3 var(--font-ui)">Pitcher vase</span><span style="letter-spacing:var(--tracking-${k});font:600 11px var(--font-mono);text-transform:uppercase;color:var(--muted)">Front W × H</span></div>`).join('')}</div></div>
+     <div class="t-trs">${TK.map(k=>`<div class="t-tr"><span class="t-tn"><b>${k[0].toUpperCase()+k.slice(1)}</b><small>--tracking-${k} · ${t.track[k]}em</small></span><span style="letter-spacing:var(--tracking-${k});font:600 ${DENS[S.dens].fs+5}px/1.3 var(--font-ui)">Spring campaign</span><span style="letter-spacing:var(--tracking-${k});font:600 11px var(--font-mono);text-transform:uppercase;color:var(--muted)">Front W × H</span></div>`).join('')}</div></div>
    <div class="k-card t-card"><div class="blk-h"><div><h4>Shadows</h4></div></div>
      <div class="t-shs">${[['inset','Inset','Inputs, wells'],['raised','Raised','Cards, bars, panels'],['floating','Floating','Menus, popovers, toasts'],['overlay','Overlay','Dialogs']].map(([k,l,j])=>`<div class="t-sh"><span style="box-shadow:var(--shadow-${k})"></span><b>${l}</b><code>--shadow-${k}</code><small>${j}</small></div>`).join('')}</div></div>
    <div class="t-cols three">
