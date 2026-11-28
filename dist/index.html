@@ -353,6 +353,65 @@ body.noapp .tb-what{display:inline}
 .st-pre .sw{display:flex;width:28px;height:18px;border-radius:5px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}.st-pre .sw i{flex:1}
 .start[hidden]{display:none!important}
 .topbar b,aside b,.start b,.xmod b,.amlist b,.topbar strong,aside strong{font-weight:580} /* Inter: bold a step lighter, as San Francisco reads */
+
+/* ---------- refinements, 28 Nov (gab's canvas comments) ---------- */
+/* one control height across the interface: 30px */
+.topbar{border-bottom:0}
+.tbb{height:30px;padding:0 11px;font-size:13px;border-radius:7px}
+.btn{padding:5px 10px;border-radius:7px}
+.start .btn{height:34px;padding:0 14px;border-radius:8px}
+.st-row input,.st-f input{height:34px}
+/* the app button: white, like the selected icon tab */
+.appbtn{height:36px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.04);border-radius:8px}
+.appbtn:hover,.appbtn[aria-expanded="true"]{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.1)}
+/* panel icon tabs: no grey tray, square tabs */
+.ptabs{background:none;padding:0;gap:0;margin:6px 12px 0}
+.ptabs button{flex:0 0 auto;width:27px;height:27px;border-radius:7px}
+.ptabs{justify-content:space-between}
+.ptabs button:hover{background:#ececec}
+.ptabs button[aria-selected="true"]{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.04)}
+.ptabs svg{width:17px;height:17px}
+/* view tabs: as tall as the buttons */
+.mh .segs.views{padding:2px;border-radius:8px}
+.mh .segs.views button{height:26px;padding:0 11px;font-size:13px}
+/* swatches: smaller */
+.swatches{grid-template-columns:repeat(9,18px);row-gap:9px}
+.swatches button{width:18px;height:18px}
+.swatches button[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 3px #1a1a1a}
+.swatches button.linked[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 3px #a3a3a3}
+/* chips → small buttons, like the interface's buttons */
+.chips{gap:4px}
+.chips button{height:26px;padding:0 9px;border-radius:7px;border-color:#dcdcdc;font-size:12px}
+.chips button[aria-pressed="true"]{background:#fff;border-color:#1a1a1a;color:#1a1a1a;box-shadow:inset 0 0 0 .5px #1a1a1a}
+/* light / dark toggle */
+.modebtn{width:30px;height:30px;display:grid;place-items:center;border:1px solid #dcdcdc;border-radius:7px;background:#fff;color:#1a1a1a;cursor:pointer}
+.modebtn:hover{background:#f5f5f5}
+.modebtn svg{width:16px;height:16px}
+.modebtn .i-moon,.modebtn.dark .i-sun{display:none}
+.modebtn.dark .i-moon{display:block}
+main.dk .modebtn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.16);color:#fff}
+/* top bar: same background as the panel; the app button sits next to Stylist's name */
+.topbar{display:flex;align-items:center;gap:0;background:#f7f7f7}
+.tb-l{flex:none}
+.appdd{margin-left:20px}
+.appdd .applist{left:0;transform:none}
+.tb-r{margin-left:auto}
+/* ghost controls share one hover and one active colour: chips, icon tabs, menu rows, icon buttons */
+:root{--ghost-hover:#ebebeb;--ghost-active:#e3e3e3}
+.chips button{border:0;background:none;color:#4d4d4d;box-shadow:none}
+.chips button:hover{background:var(--ghost-hover);color:#1a1a1a}
+.chips button[aria-pressed="true"]{background:var(--ghost-active);color:#1a1a1a;box-shadow:none}
+.ptabs button:hover{background:var(--ghost-hover)}
+.amlist button:hover,.aico:hover,.aico[aria-expanded="true"]{background:var(--ghost-hover)}
+/* panel sliders: a plain grey track with no border, and a white knob like the selected icon tab */
+aside input[type=range]{-webkit-appearance:none;appearance:none;height:18px;background:none;cursor:pointer}
+aside input[type=range]::-webkit-slider-runnable-track{height:4px;border:0;border-radius:2px;background:#e3e3e3}
+aside input[type=range]::-moz-range-track{height:4px;border:0;border-radius:2px;background:#e3e3e3}
+aside input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06)}
+aside input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06)}
+aside input[type=range]:focus-visible{outline:none}
+aside input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 2px #fff,0 0 0 4px #1a1a1a}
+aside input[type=range]:disabled{cursor:not-allowed;opacity:.5}
 /* ---------- preview (themed by variables) ---------- */
 .pv{letter-spacing:var(--tracking,0em);--icon-stroke:2;--ctl-xs:24px;--ctl-sm:28px;--ctl-lg:44px;--focus-width:2px;--focus-offset:2px;--focus-ring:0 0 #0000;--focus-outline:none;--r-xs:3px;--r-2xl:16px;--r-round:0px;--r-sm:4px;--r-md:6px;--r-lg:8px;--r-xl:12px;--bar:44px;--ctl:36px;--inset:4px;--gap:8px;--fs:14px;
   background:var(--paper);color:var(--ink);font:var(--fs)/1.45 var(--font-ui);border-radius:10px;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
