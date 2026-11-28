@@ -1,9 +1,9 @@
 
 /* ---------- manager chrome (fixed, not themed) ---------- */
 *{box-sizing:border-box}
-/* Stylist's own interface: the system's UI font (SF Pro on a Mac), neutral greys, Lucide icons drawn fine */
+/* Stylist's own interface: the system's UI font (SF Pro on a Mac), neutral greys, Phosphor Regular icons */
 :root{--chrome-sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;--chrome-mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
-svg.lu{fill:none!important;stroke:currentColor!important;stroke-width:1.75!important;stroke-linecap:round;stroke-linejoin:round}
+svg.ph{fill:currentColor!important;stroke:none!important} /* Phosphor Regular (fill paths); the Corners icon draws its own stroke */
 html,body{height:100%;margin:0}
 body{font:13px/1.45 var(--chrome-sans);-webkit-font-smoothing:antialiased;color:#1a1a1a;background:#eeeeee;display:grid;grid-template-columns:300px 1fr;overflow:hidden;grid-template-rows:56px minmax(0,1fr)}
 aside{background:#f7f7f7;border-right:1px solid #e3e3e3;display:flex;flex-direction:column;min-height:0}

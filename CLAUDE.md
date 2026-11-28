@@ -42,5 +42,5 @@ the current one, and must never change a value the app already has. To keep that
 - Settings are stored in Stylist's own terms; a library (shadcn, Radix) only changes captions, greyed controls and the export.
 
 ## Style
-- Stylist's own chrome uses fixed neutral greys, the system UI font (`--chrome-sans`: SF Pro on a Mac) and the system mono (`--chrome-mono`) for values, and Lucide icons drawn at stroke 1.75 (`svg.lu`; paths copied from `lucide-static`). It isn't themed; only the preview (`.pv`) reads the tokens. Labels are sentence case, not mono capitals.
+- Stylist's own chrome uses fixed neutral greys, the system UI font (`--chrome-sans`: SF Pro on a Mac) and the system mono (`--chrome-mono`) for values, and Phosphor Regular icons (`svg.ph`, fill paths copied from `@phosphor-icons/core`, 256 grid). Phosphor has no rounded-corner icon: the Corners tab uses one drawn for Stylist on Phosphor's grid (16-unit round stroke, 40-unit margins: a corner on a radius, a dot at its centre). It isn't themed; only the preview (`.pv`) reads the tokens. Labels are sentence case, not mono capitals.
 - Give short, direct answers, whole-pixel values and no odd decimals in controls.
