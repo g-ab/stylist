@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Stylist's own look:** the interface now uses your system's font (SF Pro on a Mac) instead of Instrument Sans and Geist Mono, neutral greys instead of blue-greys, sentence-case labels instead of mono capitals, and finer Lucide icons in the panel tabs, menus and dialogs. The component previews are unchanged.
 - **Agent instructions:** APPLY.md now says how a new app fills `components.json` (so App preview shows its components) and to keep it current, and to offer to connect new tokens after an upgrade. The Stylist block in each app's `AGENTS.md` says the same; `export.py` reminds while `components.json` is empty.
 - **README** rewritten for a first-time reader: what Stylist is and what you need, up front; the load-first stop and fonts explained.
 - **Fix:** with an app loaded, the start screen stayed on screen above the workspace.

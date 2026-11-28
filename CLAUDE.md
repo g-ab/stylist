@@ -42,5 +42,5 @@ the current one, and must never change a value the app already has. To keep that
 - Settings are stored in Stylist's own terms; a library (shadcn, Radix) only changes captions, greyed controls and the export.
 
 ## Style
-- Stylist's own chrome uses fixed colours (Instrument Sans, Geist Mono) and isn't themed; only the preview (`.pv`) reads the tokens.
+- Stylist's own chrome uses fixed neutral greys, the system UI font (`--chrome-sans`: SF Pro on a Mac) and the system mono (`--chrome-mono`) for values, and Lucide icons drawn at stroke 1.75 (`svg.lu`; paths copied from `lucide-static`). It isn't themed; only the preview (`.pv`) reads the tokens. Labels are sentence case, not mono capitals.
 - Give short, direct answers, whole-pixel values and no odd decimals in controls.

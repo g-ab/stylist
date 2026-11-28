@@ -91,7 +91,7 @@ function apply(){
   $('tintOut').textContent=S.tint===0?'white':S.tint===50?'as today':S.tint<50?'barely tinted':'tinted';
   {const s=shOf();$('shOut').textContent=s.op?`blur ${s.blur} · y ${s.y} · ${s.op}%`:'none'}
   document.querySelectorAll('#presets .pre').forEach(b=>{b.setAttribute('aria-selected',b.dataset.id===S.id);b.removeAttribute('aria-pressed')});
-  {const p=preset(),edited=p&&KEYS.some(k=>S[k]!==p[k]);if(p)$('preBtn').innerHTML=`${swatch({...p,...(edited?{exact:null,fam:S.fam,sat:S.sat,warm:S.warm,sup:S.sup,supFam:S.supFam}:{})})}<span><b>${p.name}${edited?' <em>edited</em>':''}</b><small>${p.desc}</small></span><svg class="chev" viewBox="0 0 10 10"><path d="M2.5 4l2.5 2.5L7.5 4"/></svg>`}
+  {const p=preset(),edited=p&&KEYS.some(k=>S[k]!==p[k]);if(p)$('preBtn').innerHTML=`${swatch({...p,...(edited?{exact:null,fam:S.fam,sat:S.sat,warm:S.warm,sup:S.sup,supFam:S.supFam}:{})})}<span><b>${p.name}${edited?' <em>edited</em>':''}</b><small>${p.desc}</small></span><svg class="lu chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>`}
   loadFont(S.ui);loadFont(S.mono);
   document.querySelectorAll('.fbtn').forEach(b=>{const n=S[b.dataset.k];b.innerHTML=`<span class="fn" style="font-family:${fam(n)},system-ui">${n}</span>${custom[n]?'<span class="cu">File</span>':''}<svg viewBox="0 0 10 10"><path d="M2.5 4l2.5 2.5L7.5 4"/></svg>`});
   document.querySelectorAll('#round button').forEach(b=>{const c=CORNERS[+b.dataset.i];b.setAttribute('aria-pressed',c.r===S.radius&&!!c.pill===!!S.pill)});$('rOut').textContent=`${cornerName()} · ${r.sm}/${r.md}/${r.lg}/${r.xl}px`;
