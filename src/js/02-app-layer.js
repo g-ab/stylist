@@ -15,6 +15,8 @@ const RESERVED=['grid','grid-major','axis','pencil','fill','cut','clay']; // nev
 const appDefault=()=>({brand:{},name:'Your app',target:'css',tokens:{},components:[],
   pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'No app loaded'});
 let APP=appDefault();
+// an app counts as loaded once its files were opened, or it was started here as a new app
+const appLoaded=()=>APP.source!=='No app loaded'||!!(APP.components||[]).length||!!Object.keys(APP.tokens||{}).length||!!APP.snapshot;
 try{const a=JSON.parse(localStorage.getItem('stylist.app.v1')||'null');if(a)APP={...APP,...a,pins:{light:{},dark:{},...(a.pins||{})}};if(APP.name==='Blueprint')APP.name='Your app';if(/^Built-in/.test(APP.source||'')){APP.tokens={};APP.components=[];APP.source='No app loaded'} /* the old built-in setup was Cast's: drop it unless an app was opened */if(APP.brand&&APP.brand.mark){mergeMark(APP.brand);mergeMark(APP.brandBase)}}catch(e){}
 if(APP.target==='tw')APP.target='css'; // Tailwind as a target was retired; files made for it open as Plain CSS
 const saveApp=()=>{try{localStorage.setItem('stylist.app.v1',JSON.stringify(APP))}catch(e){toast('Too big to remember after a reload')}};

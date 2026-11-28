@@ -90,6 +90,11 @@ async def main():
             return {odd,foot,usage,accent:[...(cu.accent||[])]}}""")
         check("used by: real components only, shown in Tokens", not ub["odd"] and "Accent hover" in ub["foot"] and "--accent-strong" in ub["foot"] and "Button" in ub["accent"] and not ub["usage"], ub)
 
+        # 6c. With no app loaded, the Custom tab is an empty state that offers to load one or start a new one
+        es = await pg.evaluate("""()=>{const keep=APP;APP=appDefault();showView('cus');const b=$('cusBody'),r={empty:!!b.querySelector('.ap-empty'),acts:[...b.querySelectorAll('[data-act]')].map(x=>x.dataset.act)};
+            b.querySelector('[data-act="new"]').click();r.after=!!b.querySelector('.ap-empty');APP=keep;saveApp();apply();showView('comp');return r}""")
+        check("custom tab: empty state until an app is loaded", es["empty"] and {"gh", "open", "new"} <= set(es["acts"]) and not es["after"], es)
+
         # 6b. "Copy setup for Claude" carries the full recipe, and export.py turns it into the files
         setup = await pg.evaluate("()=>{S={...PRESETS[0],radius:16,fam:'teal'};APP.name='Fixture';APP.target='css';apply();return setupText()}")
         block = json.loads(setup[setup.index("{"):setup.rindex("}") + 1])

@@ -65,9 +65,10 @@
 /* App preview */
 .apv{padding:28px}
 .ap-empty{max-width:440px;margin:48px auto;text-align:center;color:#4b5460;font:14px/1.55 "Instrument Sans",system-ui,sans-serif}
-.ap-empty h3{margin:0 0 8px;font-size:17px;font-weight:600;color:#1d232b}
+.ap-empty h3,.pv .ap-empty h3{margin:0 0 8px;font:600 17px/1.3 "Instrument Sans",system-ui,sans-serif;letter-spacing:0;text-transform:none;font-size:17px;font-weight:600;color:#1d232b}
 .ap-empty p{margin:0 0 10px}.ap-empty code{font:12.5px "Geist Mono",ui-monospace,monospace}
 .ap-acts{display:flex;justify-content:center;gap:8px;margin-top:18px}.ap-acts .btn{flex:none;padding:8px 16px}
 .ap-head h4{margin:0;font:600 15px "Instrument Sans",system-ui,sans-serif;color:var(--ink)}.ap-head p{margin:2px 0 18px;font-size:12.5px;color:var(--muted)}
 .ap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .ap-item{margin:0;display:grid;gap:8px}.ap-item figcaption{font:500 11.5px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
+.ap-alt{margin-top:18px!important;font-size:13px}.ap-alt .lnk{border:0;background:none;padding:0;font:inherit;color:#1d232b;text-decoration:underline;text-underline-offset:2px;cursor:pointer}

@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Custom tab, no app loaded:** an empty state explains the tab and offers Open from GitHub… / Open app style…, or **Start a new app** for an app with no Stylist files yet.
 - **"Used by" moved to the Tokens tab:** point at a colour, scale step, font, shadow, spacing or radius step to see its label, token name, where its value comes from and which components read it (your app's in accent). The Usage card is gone from the Custom tab, and gallery helpers ("hrow", "hlab") no longer show up as components.
 - **App preview shows your app's own components**, styled live, once an app is loaded. With no app loaded it says so and offers Open from GitHub… / Open app style….
 - **No more Cast inside Stylist:** its tokens, components, cut/clay colours and sample content are gone; a fresh start has no app ("Start over, no app"). Sessions still holding the old built-in setup are cleared once. The Kiln preset is now called Teal.
