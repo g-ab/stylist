@@ -1,6 +1,6 @@
 # Stylist: rules for working on this repo
 
-Stylist is gab's styling tool.
+Stylist is a UI styling tool.
 
 ## Layout
 - `src/index.html`: the page shell, with three placeholders (`/*@stylist:css*/`, `/*@stylist:icons*/`, `/*@stylist:js*/`).
@@ -43,4 +43,4 @@ the current one, and must never change a value the app already has. To keep that
 
 ## Style
 - Stylist's own chrome uses fixed colours (Instrument Sans, Geist Mono) and isn't themed; only the preview (`.pv`) reads the tokens.
-- gab prefers short, direct answers, whole-pixel values and no odd decimals in controls.
+- Give short, direct answers, whole-pixel values and no odd decimals in controls.
