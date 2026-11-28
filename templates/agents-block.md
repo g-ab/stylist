@@ -18,7 +18,8 @@ To run Stylist: clone https://github.com/g-ab/stylist, run `python3 build.py` in
 If export.py stops (exit code 2), the setup wasn't made from the app's current style (not loaded in Stylist
 first, or the app changed since), something in the app changed since the setup was made (the theme file
 edited by hand, a logo replaced) or a logo arrived damaged: show the message and stop, never overwrite.
-If it lists logos "removed in Stylist", ask before deleting them.
+If it lists logos "removed in Stylist", ask before deleting them. If it says the app loads Google fonts itself,
+remove those lines in the same commit: stylist-theme.css loads the fonts.
 Otherwise show the "Changed tokens" list, check the app in light and dark mode, and commit
 (one restyle or upgrade per commit).
 

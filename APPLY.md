@@ -21,6 +21,8 @@ changed in Stylist after it. Applying it means writing the app's Stylist files f
      a logo replaced), or a logo arrived damaged. Show the message to the user and stop. Never overwrite.
      They resolve it in Stylist (Share → Open from GitHub…) and send a new setup.
    - **"Removed in Stylist":** those logos were removed in Stylist but are still in the app. Ask before deleting.
+   - **"The app loads Google fonts itself":** `stylist-theme.css` loads the fonts it uses. Remove the listed lines
+     (the font link and its preconnects) in the same commit, so a font changed in Stylist is the one the app shows.
 
 ## First time: connecting the app
 1. Load the files before the app's own styles, in this order: `stylist-theme.css`, `app-tokens.css`,

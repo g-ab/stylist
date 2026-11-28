@@ -1669,7 +1669,10 @@ function tokens(){const d=DENS[S.dens];
     size:{bar:barOf(),control:hPx().md,inset:d.inset,gap:2*unitOf(),text:d.fs,'card-padding':stOf(S.dens).pad*unitOf()},unit:unitOf(),controls:hPx(),focus:focusOf(),icons:iconOf(),track:trackOf(),
     space:Object.fromEntries(SPACE.map(n=>[n,+(n*unitOf()).toFixed(2)])),
     type:[{name:'Title',size:d.fs,weight:600,sample:'Overview'},{name:'Heading',size:d.fs+1,weight:600,sample:'Save changes?'},{name:'Body',size:d.fs,weight:400,sample:'Sketch the shape in three views.'},{name:'Body strong',size:d.fs,weight:500,sample:'Spring campaign'},{name:'Small',size:d.fs-1,weight:400,sample:'Latest changes are not saved.'},{name:'Caption',size:d.fs-2,weight:400,sample:'Hidden depth for new pieces'},{name:'Label',size:11,weight:600,mono:true,upper:true,sample:'Front  W × H'},{name:'Number',size:12,weight:400,mono:true,sample:'100 × 105 × 60'}]}}
-const fontNote=()=>{const g=[S.ui,S.mono].filter((n,i,a)=>!custom[n]&&a.indexOf(n)===i);return g.length?`/* Fonts: https://fonts.google.com/share?selection.family=${g.map(n=>n.replace(/ /g,'+')).join('|')} */\n`:''};
+// The theme loads its own Google fonts, so changing a font in Stylist is all it takes: the app needs no font link of its own.
+// Google's first CSS API skips weights a family doesn't have (css2 rejects the whole request), so one line fits every font.
+const fontNote=()=>{const g=[S.ui,S.mono].filter((n,i,a)=>!custom[n]&&a.indexOf(n)===i);if(!g.length)return '';
+  return `/* Fonts: ${g.join(', ')}, loaded from Google Fonts below. The app needs no font link of its own. */\n@import url("https://fonts.googleapis.com/css?family=${g.map(n=>n.replace(/ /g,'+')+':400,500,600').join('|')}&display=swap");\n`};
 // shadcn uses Tailwind's 8 shadow sizes: Stylist's levels land on sm, lg and 2xl, the rest are filled in between
 function shadcnShadows(c,M){const D=M==='dark',g=grayScale(D),at=e=>shadowAt(e,D,g);
   return {'shadow-2xs':at(.08),'shadow-xs':at(.15),'shadow-sm':c['shadow-raised'],shadow:at(.32),'shadow-md':at(.45),'shadow-lg':c['shadow-floating'],'shadow-xl':at(.8),'shadow-2xl':c['shadow-overlay'],'inset-shadow-sm':c['shadow-inset']}}

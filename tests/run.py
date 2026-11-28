@@ -139,6 +139,13 @@ async def main():
             (app2 / "stylist.json").write_text(json.dumps(j, indent=2))
             r7 = ex(app2, again)
             check("load first: the app changed since loading stops", r7.returncode == 2 and "changed since it was loaded" in r7.stdout, r7.stdout[-200:])
+            # fonts come with the theme; an app's own Google Fonts link is pointed out
+            th = (app2 / "stylist-theme.css").read_text()
+            (app2 / "index.html").write_text('<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">\n')
+            r8 = subprocess.run([sys.executable, str(root / "export.py"), str(app2)], capture_output=True, text=True)
+            imp = await pg.evaluate("()=>{S={...S,ui:'Inter',mono:'Reddit Mono'};apply();return ['css','shadcn','radix'].map(t=>coreCSS(t).split('\\n').slice(0,3).join(' '))}")
+            check("fonts load from the theme; the app's own link is listed", '@import url("https://fonts.googleapis.com/css?family=' in th and r8.returncode == 0 and "index.html:1" in r8.stdout
+                  and all("family=Inter:400,500,600|Reddit+Mono:400,500,600" in x for x in imp), (th[:200], r8.stdout[-200:], [x[:160] for x in imp]))
             # first time: an app folder with no Stylist files gets the whole package from a setup
             new = Path(tmp) / "new-app"
             new.mkdir()

@@ -90,6 +90,23 @@ def old_names_in_code(app_dir, renames):
     return hits
 
 
+def own_font_links(app_dir):
+    """Where the app loads Google fonts itself. Stylist's theme file loads its fonts now, so these lines are left over
+    (and after a font change in Stylist they still load the old font)."""
+    hits = []
+    pat = re.compile(r"fonts\.(googleapis|gstatic)\.com")
+    for p in sorted(app_dir.rglob("*")):
+        rel = p.relative_to(app_dir)
+        if not p.is_file() or p.suffix.lower() not in CODE_FILES or any(part in SKIP_DIRS for part in rel.parts) or STYLE_FILES.match(p.name):
+            continue
+        try:
+            lines = p.read_text(encoding="utf-8").splitlines()
+        except (UnicodeDecodeError, OSError):
+            continue
+        hits += [f"{rel}:{i}" for i, line in enumerate(lines, 1) if pat.search(line)]
+    return hits
+
+
 def teach(app_dir, first):
     """Keep the app's AI instructions current: the Stylist section of AGENTS.md / CLAUDE.md.
 
@@ -273,6 +290,10 @@ async def run(app_dir, setup, brand_files=(), removed=()):
     taught = teach(app_dir, first)
     if taught:
         written.append(taught)
+    fonts = own_font_links(app_dir)
+    if fonts:
+        print("The app loads Google fonts itself (" + ", ".join(fonts) + "). stylist-theme.css loads the fonts now:")
+        print("  remove those lines (the font link and its preconnects) in the same commit, or they keep loading other fonts.")
     if first:
         print(f"First time: added the Stylist files for {out['target']} ({', '.join(written)}).")
         print("Next: load stylist-theme.css, then app-tokens.css, then stylist-icons.css before the app's own styles,")
