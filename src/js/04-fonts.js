@@ -80,4 +80,6 @@ function renderShadowCtl(){const s=shOf();document.querySelectorAll('[data-sh]')
 document.querySelectorAll('[data-sh]').forEach(x=>x.addEventListener('input',()=>{const v=Math.round(+x.value*2)/2;if(!isFinite(v)||x.value==='')return;const lo=+x.min,hi=+x.max;S.sh={...shOf(),[x.dataset.sh]:Math.max(lo,Math.min(hi,v))};apply()}));
 $('shOp').addEventListener('input',e=>{const v=Math.round(+e.target.value*2)/2;if(!isFinite(v)||e.target.value==='')return;S.sh={...shOf(),op:Math.max(0,Math.min(60,v))};apply()});
 $('shColor').addEventListener('input',e=>{S.sh={...shOf(),color:e.target.value};apply()});
-$('mode').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.v;$('mode').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));apply()};
+// Light / Dark: one button; the icon shows the mode you're in (sun, moon)
+const renderMode=()=>{const b=$('mode'),d=mode==='dark',l=d?'Switch to light':'Switch to dark';b.classList.toggle('dark',d);b.setAttribute('aria-label',l);b.title=l};
+$('mode').onclick=()=>{mode=mode==='dark'?'light':'dark';renderMode();apply()};renderMode();

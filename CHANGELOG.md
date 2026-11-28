@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Light / Dark is one button:** a sun in light mode, a moon in dark; click to switch.
 - **Inter for Stylist's interface:** the free font closest to San Francisco, loaded for everyone so Stylist looks the same on every computer. Its optical sizes are on and its bold and medium sit a step lighter, as San Francisco reads.
 - **Phosphor icons in Stylist's interface:** the panel tabs, menus, dialogs and start screen now use Phosphor Regular (Shadows: `circle-half`; GitHub: Phosphor's logo). Phosphor has no rounded-corner icon, so the Corners tab gets one drawn in Phosphor's style.
 - **Stylist's own look:** the interface now uses your system's font (SF Pro on a Mac) instead of Instrument Sans and Geist Mono, neutral greys instead of blue-greys, sentence-case labels instead of mono capitals, and finer Lucide icons in the panel tabs, menus and dialogs. The component previews are unchanged.
