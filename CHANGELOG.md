@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Custom tab, no duplicates:** its App name and "Exports to" fields are gone; rename the app and pick its destination in the app menu (Rename…, Destination).
 - **Interface refinements:** the top bar has the panel's background and no divider, with the app button (white, like the selected icon tab) next to Stylist's name; buttons and view tabs are 30px high; the panel's icon tabs are square, with no grey tray; colour swatches are smaller; the Support chips are ghost buttons; every ghost control shares one hover and one active grey; sliders have a plain track and a white knob.
 - **Light / Dark is one button:** a sun in light mode, a moon in dark; click to switch.
 - **Inter for Stylist's interface:** the free font closest to San Francisco, loaded for everyone so Stylist looks the same on every computer. Its optical sizes are on and its bold and medium sit a step lighter, as San Francisco reads.

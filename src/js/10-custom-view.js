@@ -18,8 +18,6 @@ function renderCustom(){
   const t=tokens(),T=APP.tokens,tg=APP.target,R=APP.review||[],sw=v=>isColor(v)?`<span class="c-sw" style="background:${escH(v)}"></span>`:'';
   let h=`<div class="k-card c-card"><div class="blk-h"><div><h4>${escH(APP.name)}</h4><p>${escH((APP.source||''))}${APP.exported?` · last exported ${new Date(APP.exported).toLocaleDateString()}`:''}</p></div>
     <div class="k-row" style="gap:8px;flex-wrap:nowrap"><button class="k-btn pri" data-act="pkg">Export package…</button></div></div>
-    <div class="k-row" style="gap:20px;align-items:flex-end"><label class="k-field">App name<input class="k-input" data-f="name" value="${escH(APP.name)}"></label>
-    <div class="k-field" style="width:auto">Exports to<div class="k-seg" data-f="target">${Object.entries(TGT).map(([k,v])=>`<button data-v="${k}" aria-pressed="${k===tg}">${v}</button>`).join('')}</div></div></div>
     <div class="c-drop">Drop the app’s files here: stylist.json, stylist-theme.css, app-tokens.css, components.json, and brand SVGs (logo, mark, favicon)</div></div>`;
   // changes + pins
   const pins=[];for(const m of ['light','dark'])for(const k in APP.pins[m]||{})pins.push({m,k,v:APP.pins[m][k]});
@@ -71,11 +69,9 @@ cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return
   else if(a==='allpin'||a==='allrev'){[...APP.review].forEach(r=>resolveReview(r.id,a==='allpin'?(r.kind==='changed'?'pin':r.kind==='added'?'move':'restore'):(r.kind==='removed'?'restore':'revert')))}
   else if(b.dataset.rv)resolveReview(b.dataset.id,b.dataset.rv);
   else if(b.dataset.unpin){const [m,...k]=b.dataset.unpin.split('|');delete APP.pins[m][k.join('|')];saveApp();apply()}
-  else if(b.dataset.del){delete APP.tokens[b.dataset.del];saveApp();apply()}
-  else if(b.closest('[data-f="target"]')){APP.target=b.dataset.v;saveApp();apply()}});
+  else if(b.dataset.del){delete APP.tokens[b.dataset.del];saveApp();apply()}});
 cus.addEventListener('change',e=>{const x=e.target;
-  if(x.dataset.f==='name'){APP.name=x.value.trim()||'App';saveApp();apply()}
-  else if(x.dataset.tok){const n=x.dataset.tok,d=APP.tokens[n],t=tokens();
+  if(x.dataset.tok){const n=x.dataset.tok,d=APP.tokens[n],t=tokens();
     APP.tokens[n]=x.value==='@pin'?{light:resolveApp(d,'light',t.light),dark:resolveApp(d,'dark',t.dark)}:{ref:x.value,...(d.ref&&d.pct?{pct:d.pct}:{})};saveApp();apply()}
   else if(x.dataset.pct){const d=APP.tokens[x.dataset.pct],v=Math.max(1,Math.min(100,Math.round(+x.value||100)));if(v>=100)delete d.pct;else d.pct=v;saveApp();apply()}
   else if(x.dataset.raw){const [n,m]=x.dataset.raw.split('|');APP.tokens[n][m]=x.value.trim();saveApp();apply()}});
