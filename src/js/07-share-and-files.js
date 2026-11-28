@@ -75,6 +75,7 @@ async function openFiles(list){
   for(const c of css){if(c===app||c===core)continue;if(!core)core=c;else if(!app)app=c}
   if(!cj&&!core&&!app&&!comps){if(svgs.length){if(brIn){shipBrand(brIn);saveApp();apply();toast('Brand files placed, and kept as the defaults');return}toast('Drop brand SVGs on a slot in the Brand panel');return}toast('No Stylist files found. Use stylist.json, the theme CSS, app-tokens.css or components.json');return}
   if(brIn)shipBrand(brIn);
+  const fp0=cj?styleFp(cj.settings,cj.pins):null; // the app's style as it is in its repo, before any migration
   cj=migrate(cj);
   if(cj&&cj.framework>FRAMEWORK)toast('Made with a newer Stylist: some settings may be ignored');
   const tg=cj&&TGT[cj.target]?cj.target:detectTarget(core?core.text:'');
@@ -82,7 +83,7 @@ async function openFiles(list){
   APP={...APP,name:cj&&cj.app||APP.name,target:tg,pins:cj?cj.pins:{light:{},dark:{}},changelog:cj?cj.changelog:APP.changelog,snapshot:cj&&cj.snapshot||null,exported:cj&&cj.exported||null};
   if(app){const T=parseAppTokens(app.text,tg),cn=new Set(coreNames());for(const n in T)if(cn.has(n)){delete T[n];toast(`--${n} is a core token, so it was left out of the app tokens`)}APP.tokens=T}
   if(comps)APP.components=normComps(comps);
-  APP.review=[];APP.reviewNote='';
+  APP.review=[];APP.reviewNote='';APP.origin={style:fp0?[fp0]:[],sent:[],loaded:today(),from:'files'};
   if(core){const cur=parseCSS(core.text),snap=APP.snapshot||parseCSS(coreCSS(tg));APP.review=diffCore(snap,cur);
     APP.reviewNote=APP.snapshot?'':'There was no stylist.json, so the file is compared with what Stylist would export now.'}
   const missing=[!cj&&'stylist.json',!core&&'the theme CSS',!app&&'app-tokens.css',!comps&&'components.json'].filter(Boolean);

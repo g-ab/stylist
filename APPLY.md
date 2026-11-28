@@ -16,7 +16,8 @@ changed in Stylist after it. Applying it means writing the app's Stylist files f
      (one restyle per commit, the list in the message).
    - **Exit code 0, first time** (the app had no `stylist.json`): it added the Stylist files and a Stylist
      section to the app's `AGENTS.md`. Then connect the app to them, below.
-   - **Exit code 2:** something in the app changed since the setup was made (the theme file edited by hand,
+   - **Exit code 2:** the setup wasn't made from the app's current style (the app wasn't loaded in Stylist first,
+     or it changed since), something in the app changed since the setup was made (the theme file edited by hand,
      a logo replaced), or a logo arrived damaged. Show the message to the user and stop. Never overwrite.
      They resolve it in Stylist (Share → Open from GitHub…) and send a new setup.
    - **"Removed in Stylist":** those logos were removed in Stylist but are still in the app. Ask before deleting.

@@ -13,8 +13,15 @@ const TOKEN_RENAMES=[];
 const RESERVED=['grid','grid-major','axis','pencil','fill','cut','clay']; // never core tokens: names an app may define in its own app tokens
 // a fresh start: no app loaded yet, so no app tokens or components until one is opened (Open from GitHub, Open app style…)
 const appDefault=()=>({brand:{},name:'Your app',target:'css',tokens:{},components:[],
-  pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'No app loaded'});
+  pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'No app loaded',origin:null});
 let APP=appDefault();
+// Where the style being edited came from, so a setup can say it (and export.py can check it): the fingerprint of the
+// app's settings + pins as loaded, plus those of every setup or package made since (the app may already hold one of them).
+// {style:[fp…], sent:[fp…], loaded:'YYYY-MM-DD', from:'github:owner/repo'|'files', new?:true}
+function canon(v){return Array.isArray(v)?'['+v.map(canon).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+canon(v[k])).join(',')+'}':JSON.stringify(v===undefined?null:v)}
+function styleFp(settings,pins){return fnv(canon({pins:pins||{light:{},dark:{}},settings:settings||{}}))}
+const today=()=>new Date().toISOString().slice(0,10);
+function noteSent(settings,pins){if(!APP.origin)return;APP.origin.sent=[...new Set([...(APP.origin.sent||[]),styleFp(settings,pins)])].slice(-20)}
 // an app counts as loaded once its files were opened, or it was started here as a new app
 const appLoaded=()=>APP.source!=='No app loaded'||!!(APP.components||[]).length||!!Object.keys(APP.tokens||{}).length||!!APP.snapshot;
 try{const a=JSON.parse(localStorage.getItem('stylist.app.v1')||'null');if(a)APP={...APP,...a,pins:{light:{},dark:{},...(a.pins||{})}};if(APP.name==='Blueprint')APP.name='Your app';if(/^Built-in/.test(APP.source||'')){APP.tokens={};APP.components=[];APP.source='No app loaded'} /* the old built-in setup was Cast's: drop it unless an app was opened */if(APP.brand&&APP.brand.mark){mergeMark(APP.brand);mergeMark(APP.brandBase)}}catch(e){}

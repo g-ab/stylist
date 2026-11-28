@@ -1328,8 +1328,15 @@ const TOKEN_RENAMES=[];
 const RESERVED=['grid','grid-major','axis','pencil','fill','cut','clay']; // never core tokens: names an app may define in its own app tokens
 // a fresh start: no app loaded yet, so no app tokens or components until one is opened (Open from GitHub, Open app style…)
 const appDefault=()=>({brand:{},name:'Your app',target:'css',tokens:{},components:[],
-  pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'No app loaded'});
+  pins:{light:{},dark:{}},changelog:[],review:[],reviewNote:'',snapshot:null,exported:null,source:'No app loaded',origin:null});
 let APP=appDefault();
+// Where the style being edited came from, so a setup can say it (and export.py can check it): the fingerprint of the
+// app's settings + pins as loaded, plus those of every setup or package made since (the app may already hold one of them).
+// {style:[fp…], sent:[fp…], loaded:'YYYY-MM-DD', from:'github:owner/repo'|'files', new?:true}
+function canon(v){return Array.isArray(v)?'['+v.map(canon).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+canon(v[k])).join(',')+'}':JSON.stringify(v===undefined?null:v)}
+function styleFp(settings,pins){return fnv(canon({pins:pins||{light:{},dark:{}},settings:settings||{}}))}
+const today=()=>new Date().toISOString().slice(0,10);
+function noteSent(settings,pins){if(!APP.origin)return;APP.origin.sent=[...new Set([...(APP.origin.sent||[]),styleFp(settings,pins)])].slice(-20)}
 // an app counts as loaded once its files were opened, or it was started here as a new app
 const appLoaded=()=>APP.source!=='No app loaded'||!!(APP.components||[]).length||!!Object.keys(APP.tokens||{}).length||!!APP.snapshot;
 try{const a=JSON.parse(localStorage.getItem('stylist.app.v1')||'null');if(a)APP={...APP,...a,pins:{light:{},dark:{},...(a.pins||{})}};if(APP.name==='Blueprint')APP.name='Your app';if(/^Built-in/.test(APP.source||'')){APP.tokens={};APP.components=[];APP.source='No app loaded'} /* the old built-in setup was Cast's: drop it unless an app was opened */if(APP.brand&&APP.brand.mark){mergeMark(APP.brand);mergeMark(APP.brandBase)}}catch(e){}
@@ -1484,6 +1491,8 @@ function apply(){
 function setupText(d){ // short: a request line, the settings (compact) and any changed logos; the steps live in APPLY.md
   d=d||brandDelta();
   const cj={stylist:SCHEMA,version:VERSION,framework:FRAMEWORK,app:APP.name,target:APP.target,settings:recipeSettings(),pins:APP.pins};
+  if(APP.origin){noteSent(cj.settings,cj.pins);saveApp();const o=APP.origin;
+    cj.from={style:[...o.style,...o.sent],loaded:o.loaded,...(o.from?{source:o.from}:{}),...(o.new?{new:true}:{})}}
   if(d.files.length||d.removed.length)cj.brand={files:d.files.map(f=>({name:f.name,hash:f.hash,base:f.base})),removed:d.removed};
   const own=[S.ui,S.mono].filter(n=>custom[n]),notes=[];
   if(d.files.length)notes.push('Logos changed in Stylist are at the end; export.py writes them.');
@@ -1806,6 +1815,7 @@ async function openFiles(list){
   for(const c of css){if(c===app||c===core)continue;if(!core)core=c;else if(!app)app=c}
   if(!cj&&!core&&!app&&!comps){if(svgs.length){if(brIn){shipBrand(brIn);saveApp();apply();toast('Brand files placed, and kept as the defaults');return}toast('Drop brand SVGs on a slot in the Brand panel');return}toast('No Stylist files found. Use stylist.json, the theme CSS, app-tokens.css or components.json');return}
   if(brIn)shipBrand(brIn);
+  const fp0=cj?styleFp(cj.settings,cj.pins):null; // the app's style as it is in its repo, before any migration
   cj=migrate(cj);
   if(cj&&cj.framework>FRAMEWORK)toast('Made with a newer Stylist: some settings may be ignored');
   const tg=cj&&TGT[cj.target]?cj.target:detectTarget(core?core.text:'');
@@ -1813,7 +1823,7 @@ async function openFiles(list){
   APP={...APP,name:cj&&cj.app||APP.name,target:tg,pins:cj?cj.pins:{light:{},dark:{}},changelog:cj?cj.changelog:APP.changelog,snapshot:cj&&cj.snapshot||null,exported:cj&&cj.exported||null};
   if(app){const T=parseAppTokens(app.text,tg),cn=new Set(coreNames());for(const n in T)if(cn.has(n)){delete T[n];toast(`--${n} is a core token, so it was left out of the app tokens`)}APP.tokens=T}
   if(comps)APP.components=normComps(comps);
-  APP.review=[];APP.reviewNote='';
+  APP.review=[];APP.reviewNote='';APP.origin={style:fp0?[fp0]:[],sent:[],loaded:today(),from:'files'};
   if(core){const cur=parseCSS(core.text),snap=APP.snapshot||parseCSS(coreCSS(tg));APP.review=diffCore(snap,cur);
     APP.reviewNote=APP.snapshot?'':'There was no stylist.json, so the file is compared with what Stylist would export now.'}
   const missing=[!cj&&'stylist.json',!core&&'the theme CSS',!app&&'app-tokens.css',!comps&&'components.json'].filter(Boolean);
@@ -1830,6 +1840,7 @@ function buildPackage(tg){const core=coreCSS(tg),snap=parseCSS(core);
   const cj={stylist:SCHEMA,version:VERSION,framework:FRAMEWORK,app:APP.name,target:tg,exported:new Date().toISOString(),
     settings:recipeSettings(),
     fontFiles:[S.ui,S.mono].filter(n=>custom[n]),brand:brandFiles().map(f=>f.name),pins:APP.pins,snapshot:snap,changelog:APP.changelog};
+  noteSent(cj.settings,cj.pins); // the app may hold this package next: a later setup from this session still fits it
   return {snap,files:[
    {name:'stylist.json',type:'application/json',text:JSON.stringify(cj,null,2),note:'Stylist’s recipe: settings, pins, the changelog and a snapshot of the core file. Keep it in the app’s repo, and open it in Stylist to restyle.'},
    {name:'stylist-theme.css',type:'text/css',text:core,note:`Core tokens for ${TGT[tg]}. Generated: don’t edit it by hand. ${FMT[tg].note}`},
@@ -2027,7 +2038,7 @@ cus.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return
   if(a==='open')$('appFiles').click();
   if(a==='gh')openGh();
   else if(a==='pkg')openPkg();
-  else if(a==='new'){APP.source='New app, not exported yet';saveApp();apply()}
+  else if(a==='new'){APP.source='New app, not exported yet';APP.origin={new:true,style:[],sent:[],loaded:today()};saveApp();apply()}
   else if(a==='reset'){APP=appDefault();saveApp();apply();toast('Started over: no app loaded')}
   else if(a==='addtok'){const n=$('newTok').value.trim().replace(/^--/,'').toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
     if(!n){toast('Give the token a name');return}if(APP.tokens[n]){toast(`--${n} already exists`);return}
@@ -2409,7 +2420,7 @@ async function ghFetch(g){const base=`https://raw.githubusercontent.com/${g.owne
 async function ghOpen(g){const files=await ghFetch(g);
   if(!files.some(f=>f.name==='stylist.json'||f.name==='stylist-theme.css'))return false;
   await openFiles(files);
-  APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);saveApp();apply();
+  APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);if(APP.origin)APP.origin.from='github:'+ghLabel(g);saveApp();apply();
   ghLast={repo:`${g.owner}/${g.repo}`,path:g.path};try{localStorage.setItem('stylist.gh.v1',JSON.stringify(ghLast))}catch(e){}
   return true}
 function openGh(){$('ghRepo').value=ghLast?ghLast.repo+(ghLast.path?'/'+ghLast.path:''):'';$('ghMsg').textContent='';

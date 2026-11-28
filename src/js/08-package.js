@@ -7,6 +7,7 @@ function buildPackage(tg){const core=coreCSS(tg),snap=parseCSS(core);
   const cj={stylist:SCHEMA,version:VERSION,framework:FRAMEWORK,app:APP.name,target:tg,exported:new Date().toISOString(),
     settings:recipeSettings(),
     fontFiles:[S.ui,S.mono].filter(n=>custom[n]),brand:brandFiles().map(f=>f.name),pins:APP.pins,snapshot:snap,changelog:APP.changelog};
+  noteSent(cj.settings,cj.pins); // the app may hold this package next: a later setup from this session still fits it
   return {snap,files:[
    {name:'stylist.json',type:'application/json',text:JSON.stringify(cj,null,2),note:'Stylist’s recipe: settings, pins, the changelog and a snapshot of the core file. Keep it in the app’s repo, and open it in Stylist to restyle.'},
    {name:'stylist-theme.css',type:'text/css',text:core,note:`Core tokens for ${TGT[tg]}. Generated: don’t edit it by hand. ${FMT[tg].note}`},

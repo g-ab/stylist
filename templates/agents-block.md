@@ -15,7 +15,8 @@ To run Stylist: clone https://github.com/g-ab/stylist, run `python3 build.py` in
 - **New brand files as a .zip** (Stylist's "Download brand files", for logos too big for the setup):
   replace the files in brand/ with it.
 
-If export.py stops (exit code 2), something in the app changed since the setup was made (the theme file
+If export.py stops (exit code 2), the setup wasn't made from the app's current style (not loaded in Stylist
+first, or the app changed since), something in the app changed since the setup was made (the theme file
 edited by hand, a logo replaced) or a logo arrived damaged: show the message and stop, never overwrite.
 If it lists logos "removed in Stylist", ask before deleting them.
 Otherwise show the "Changed tokens" list, check the app in light and dark mode, and commit

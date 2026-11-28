@@ -18,7 +18,8 @@ the Export package dialog would give.
 
 For an app that already uses Stylist:
   1. open the app's current files, as "Open app style…" does;
-  2. stop if the theme file was edited by hand since the last export: those edits must
+  2. stop if the setup wasn't made from the app's current style (not loaded in Stylist
+     first, or the app changed since), or if the theme file was edited by hand since the last export: those edits must
      be matched, pinned or reverted in Stylist first, never overwritten silently;
   3. apply the setup's settings and pins;
   4. write the package files back into APP_DIR: those the app already has (plus the
@@ -142,6 +143,31 @@ def read_setup(path):
         sys.exit("export: the setup has no settings")
     setup["_files"] = {name: body for name, body in re.findall(r"<!-- stylist-file (\S+) -->\s*\n````\w*\n(.*?)\n````", text, re.S)}
     return setup
+
+
+def style_fp(cj):
+    """Fingerprint of an app's style (settings + pins), the same as Stylist's styleFp()."""
+    body = {"pins": cj.get("pins") or {"light": {}, "dark": {}}, "settings": cj.get("settings") or {}}
+    return fnv(json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+
+
+def check_origin(app_dir, setup):
+    """A setup restyles an app only if it was made from the app's current style (loaded in Stylist first).
+    A new app (no stylist.json yet) has nothing to compare with, so it goes through."""
+    current = app_dir / "stylist.json"
+    if not setup or not current.exists():
+        return []
+    name = setup.get("app") or app_dir.name
+    frm = setup.get("from") or {}
+    try:
+        fp = style_fp(json.loads(current.read_text(encoding="utf-8")))
+    except (json.JSONDecodeError, AttributeError):
+        return [f"{name}'s stylist.json isn't valid JSON, so the setup can't be checked against it."]
+    if not frm.get("style") or frm.get("new"):
+        return [f"This setup wasn't made from {name}'s current style. Load it in Stylist first (Share → Open from GitHub…), then send again."]
+    if fp not in frm["style"]:
+        return [f"{name}'s style changed since it was loaded in Stylist" + (f" on {frm['loaded']}" if frm.get("loaded") else "") + ". Load it again (Share → Open from GitHub…), then send again."]
+    return []
 
 
 def check_brand(app_dir, setup):
@@ -286,6 +312,11 @@ def main():
     if not app_dir.is_dir():
         sys.exit(f"export: {app_dir} isn't a folder")
     setup = read_setup(sys.argv[2]) if len(sys.argv) == 3 else None
+    problems = check_origin(app_dir, setup)
+    if problems:
+        print("Stopped: " + problems[0])
+        print("Nothing was written. Starting from the app's current style keeps settings you didn't mean to change.")
+        sys.exit(2)
     problems, brand_files, removed = check_brand(app_dir, setup)
     if problems:
         print("Stopped: the logos in this setup don't match the app:")

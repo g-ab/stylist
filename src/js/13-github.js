@@ -20,7 +20,7 @@ async function ghFetch(g){const base=`https://raw.githubusercontent.com/${g.owne
 async function ghOpen(g){const files=await ghFetch(g);
   if(!files.some(f=>f.name==='stylist.json'||f.name==='stylist-theme.css'))return false;
   await openFiles(files);
-  APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);saveApp();apply();
+  APP.source=`Opened from GitHub: ${ghLabel(g)} · ${new Date().toLocaleDateString()}`;APP.gh=ghLabel(g);if(APP.origin)APP.origin.from='github:'+ghLabel(g);saveApp();apply();
   ghLast={repo:`${g.owner}/${g.repo}`,path:g.path};try{localStorage.setItem('stylist.gh.v1',JSON.stringify(ghLast))}catch(e){}
   return true}
 function openGh(){$('ghRepo').value=ghLast?ghLast.repo+(ghLast.path?'/'+ghLast.path:''):'';$('ghMsg').textContent='';

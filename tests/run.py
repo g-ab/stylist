@@ -96,7 +96,11 @@ async def main():
         check("custom tab: empty state until an app is loaded", es["empty"] and {"gh", "open", "new"} <= set(es["acts"]) and not es["after"], es)
 
         # 6b. "Copy setup for Claude" carries the full recipe, and export.py turns it into the files
-        setup = await pg.evaluate("()=>{S={...PRESETS[0],radius:16,fam:'teal'};APP.name='Fixture';APP.target='css';apply();return setupText()}")
+        import shutil, subprocess, tempfile
+        root = Path(__file__).resolve().parent.parent
+        fx_files = [[f.name, f.read_text()] for f in sorted((root / "tests" / "fixtures" / "v5-css").iterdir()) if f.is_file()]
+        setup = await pg.evaluate("""async(fs)=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();await openFiles(fs.map(([n,t])=>new File([t],n)));
+            S={...S,radius:16,fam:'teal'};APP.name='Fixture';APP.target='css';apply();return setupText()}""", fx_files)
         block = json.loads(setup[setup.index("{"):setup.rindex("}") + 1])
         keys = await pg.evaluate("RECIPE_KEYS")
         check("copy setup is a full recipe", set(keys) <= set(block["settings"]) and "pins" in block and block["settings"]["radius"] == 16, list(block)[:6])
@@ -104,8 +108,6 @@ async def main():
         apply_md = (Path(__file__).resolve().parent.parent / "APPLY.md").read_text()
         check("setup is short and points to APPLY.md", "Send to your agent" in steps and setup.startswith("Apply this Stylist setup to Fixture.") and "blob/main/APPLY.md" in setup and len(setup) < 2500 and "Claude" not in setup
               and all(w in apply_md for w in ("export.py", "Exit code 2", "First time", "upgrade Stylist", "Removed in Stylist")), {"chars": len(setup), "start": setup[:60]})
-        import shutil, subprocess, tempfile
-        root = Path(__file__).resolve().parent.parent
         with tempfile.TemporaryDirectory() as tmp:
             app = Path(tmp) / "app"
             shutil.copytree(root / "tests" / "fixtures" / "v5-css", app)
@@ -118,6 +120,25 @@ async def main():
             (app / "stylist-theme.css").write_text(theme.replace("--radius-lg: 16px", "--radius-lg: 10px"))
             r3 = subprocess.run([sys.executable, str(root / "export.py"), str(app), str(Path(tmp) / "setup.txt")], capture_output=True, text=True)
             check("export.py stops on hand edits", r3.returncode == 2 and "radius-lg" in r3.stdout, r3.stdout[-200:])
+            # load first: a setup made from Stylist's defaults, or from an older copy of the app's style, stops before writing
+            app2 = Path(tmp) / "app2"
+            shutil.copytree(root / "tests" / "fixtures" / "v5-css", app2)
+            def ex(a, text):
+                (Path(tmp) / "s.md").write_text(text)
+                return subprocess.run([sys.executable, str(root / "export.py"), str(a), str(Path(tmp) / "s.md")], capture_output=True, text=True)
+            before = (app2 / "stylist.json").read_text()
+            cold = await pg.evaluate("()=>{localStorage.clear();APP=appDefault();S={...PRESETS[0],radius:16};apply();return setupText()}")
+            rc = ex(app2, cold)
+            check("load first: a setup made without loading the app stops", rc.returncode == 2 and "Load it in Stylist first" in rc.stdout and (app2 / "stylist.json").read_text() == before, rc.stdout[-200:])
+            first = ex(app2, setup)
+            again = await pg.evaluate("""async(fs)=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};apply();await openFiles(fs.map(([n,t])=>new File([t],n)));
+                S={...S,radius:16,fam:'teal'};APP.name='Fixture';APP.target='css';apply();setupText();S={...S,radius:8};apply();return setupText()}""", fx_files)
+            r6 = ex(app2, again)
+            check("load first: a second setup from the same session still applies", first.returncode == 0 and r6.returncode == 0 and "--radius-lg: 16px → 8px" in r6.stdout, (first.stdout[-150:], r6.stdout[-200:], r6.stderr[-200:]))
+            j = json.loads((app2 / "stylist.json").read_text()); j["settings"]["radius"] = 20
+            (app2 / "stylist.json").write_text(json.dumps(j, indent=2))
+            r7 = ex(app2, again)
+            check("load first: the app changed since loading stops", r7.returncode == 2 and "changed since it was loaded" in r7.stdout, r7.stdout[-200:])
             # first time: an app folder with no Stylist files gets the whole package from a setup
             new = Path(tmp) / "new-app"
             new.mkdir()
@@ -232,7 +253,7 @@ async def main():
             app = make_app(Path(tmp))
             t2 = await sp.evaluate("(n)=>{localStorage.clear();APP=appDefault();S={...PRESETS[0]};APP.brand={logo:{light:{name:'logo.svg',svg:n}}};apply();return setupText()}", NEW)
             r = export(app, t2)
-            check("send: made without loading the app, it asks first", r.returncode == 2 and "Load the app in Stylist first" in r.stdout and (app / "brand" / "logo.svg").read_text().strip() == OLD, r.stdout[-200:])
+            check("send: made without loading the app, it asks first", r.returncode == 2 and "Load it in Stylist first" in r.stdout and (app / "brand" / "logo.svg").read_text().strip() == OLD, r.stdout[-200:])
             await sp.evaluate(load, app_payload(app))
             big = await sp.evaluate("""()=>{const p=Array.from({length:900},(_,i)=>`<rect x="${i%40}" y="${i%10}" width="1" height="1" fill="#${(i*2654435761>>>8&0xffffff).toString(16).padStart(6,'0')}"/>`).join('');
               APP.brand.logo={...(APP.brand.logo||{}),light:{name:'logo.svg',svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 10">${p}</svg>`}};apply();const d=brandDelta();return {n:d.files.length,big:d.tooBig,text:setupText(d)}}""")

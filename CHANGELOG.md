@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Load the app first, enforced:** a setup now records which style it was made from. `export.py` stops, writing nothing, if it wasn't made from the app's current style (sent without loading the app, or the app changed since). A second setup from the same session still applies. Setups made before today have no record: load the app again and send a new one.
 - **Custom tab, no app loaded:** an empty state explains the tab and offers Open from GitHub… / Open app style…, or **Start a new app** for an app with no Stylist files yet.
 - **"Used by" moved to the Tokens tab:** point at a colour, scale step, font, shadow, spacing or radius step to see its label, token name, where its value comes from and which components read it (your app's in accent). The Usage card is gone from the Custom tab, and gallery helpers ("hrow", "hlab") no longer show up as components.
 - **App preview shows your app's own components**, styled live, once an app is loaded. With no app loaded it says so and offers Open from GitHub… / Open app style….
