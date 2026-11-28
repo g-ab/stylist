@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Start screen:** with no app loaded, Stylist opens on three choices: Open from GitHub, Open app style (or drop the files anywhere) and Start new (a name, a destination and an optional preset). A `?app=` link skips it; Close app comes back to it.
 - **Top bar with the app menu:** the app's name sits in the middle, with where it came from and when it was loaded. Its menu: Reload from GitHub, Revert to loaded style, Rename, Destination (moved from the Stylist title) and Close app. **Export…** and **Send to agent** moved to the right of the bar; Reset to defaults is gone.
 - **Fonts come with the theme:** `stylist-theme.css` now loads the Google fonts it uses, so changing a font in Stylist is all it takes. `export.py` points out font links left in the app's own files, to remove.
 - **Load the app first, enforced:** a setup now records which style it was made from. `export.py` stops, writing nothing, if it wasn't made from the app's current style (sent without loading the app, or the app changed since). A second setup from the same session still applies. Setups made before today have no record: load the app again and send a new one.

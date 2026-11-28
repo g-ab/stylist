@@ -98,7 +98,7 @@ function apply(){
   const U=unitOf();document.querySelectorAll('#dens button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.dens));
   {const n=typeof styleEdits==='function'?styleEdits().length:0;$('densOut').textContent=n?`${n} change${n>1?'s':''}`:''}
   renderDensSpec();
-  if(typeof renderLens==='function'){renderHeights();renderFocus();renderLens();renderHeightGuides();renderAppBar()}
+  if(typeof renderLens==='function'){renderHeights();renderFocus();renderLens();renderHeightGuides();renderAppBar();if(typeof renderStart==='function')renderStart()}
   if(typeof renderIcons==='function')renderIcons();
   if(typeof renderBrand==='function')renderBrand();
   if(typeof renderMotion==='function')renderMotion();

@@ -30,7 +30,7 @@ $('mRevert').onclick=()=>{const b=APP.origin&&APP.origin.base;appClose();if(!b)r
 $('mRename').onclick=()=>{const box=$('appInfo'),cur=APP.name||'';box.innerHTML=`<label class="ai-ren"><span>App name</span><input id="appRen" value="${escH(cur)}" maxlength="60" autocomplete="off"></label>`;
   const i=$('appRen');i.focus();i.select();
   const done=ok=>{if(ok&&i.value.trim()){APP.name=i.value.trim();saveApp();apply()}renderAppBar();$('mRename').focus()};
-  i.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();done(true)}else if(e.key==='Escape'){e.preventDefault();done(false)}};
+  i.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();i.onblur=null;done(true);appClose();$('appBtn').focus()}else if(e.key==='Escape'){e.preventDefault();i.onblur=null;done(false)}};
   i.onblur=()=>done(true)};
 function closeApp(){APP=appDefault();S={...PRESETS[0]};saveApp();apply();appClose();toast('App closed')}
 $('mClose').onclick=()=>closeApp();
