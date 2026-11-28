@@ -62,3 +62,7 @@
 .ap-head h4{margin:0;font:600 15px "Instrument Sans",system-ui,sans-serif;color:var(--ink)}.ap-head p{margin:2px 0 18px;font-size:12.5px;color:var(--muted)}
 .ap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .ap-item{margin:0;display:grid;gap:8px}.ap-item figcaption{font:500 11.5px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
+.xcard.closec{width:min(460px,92vw);height:auto;grid-template-rows:auto auto auto}
+.closetx{margin:0;padding:4px 18px 4px;font-size:13.5px;line-height:1.55;color:#4a5260}
+.closec .sendact{justify-content:flex-end}.closec .sendact .btn{flex:none;padding:8px 13px}
+.btn.danger{background:#b4361e;border-color:#b4361e;color:#fff}.btn.danger:hover{background:#962c18}

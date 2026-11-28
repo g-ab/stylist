@@ -1,6 +1,7 @@
 # Changelog
 
 ## 28 Nov 2026
+- **Close app warns about unsent changes:** if the style changed since it was loaded and was never copied, downloaded or exported, Close app asks first (Cancel, Send to agent first, Close anyway).
 - **One place for each action:** opening an app lives on the start screen (and Reload in the app menu), so Open app style / Open from GitHub left the Export menu and the Custom tab, and the Open from GitHub dialog is gone. Copy link to this app moved to the app menu. The empty states in App preview and Custom are gone; App preview says so when a loaded app has no components.
 - **Start screen:** with no app loaded, Stylist opens on three choices: Open from GitHub, Open app style (or drop the files anywhere) and Start new (a name, a destination and an optional preset). A `?app=` link skips it; Close app comes back to it.
 - **Top bar with the app menu:** the app's name sits in the middle, with where it came from and when it was loaded. Its menu: Reload from GitHub, Revert to loaded style, Rename, Destination (moved from the Stylist title) and Close app. **Export…** and **Send to agent** moved to the right of the bar; Reset to defaults is gone.

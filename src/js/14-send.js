@@ -33,11 +33,11 @@ function openSend(){renderSend();$('sendmod').hidden=false}
 const closeSend=()=>{$('sendmod').hidden=true};
 $('copy').onclick=openSend;$('sendClose').onclick=closeSend;$('sendmod').onclick=e=>{if(e.target===$('sendmod'))closeSend()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('sendmod').hidden)closeSend()});
-$('sendCopy').onclick=async()=>{if(await copyStr(sendText)){toast(`Copied. Paste it in ${APP.name}’s AI chat.`);closeSend()}else{const el=$('setup');el.textContent=sendText;el.hidden=false;closeSend();
+$('sendCopy').onclick=async()=>{markSent();if(await copyStr(sendText)){toast(`Copied. Paste it in ${APP.name}’s AI chat.`);closeSend()}else{const el=$('setup');el.textContent=sendText;el.hidden=false;closeSend();
   const r=document.createRange();r.selectNodeContents(el);const g=getSelection();g.removeAllRanges();g.addRange(r);toast('Copy the selected setup')}};
 const sendDownload=async()=>{const name=(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist-setup.md',blob=new Blob([sendText],{type:'text/markdown'});
-  if(DLS){try{await DLS.save({filename:name,data:blob});toast(`Saved. Attach it in ${APP.name}’s AI chat and say “apply this”.`);closeSend()}catch(e){if(!(e&&e.code==='declined'))toast('Download isn’t available here. Use Copy instead')}return}
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);toast(`Saved. Attach it in ${APP.name}’s AI chat and say “apply this”.`);closeSend()};
+  if(DLS){try{await DLS.save({filename:name,data:blob});markSent();toast(`Saved. Attach it in ${APP.name}’s AI chat and say “apply this”.`);closeSend()}catch(e){if(!(e&&e.code==='declined'))toast('Download isn’t available here. Use Copy instead')}return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);markSent();toast(`Saved. Attach it in ${APP.name}’s AI chat and say “apply this”.`);closeSend()};
 $('sendDl').onclick=sendDownload;
 
 $('ver').textContent='v'+VERSION;

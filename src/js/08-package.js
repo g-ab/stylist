@@ -7,7 +7,6 @@ function buildPackage(tg){const core=coreCSS(tg),snap=parseCSS(core);
   const cj={stylist:SCHEMA,version:VERSION,framework:FRAMEWORK,app:APP.name,target:tg,exported:new Date().toISOString(),
     settings:recipeSettings(),
     fontFiles:[S.ui,S.mono].filter(n=>custom[n]),brand:brandFiles().map(f=>f.name),pins:APP.pins,snapshot:snap,changelog:APP.changelog};
-  noteSent(cj.settings,cj.pins); // the app may hold this package next: a later setup from this session still fits it
   return {snap,files:[
    {name:'stylist.json',type:'application/json',text:JSON.stringify(cj,null,2),note:'Stylist’s recipe: settings, pins, the changelog and a snapshot of the core file. Keep it in the app’s repo, and open it in Stylist to restyle.'},
    {name:'stylist-theme.css',type:'text/css',text:core,note:`Core tokens for ${TGT[tg]}. Generated: don’t edit it by hand. ${FMT[tg].note}`},
@@ -62,7 +61,7 @@ let DLS=null;(async()=>{try{DLS=await window.claude?.use('downloads')}catch(e){D
 async function downloadZip(files,name,done){const blob=zip(files); // true when the download went through
   if(DLS){try{await DLS.save({filename:name,data:blob});toast(done);return true}catch(e){if(e&&e.code==='declined')return false;toast('Download isn’t available here. Copy each file instead');return false}}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);return true}
-async function saveZip(){if(await downloadZip(pBuilt.files,(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist.zip','Package saved'))commitExport()}
+async function saveZip(){if(await downloadZip(pBuilt.files,(APP.name||'app').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stylist.zip','Package saved')){commitExport();markSent()}}
 function openPkg(){pTgt=APP.target;pFile=Math.max(0,buildPackage(pTgt).files.findIndex(f=>f.name==='stylist-theme.css'));renderPkg();$('pmod').hidden=false}
 $('mPkg').onclick=openPkg;
 $('appFiles').onchange=e=>{if(e.target.files.length)openFiles(e.target.files);e.target.value=''};

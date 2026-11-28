@@ -117,8 +117,8 @@ function apply(){
 function setupText(d){ // short: a request line, the settings (compact) and any changed logos; the steps live in APPLY.md
   d=d||brandDelta();
   const cj={stylist:SCHEMA,version:VERSION,framework:FRAMEWORK,app:APP.name,target:APP.target,settings:recipeSettings(),pins:APP.pins};
-  if(APP.origin){noteSent(cj.settings,cj.pins);saveApp();const o=APP.origin;
-    cj.from={style:[...o.style,...o.sent],loaded:o.loaded,...(o.from?{source:o.from}:{}),...(o.new?{new:true}:{})}}
+  if(APP.origin){const o=APP.origin; // the app may already hold this very style (sent before): that fits too
+    cj.from={style:[...new Set([...o.style,...(o.sent||[]),styleFp(cj.settings,cj.pins)])],loaded:o.loaded,...(o.from?{source:o.from}:{}),...(o.new?{new:true}:{})}}
   if(d.files.length||d.removed.length)cj.brand={files:d.files.map(f=>({name:f.name,hash:f.hash,base:f.base})),removed:d.removed};
   const own=[S.ui,S.mono].filter(n=>custom[n]),notes=[];
   if(d.files.length)notes.push('Logos changed in Stylist are at the end; export.py writes them.');

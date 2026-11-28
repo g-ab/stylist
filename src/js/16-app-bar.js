@@ -35,4 +35,14 @@ $('mRename').onclick=()=>{const box=$('appInfo'),cur=APP.name||'';box.innerHTML=
   i.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();i.onblur=null;done(true);appClose();$('appBtn').focus()}else if(e.key==='Escape'){e.preventDefault();i.onblur=null;done(false)}};
   i.onblur=()=>done(true)};
 function closeApp(){APP=appDefault();S={...PRESETS[0]};saveApp();apply();appClose();toast('App closed')}
-$('mClose').onclick=()=>closeApp();
+// closing with changes the app's agent never got: say so first
+const closeDlg=()=>{$('closemod').hidden=true};
+$('mClose').onclick=()=>{appClose();if(!unsent()){closeApp();return}const n=escH(APP.name||'this app');
+  $('closeTitle').textContent=`Close ${APP.name||'the app'}?`;
+  $('closeText').innerHTML=`Your changes to ${n} haven’t been sent to its agent. Closing clears them from Stylist; ${n} itself doesn’t change.`;
+  $('closemod').hidden=false;$('closeCancel').focus()};
+$('closeCancel').onclick=()=>{closeDlg();$('appBtn').focus()};
+$('closeSend').onclick=()=>{closeDlg();openSend()};
+$('closeGo').onclick=()=>{closeDlg();closeApp()};
+$('closemod').onclick=e=>{if(e.target===$('closemod'))closeDlg()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('closemod').hidden){closeDlg();$('appBtn').focus()}});

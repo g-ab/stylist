@@ -21,6 +21,13 @@ let APP=appDefault();
 function canon(v){return Array.isArray(v)?'['+v.map(canon).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+canon(v[k])).join(',')+'}':JSON.stringify(v===undefined?null:v)}
 function styleFp(settings,pins){return fnv(canon({pins:pins||{light:{},dark:{}},settings:settings||{}}))}
 const today=()=>new Date().toISOString().slice(0,10);
+// A setup copied or downloaded, or a package saved: the app may hold that style next, so a later setup from this session
+// still fits it, and closing the app doesn't warn about it.
+function markSent(){noteSent(recipeSettings(),APP.pins);saveApp()}
+// The style now differs from everything the app could hold (as loaded or started, or anything sent since)
+function unsent(){const o=APP.origin;if(!o)return false;const cur=styleFp(recipeSettings(),APP.pins),known=new Set([...(o.style||[]),...(o.sent||[])]);
+  if(o.base){const keep=S;S=o.base.settings;known.add(styleFp(recipeSettings(),o.base.pins));S=keep}
+  return !known.has(cur)}
 function noteSent(settings,pins){if(!APP.origin)return;APP.origin.sent=[...new Set([...(APP.origin.sent||[]),styleFp(settings,pins)])].slice(-20)}
 // an app counts as loaded once its files were opened, or it was started here as a new app
 const appLoaded=()=>APP.source!=='No app loaded'||!!(APP.components||[]).length||!!Object.keys(APP.tokens||{}).length||!!APP.snapshot;
